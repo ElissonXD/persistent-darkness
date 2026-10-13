@@ -46,8 +46,12 @@ game/resources/              resources (.tres)
 ## Boss (Soul of Cinder)
 
 - Cena: `game/scenes/enemies/boss.tscn`, script: `game/scripts/enemies/boss.gd`.
-- Estados em `StateChart/Root`: Idle, Walk, Attack1, Attack2, Rest, Stunned.
+- Estados em `StateChart/Root`: Idle, Walk, Attack1 (ComboA), Attack2 (ComboB), Rest, Stunned.
 - Eventos: `player_close` (Walk → Attack1), `posture_broken` (qualquer estado → Stunned).
+- Ataques: `AttackN` (composto) contém um ou mais golpes (`ComboA`, futuro `Uppercut`...); cada golpe é
+  composto de fases `AttackPhase` (`game/scripts/enemies/attacks/`): Telegraphy → Hit1 → Gap → Hit2 → Recovery.
+  A fase liga/desliga a `MeleeHitbox` ao entrar e sempre desliga ao sair. Dano só em fase com hitbox ativa,
+  nunca por contato. Durações, dano e knockback dos combos ficam nos exports do `boss.gd`.
 - Cena de teste: `game/scenes/test/boss_test_scene.tscn` (usa `player_dummy.tscn`).
 
 ## Fluxo de git

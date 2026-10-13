@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bhvv7"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_twjaa"]
 [ext_resource type="Script" uid="uid://le5w1cm0ul8p" path="res://addons/godot_state_charts/expression_guard.gd" id="7_xgrd1"]
+[ext_resource type="Script" path="res://game/scripts/enemies/attacks/attack_phase.gd" id="8_atkph"]
+[ext_resource type="Script" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="9_mhbox"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
 size = Vector2(180, 330)
@@ -14,6 +16,9 @@ size = Vector2(180, 330)
 [sub_resource type="Resource" id="Resource_pfar1"]
 script = ExtResource("7_xgrd1")
 expression = "player_far"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhit1"]
+size = Vector2(220, 260)
 
 [sub_resource type="Animation" id="Animation_4ybrt"]
 length = 0.001
@@ -108,6 +113,17 @@ animation = &"idle"
 autoplay = "idle"
 frame_progress = 0.6800363
 
+[node name="MeleeHitbox" type="Area2D" parent="." unique_id=1410678488]
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+script = ExtResource("9_mhbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitbox" unique_id=1081693573]
+position = Vector2(200, 30)
+shape = SubResource("RectangleShape2D_mhit1")
+debug_color = Color(0.9, 0.1, 0.1, 0.42)
+
 [node name="StateChart" type="Node" parent="." unique_id=1980650167]
 script = ExtResource("3_uoiu8")
 metadata/_custom_type_script = "uid://couw105c3bde4"
@@ -140,33 +156,127 @@ event = &"player_close"
 delay_in_seconds = "0.0"
 
 [node name="Attack1" type="Node" parent="StateChart/Root" unique_id=640913275]
-script = ExtResource("5_bhvv7")
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("ComboA")
 
-[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1" unique_id=1180342957]
+[node name="ComboA" type="Node" parent="StateChart/Root/Attack1" unique_id=1334557635]
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Telegraphy")
+
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1987827595]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+
+[node name="Go Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA/Telegraphy" unique_id=2056651043]
 script = ExtResource("6_twjaa")
-to = NodePath("../../Attack2")
-delay_in_seconds = "attack_placeholder_duration"
+to = NodePath("../../Hit1")
+delay_in_seconds = "combo_a_telegraphy"
+
+[node name="Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1615647313]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX_ACTIVE = true
+
+[node name="Go Gap" type="Node" parent="StateChart/Root/Attack1/ComboA/Hit1" unique_id=804212589]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Gap")
+delay_in_seconds = "combo_a_hit"
+
+[node name="Gap" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1117113080]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+
+[node name="Go Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA/Gap" unique_id=308261849]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Hit2")
+delay_in_seconds = "combo_a_gap"
+
+[node name="Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=991153172]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX_ACTIVE = true
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA/Hit2" unique_id=1437630967]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Recovery")
+delay_in_seconds = "combo_a_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1427744315]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+
+[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1/ComboA/Recovery" unique_id=1627320177]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../../Attack2")
+delay_in_seconds = "combo_a_recovery"
 
 [node name="Attack2" type="Node" parent="StateChart/Root" unique_id=297465831]
-script = ExtResource("5_bhvv7")
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("ComboB")
 
-[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2" unique_id=1862203546]
+[node name="ComboB" type="Node" parent="StateChart/Root/Attack2" unique_id=214677228]
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Telegraphy")
+
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1877258970]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+
+[node name="Go Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB/Telegraphy" unique_id=1648625623]
 script = ExtResource("6_twjaa")
-to = NodePath("../../Rest")
+to = NodePath("../../Hit1")
+delay_in_seconds = "combo_b_telegraphy"
+
+[node name="Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1994299432]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX_ACTIVE = true
+
+[node name="Go Gap" type="Node" parent="StateChart/Root/Attack2/ComboB/Hit1" unique_id=608973990]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Gap")
+delay_in_seconds = "combo_b_hit"
+
+[node name="Gap" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1906219080]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+
+[node name="Go Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB/Gap" unique_id=1360827419]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Hit2")
+delay_in_seconds = "combo_b_gap"
+
+[node name="Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=258177799]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX_ACTIVE = true
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB/Hit2" unique_id=140193930]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Recovery")
+delay_in_seconds = "combo_b_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=575098438]
+script = ExtResource("8_atkph")
+HITBOX = NodePath("../../../../../MeleeHitbox")
+
+[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1644967665]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../../Rest")
 guard = SubResource("Resource_pfar1")
-delay_in_seconds = "attack_placeholder_duration"
+delay_in_seconds = "combo_b_recovery"
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2" unique_id=905176224]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1660596667]
 script = ExtResource("6_twjaa")
-to = NodePath("../../Walk")
-delay_in_seconds = "attack_placeholder_duration"
+to = NodePath("../../../../Walk")
+delay_in_seconds = "combo_b_recovery"
 
 [node name="Rest" type="Node" parent="StateChart/Root" unique_id=1543790628]
 script = ExtResource("5_bhvv7")
 
-[node name="Go Attack1" type="Node" parent="StateChart/Root/Rest" unique_id=461837095]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Rest" unique_id=461837095]
 script = ExtResource("6_twjaa")
-to = NodePath("../../Attack1")
+to = NodePath("../../Walk")
 delay_in_seconds = "rest_duration"
 
 [node name="Stunned" type="Node" parent="StateChart/Root" unique_id=2071635489]
