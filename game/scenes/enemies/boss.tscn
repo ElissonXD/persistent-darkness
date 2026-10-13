@@ -6,8 +6,14 @@
 [ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="4_jtqy8"]
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bhvv7"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_twjaa"]
+[ext_resource type="Script" uid="uid://le5w1cm0ul8p" path="res://addons/godot_state_charts/expression_guard.gd" id="7_xgrd1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
+size = Vector2(180, 330)
+
+[sub_resource type="Resource" id="Resource_pfar1"]
+script = ExtResource("7_xgrd1")
+expression = "player_far"
 
 [sub_resource type="Animation" id="Animation_4ybrt"]
 length = 0.001
@@ -86,10 +92,11 @@ animations = [{
 }]
 
 [node name="SoulCinder" type="CharacterBody2D" unique_id=1100173584]
+collision_layer = 4
 script = ExtResource("1_48gq0")
-HEALTH = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1036619247]
+position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_83sn4")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2027975258]
@@ -109,14 +116,63 @@ metadata/_custom_type_script = "uid://couw105c3bde4"
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Idle")
 
+[node name="Go Stunned" type="Node" parent="StateChart/Root" unique_id=1394027716]
+script = ExtResource("6_twjaa")
+to = NodePath("../Stunned")
+event = &"posture_broken"
+delay_in_seconds = "0.0"
+
 [node name="Idle" type="Node" parent="StateChart/Root" unique_id=373310700]
 script = ExtResource("5_bhvv7")
 
 [node name="Go Walk" type="Node" parent="StateChart/Root/Idle" unique_id=658592514]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Walk")
-event = &"event_walk"
-delay_in_seconds = "0.0"
+delay_in_seconds = "idle_duration"
 
 [node name="Walk" type="Node" parent="StateChart/Root" unique_id=804597078]
 script = ExtResource("5_bhvv7")
+
+[node name="Go Attack1" type="Node" parent="StateChart/Root/Walk" unique_id=1720459313]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Attack1")
+event = &"player_close"
+delay_in_seconds = "0.0"
+
+[node name="Attack1" type="Node" parent="StateChart/Root" unique_id=640913275]
+script = ExtResource("5_bhvv7")
+
+[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1" unique_id=1180342957]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Attack2")
+delay_in_seconds = "attack_placeholder_duration"
+
+[node name="Attack2" type="Node" parent="StateChart/Root" unique_id=297465831]
+script = ExtResource("5_bhvv7")
+
+[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2" unique_id=1862203546]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Rest")
+guard = SubResource("Resource_pfar1")
+delay_in_seconds = "attack_placeholder_duration"
+
+[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2" unique_id=905176224]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Walk")
+delay_in_seconds = "attack_placeholder_duration"
+
+[node name="Rest" type="Node" parent="StateChart/Root" unique_id=1543790628]
+script = ExtResource("5_bhvv7")
+
+[node name="Go Attack1" type="Node" parent="StateChart/Root/Rest" unique_id=461837095]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Attack1")
+delay_in_seconds = "rest_duration"
+
+[node name="Stunned" type="Node" parent="StateChart/Root" unique_id=2071635489]
+script = ExtResource("5_bhvv7")
+
+[node name="Go Walk" type="Node" parent="StateChart/Root/Stunned" unique_id=1306928874]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Walk")
+delay_in_seconds = "stun_duration"
