@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://p7mg1ekvy812"]
+
+[ext_resource type="PackedScene" uid="uid://io6404lxsbja" path="res://game/scenes/projectiles/power_wave.tscn" id="1_ycstu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
+size = Vector2(96, 217)
+
+[node name="Node2D" type="Node2D" unique_id=548056787]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=895717479]
+collision_mask = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1249622111]
+position = Vector2(373, 107)
+shape = SubResource("RectangleShape2D_83sn4")
+
+[node name="PowerWave" parent="." unique_id=1259965705 instance=ExtResource("1_ycstu")]
+position = Vector2(-4, 75)

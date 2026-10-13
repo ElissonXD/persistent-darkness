@@ -1,0 +1,122 @@
+[gd_scene format=3 uid="uid://8mvh8343eyu3"]
+
+[ext_resource type="Script" uid="uid://btq6k7gbmvvay" path="res://game/scripts/enemies/boss.gd" id="1_48gq0"]
+[ext_resource type="Texture2D" uid="uid://b7mhupnvvdnji" path="res://assets/sprites/enemies/soul_of_cinder_temp.jpg" id="2_y2qqi"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_uoiu8"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="4_jtqy8"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bhvv7"]
+[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_twjaa"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
+
+[sub_resource type="Animation" id="Animation_4ybrt"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_bv1ij"]
+resource_name = "idle"
+length = 1.0000033854875714
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wruid"]
+_data = {
+&"RESET": SubResource("Animation_4ybrt"),
+&"idle": SubResource("Animation_bv1ij")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bfkjr"]
+atlas = ExtResource("2_y2qqi")
+region = Rect2(0, 512, 458, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_msw4w"]
+atlas = ExtResource("2_y2qqi")
+region = Rect2(458, 512, 458, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cknmc"]
+atlas = ExtResource("2_y2qqi")
+region = Rect2(916, 512, 458, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dsmj6"]
+atlas = ExtResource("2_y2qqi")
+region = Rect2(1374, 512, 458, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qsqqt"]
+atlas = ExtResource("2_y2qqi")
+region = Rect2(1832, 512, 458, 512)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6w058"]
+atlas = ExtResource("2_y2qqi")
+region = Rect2(2290, 512, 458, 512)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_83sn4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bfkjr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_msw4w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cknmc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dsmj6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qsqqt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6w058")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 10.0
+}]
+
+[node name="SoulCinder" type="CharacterBody2D" unique_id=1100173584]
+script = ExtResource("1_48gq0")
+HEALTH = null
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1036619247]
+shape = SubResource("RectangleShape2D_83sn4")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2027975258]
+libraries/ = SubResource("AnimationLibrary_wruid")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1427939567]
+sprite_frames = SubResource("SpriteFrames_83sn4")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.6800363
+
+[node name="StateChart" type="Node" parent="." unique_id=1980650167]
+script = ExtResource("3_uoiu8")
+metadata/_custom_type_script = "uid://couw105c3bde4"
+
+[node name="Root" type="Node" parent="StateChart" unique_id=875210573]
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateChart/Root" unique_id=373310700]
+script = ExtResource("5_bhvv7")
+
+[node name="Go Walk" type="Node" parent="StateChart/Root/Idle" unique_id=658592514]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Walk")
+event = &"event_walk"
+delay_in_seconds = "0.0"
+
+[node name="Walk" type="Node" parent="StateChart/Root" unique_id=804597078]
+script = ExtResource("5_bhvv7")

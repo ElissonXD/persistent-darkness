@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://io6404lxsbja"]
+
+[ext_resource type="Script" uid="uid://dynudqtvebgxk" path="res://game/scripts/projectiles/power_wave.gd" id="1_6y61h"]
+[ext_resource type="Texture2D" uid="uid://21cjfyq1gkb4" path="res://assets/sprites/projectiles/power_wave.png" id="2_v01y3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
+size = Vector2(50, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mfnai"]
+size = Vector2(52, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3bavd"]
+atlas = ExtResource("2_v01y3")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_krbxk"]
+atlas = ExtResource("2_v01y3")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vho61"]
+atlas = ExtResource("2_v01y3")
+region = Rect2(64, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51e1d"]
+atlas = ExtResource("2_v01y3")
+region = Rect2(0, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pbstd"]
+atlas = ExtResource("2_v01y3")
+region = Rect2(32, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_be5jw"]
+atlas = ExtResource("2_v01y3")
+region = Rect2(64, 96, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5me1"]
+atlas = ExtResource("2_v01y3")
+region = Rect2(96, 96, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_83sn4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3bavd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_krbxk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vho61")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_51e1d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pbstd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_be5jw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r5me1")
+}, {
+"duration": 1.0,
+"texture": null
+}],
+"loop": 0,
+"name": &"vanish",
+"speed": 10.0
+}]
+
+[node name="PowerWave" type="RigidBody2D" unique_id=1259965705]
+collision_layer = 8
+gravity_scale = 0.0
+lock_rotation = true
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_6y61h")
+DURATION = 2.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1107724837]
+shape = SubResource("RectangleShape2D_83sn4")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1589194335]
+collision_layer = 8
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=339566048]
+shape = SubResource("RectangleShape2D_mfnai")
+debug_color = Color(0.7261184, 0, 0.10694278, 0.41960785)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1227645359]
+position = Vector2(-1.749999, -4.7500033)
+scale = Vector2(1.8593751, 2.171875)
+sprite_frames = SubResource("SpriteFrames_83sn4")
+animation = &"vanish"
+autoplay = "default"
+frame = 3
+frame_progress = 1.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]

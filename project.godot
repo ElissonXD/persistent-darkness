@@ -19,6 +19,17 @@ config/icon="res://icon.svg"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_state_charts/plugin.cfg")
+
+[layer_names]
+
+2d_physics/layer_1="terrain"
+2d_physics/layer_2="player"
+2d_physics/layer_3="boss"
+2d_physics/layer_4="projectile"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
