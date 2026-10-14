@@ -7,18 +7,11 @@
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bhvv7"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_twjaa"]
 [ext_resource type="Script" uid="uid://le5w1cm0ul8p" path="res://addons/godot_state_charts/expression_guard.gd" id="7_xgrd1"]
-[ext_resource type="Script" path="res://game/scripts/enemies/attacks/attack_phase.gd" id="8_atkph"]
-[ext_resource type="Script" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="9_mhbox"]
+[ext_resource type="Script" uid="uid://b411mffelg75g" path="res://game/scripts/enemies/attacks/attack_phase.gd" id="8_atkph"]
+[ext_resource type="Script" uid="uid://brv01bwrynsnk" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="9_mhbox"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
 size = Vector2(180, 330)
-
-[sub_resource type="Resource" id="Resource_pfar1"]
-script = ExtResource("7_xgrd1")
-expression = "player_far"
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhit1"]
-size = Vector2(220, 260)
 
 [sub_resource type="Animation" id="Animation_4ybrt"]
 length = 0.001
@@ -96,6 +89,13 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhit1"]
+size = Vector2(220, 260)
+
+[sub_resource type="Resource" id="Resource_pfar1"]
+script = ExtResource("7_xgrd1")
+expression = "player_far"
+
 [node name="SoulCinder" type="CharacterBody2D" unique_id=1100173584]
 collision_layer = 4
 script = ExtResource("1_48gq0")
@@ -165,7 +165,6 @@ initial_state = NodePath("Telegraphy")
 
 [node name="Telegraphy" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1987827595]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 
 [node name="Go Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA/Telegraphy" unique_id=2056651043]
 script = ExtResource("6_twjaa")
@@ -174,7 +173,6 @@ delay_in_seconds = "combo_a_telegraphy"
 
 [node name="Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1615647313]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 
 [node name="Go Gap" type="Node" parent="StateChart/Root/Attack1/ComboA/Hit1" unique_id=804212589]
@@ -184,7 +182,6 @@ delay_in_seconds = "combo_a_hit"
 
 [node name="Gap" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1117113080]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 
 [node name="Go Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA/Gap" unique_id=308261849]
 script = ExtResource("6_twjaa")
@@ -193,7 +190,6 @@ delay_in_seconds = "combo_a_gap"
 
 [node name="Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=991153172]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 
 [node name="Go Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA/Hit2" unique_id=1437630967]
@@ -203,7 +199,6 @@ delay_in_seconds = "combo_a_hit"
 
 [node name="Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1427744315]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 
 [node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1/ComboA/Recovery" unique_id=1627320177]
 script = ExtResource("6_twjaa")
@@ -220,7 +215,6 @@ initial_state = NodePath("Telegraphy")
 
 [node name="Telegraphy" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1877258970]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 
 [node name="Go Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB/Telegraphy" unique_id=1648625623]
 script = ExtResource("6_twjaa")
@@ -229,7 +223,6 @@ delay_in_seconds = "combo_b_telegraphy"
 
 [node name="Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1994299432]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 
 [node name="Go Gap" type="Node" parent="StateChart/Root/Attack2/ComboB/Hit1" unique_id=608973990]
@@ -239,7 +232,6 @@ delay_in_seconds = "combo_b_hit"
 
 [node name="Gap" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1906219080]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 
 [node name="Go Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB/Gap" unique_id=1360827419]
 script = ExtResource("6_twjaa")
@@ -248,7 +240,6 @@ delay_in_seconds = "combo_b_gap"
 
 [node name="Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=258177799]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 
 [node name="Go Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB/Hit2" unique_id=140193930]
@@ -258,7 +249,6 @@ delay_in_seconds = "combo_b_hit"
 
 [node name="Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=575098438]
 script = ExtResource("8_atkph")
-HITBOX = NodePath("../../../../../MeleeHitbox")
 
 [node name="Go Rest" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1644967665]
 script = ExtResource("6_twjaa")

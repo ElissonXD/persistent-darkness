@@ -15,17 +15,30 @@ game/resources/              resources (.tres)
 
 ## Regras de código
 
-- Lógica fica nos scripts `.gd`; os `.tscn` guardam só a estrutura de nós e valores de inspector.
+- Preferir configurar pelo Inspetor da Godot: valores ajustáveis são @export, e as conexões de sinais
+  (state_entered, state_exited, state_physics_processing) são feitas na aba Sinais, não com connect() no código.
+  O .gd só tem o corpo dos métodos ligados.
+- Não colorir (modulate) o sprite do boss para mostrar estado e não criar Labels de debug de estado:
+  usar o debugger do addon e "Formas de colisão visíveis" da Godot.
 - Estilo: indentação com tabs, comentários em português.
 - Exports agrupados com `@export_category('...')` e nomes em MAIÚSCULAS (ver `game/scripts/enemies/boss.gd`).
 - Todo número ajustável (velocidade, dano, duração, distância...) vira `@export`.
-- Máquinas de estado usam o addon `godot_state_charts` (StateChart, CompoundState, AtomicState, Transition).
-  Não criar StateMachine própria.
-  - Durações: transição automática com `delay_in_seconds` (é cancelada se o estado for interrompido).
-  - Valores vindos de exports entram nas expressões via `state_chart.set_expression_property()`.
-  - Transição num estado pai (ex.: `Root`) vale para qualquer filho ativo que não consumir o evento.
-  - Guards de transições atrasadas são avaliados quando a transição é enfileirada (entrada no estado),
-	não quando o delay termina.
+
+## Máquina de estados (OBRIGATÓRIO)
+
+Usamos SOMENTE o addon `godot_state_charts` (StateChart, CompoundState, AtomicState, Transition).
+Todo comportamento do boss (movimento, ataques, fases, atordoado) é um estado ou uma transição
+dentro do nó `StateChart` do boss.
+
+- Não criar StateMachine própria, enum de estados nem `match state:` no `boss.gd`.
+- Não editar `addons/`.
+- O código reage aos sinais do estado (`state_entered`, `state_exited`, `state_physics_processing`).
+- Antes de criar um estado novo, dizer onde ele se encaixa na hierarquia do StateChart.
+- Durações: transição automática com `delay_in_seconds` (é cancelada se o estado for interrompido).
+- Valores vindos de exports entram nas expressões via `state_chart.set_expression_property()`.
+- Transição num estado pai (ex.: `Root`) vale para qualquer filho ativo que não consumir o evento.
+- Guards de transições atrasadas são avaliados quando a transição é enfileirada (entrada no estado),
+  não quando o delay termina.
 
 ## Camadas de física
 
@@ -53,6 +66,16 @@ game/resources/              resources (.tres)
   A fase liga/desliga a `MeleeHitbox` ao entrar e sempre desliga ao sair. Dano só em fase com hitbox ativa,
   nunca por contato. Durações, dano e knockback dos combos ficam nos exports do `boss.gd`.
 - Cena de teste: `game/scenes/test/boss_test_scene.tscn` (usa `player_dummy.tscn`).
+
+## Como adicionar um ataque novo
+
+1. Criar o golpe como estado composto dentro do `Attack1` ou `Attack2` (ou um `AttackN` novo),
+   com as fases Telegraphy → execução → Recovery, reaproveitando `AttackPhase`.
+2. Reaproveitar a `MeleeHitbox` para corpo a corpo. Projétil ou área ganham cena e script próprios.
+3. Colocar duração, dano e knockback como `@export`.
+4. Não mudar o fluxo principal do boss (Idle/Walk/Attack/Rest/Stunned): o ataque novo só entra como
+   filho de um estado de ataque, com uma transição de entrada.
+5. Testar na `boss_test_scene.tscn` antes de abrir PR.
 
 ## Fluxo de git
 
