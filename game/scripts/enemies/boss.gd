@@ -44,33 +44,13 @@ var FIRE_BUILDUP = 0
 var FREEZE_BUILDUP = 0
 var ELETRIC_BUILDUP = 0
 
-# Cor do sprite por estado, só para debug enquanto não há animações
-const STATE_COLORS := {
-	&"Idle": Color.WHITE,
-	&"Walk": Color(0.8, 1.0, 0.8),
-	&"Rest": Color(0.5, 0.7, 1.0),
-	&"Stunned": Color(1.0, 1.0, 0.3),
-}
-
-# Cor do sprite por fase de ataque (fases com hitbox ativa usam HIT_COLOR)
-const PHASE_COLORS := {
-	&"Telegraphy": Color(1.0, 0.7, 0.2),
-	&"Gap": Color(1.0, 0.6, 0.5),
-	&"Recovery": Color(0.55, 0.55, 0.55),
-}
-const HIT_COLOR := Color(1.0, 0.15, 0.15)
-
 # Nodes
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var state_chart: StateChart = $StateChart
-@onready var root_state: CompoundState = $StateChart/Root
-@onready var walk_state: StateChartState = $StateChart/Root/Walk
 @onready var combo_a: CompoundState = $StateChart/Root/Attack1/ComboA
 @onready var combo_b: CompoundState = $StateChart/Root/Attack2/ComboB
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
 
-# Caminho do estado ativo a partir do Root, ex.: Attack1/ComboA/Hit1 (usado pelo debug)
-var current_state_path : String = ""
 var player : Node2D = null
 
 func _ready() -> void:
@@ -82,24 +62,16 @@ func _ready() -> void:
 	configure_combo(combo_a, "combo_a", COMBO_A_TELEGRAPHY, COMBO_A_HIT, COMBO_A_GAP, COMBO_A_RECOVERY, COMBO_A_DAMAGE, COMBO_A_KNOCKBACK)
 	configure_combo(combo_b, "combo_b", COMBO_B_TELEGRAPHY, COMBO_B_HIT, COMBO_B_GAP, COMBO_B_RECOVERY, COMBO_B_DAMAGE, COMBO_B_KNOCKBACK)
 
-	for state in root_state.get_children():
-		if state is StateChartState:
-			state.state_entered.connect(_on_state_entered.bind(state.name))
-	for phase in find_attack_phases(root_state):
-		phase.state_entered.connect(_on_attack_phase_entered.bind(phase))
-	walk_state.state_physics_processing.connect(_on_walk_state_physics_processing)
-
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
 	move_and_slide()
 
-# Estados
+# Estados (sinais ligados na aba Sinais do boss.tscn)
 
+# state_entered de cada filho do Root, com o nome do estado como bind
 func _on_state_entered(state_name: StringName) -> void:
-	current_state_path = state_name
-	animated_sprite_2d.modulate = STATE_COLORS.get(state_name, Color.WHITE)
 	# só o Walk move o boss na horizontal
 	if state_name != &"Walk":
 		velocity.x = 0
@@ -109,11 +81,9 @@ func _on_state_entered(state_name: StringName) -> void:
 		if target != null:
 			face(target.global_position.x - global_position.x)
 
-# Chamado depois do _on_state_entered do estado pai (o addon entra primeiro no pai)
-func _on_attack_phase_entered(phase: AttackPhase) -> void:
-	current_state_path = str(root_state.get_path_to(phase))
-	animated_sprite_2d.modulate = HIT_COLOR if phase.HITBOX_ACTIVE else PHASE_COLORS.get(phase.name, Color.WHITE)
-
+# state_entered de cada AttackPhase. Chamado depois do _on_state_entered do estado pai
+# (o addon entra primeiro no pai)
+func _on_attack_phase_entered() -> void:
 	# O addon avalia o guard de uma transição atrasada quando ela é enfileirada (na entrada
 	# da fase), não quando o delay termina. Por isso a distância é medida a cada fase: a
 	# decisão Rest/Walk do fim do Combo B usa a distância do início do Recovery.

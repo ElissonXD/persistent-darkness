@@ -1,6 +1,7 @@
 extends Node2D
 
-# Cena de teste do boss: mostra o estado ativo e a vida do dummy.
+# Cena de teste do boss: mostra a vida do dummy (estado do boss: usar o debugger do addon).
+# [<-/->] anda, [Espaço] alterna invulnerável,
 # [1] envia posture_broken ao boss, [2] aplica dano de teste no dummy pelo contrato,
 # [R] restaura a vida do dummy.
 
@@ -14,11 +15,7 @@ extends Node2D
 @onready var debug_label: Label = $CanvasLayer/DebugLabel
 
 func _process(_delta: float) -> void:
-	debug_label.text = "Boss: %s\nDummy HP: %d%s\n\n[<-/->] andar   [Espaço] invulnerável   [1] posture_broken   [2] dano de teste   [R] restaurar vida" % [
-		boss.current_state_path,
-		player_dummy.health,
-		"  (INVULNERÁVEL)" if player_dummy.invulnerable else "",
-	]
+	debug_label.text = "Dummy HP: %d" % player_dummy.health
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey and event.pressed and not event.echo):

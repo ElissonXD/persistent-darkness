@@ -6,6 +6,8 @@ extends AtomicState
 # Ao entrar liga ou desliga a hitbox conforme HITBOX_ACTIVE; ao sair (inclusive quando a fase é
 # interrompida, ex.: Stunned) a hitbox SEMPRE é desligada.
 # A duração da fase fica no delay_in_seconds da transição que sai dela.
+# Toda AttackPhase precisa ter, na aba Sinais, state_entered -> _on_state_entered e
+# state_exited -> _on_state_exited ligados nela mesma; sem o segundo a hitbox fica ligada.
 
 @export_category('Fase de ataque')
 @export var HITBOX : MeleeHitbox
@@ -14,14 +16,6 @@ extends AtomicState
 @export var DAMAGE : int = 0
 ## Empurrão aplicado no alvo; x é sempre convertido para longe do atacante
 @export var KNOCKBACK : Vector2 = Vector2.ZERO
-
-func _ready() -> void:
-	super._ready()
-	if Engine.is_editor_hint():
-		return
-
-	state_entered.connect(_on_state_entered)
-	state_exited.connect(_on_state_exited)
 
 func _on_state_entered() -> void:
 	if HITBOX == null:

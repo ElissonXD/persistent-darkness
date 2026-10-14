@@ -18,11 +18,13 @@ game/resources/              resources (.tres)
 - Preferir configurar pelo Inspetor da Godot: valores ajustáveis são @export, e as conexões de sinais
   (state_entered, state_exited, state_physics_processing) são feitas na aba Sinais, não com connect() no código.
   O .gd só tem o corpo dos métodos ligados.
-- Não colorir (modulate) o sprite do boss para mostrar estado e não criar Labels de debug de estado:
-  usar o debugger do addon e "Formas de colisão visíveis" da Godot.
+- Não colorir (modulate) o sprite do boss para mostrar estado nem criar Labels de estado: usar o
+	debugger do addon e "Formas de colisão visíveis" da Godot. O Label da boss_test_scene pode
+	mostrar só a vida do dummy.
 - Estilo: indentação com tabs, comentários em português.
 - Exports agrupados com `@export_category('...')` e nomes em MAIÚSCULAS (ver `game/scripts/enemies/boss.gd`).
 - Todo número ajustável (velocidade, dano, duração, distância...) vira `@export`.
+- Ao terminar, listar o que mudou e o que NÃO foi possível validar (ex.: comportamento em jogo).
 
 ## Máquina de estados (OBRIGATÓRIO)
 
@@ -36,9 +38,6 @@ dentro do nó `StateChart` do boss.
 - Antes de criar um estado novo, dizer onde ele se encaixa na hierarquia do StateChart.
 - Durações: transição automática com `delay_in_seconds` (é cancelada se o estado for interrompido).
 - Valores vindos de exports entram nas expressões via `state_chart.set_expression_property()`.
-- Transição num estado pai (ex.: `Root`) vale para qualquer filho ativo que não consumir o evento.
-- Guards de transições atrasadas são avaliados quando a transição é enfileirada (entrada no estado),
-  não quando o delay termina.
 
 ## Camadas de física
 
@@ -66,6 +65,8 @@ dentro do nó `StateChart` do boss.
   A fase liga/desliga a `MeleeHitbox` ao entrar e sempre desliga ao sair. Dano só em fase com hitbox ativa,
   nunca por contato. Durações, dano e knockback dos combos ficam nos exports do `boss.gd`.
 - Cena de teste: `game/scenes/test/boss_test_scene.tscn` (usa `player_dummy.tscn`).
+- O design dos ataques (valores finais, distâncias) está no Notion do grupo; valores provisórios no
+	código levam um comentário TODO.
 
 ## Como adicionar um ataque novo
 
@@ -85,3 +86,6 @@ dentro do nó `StateChart` do boss.
 - Arquivos atuais com dono: Power Wave (`power_wave.gd`, `power_wave.tscn`, `test_scene.tscn`).
 - `.godot/` não vai pro repositório.
 - Abra PR para a `main` e peça revisão; não faça push forçado em branch compartilhada.
+- Não fazer commit nem push sem eu pedir.
+- O boss.tscn é editado por duas pessoas: mudanças pequenas e commits frequentes. Ao editar .tscn,
+	alterar só as linhas necessárias, sem reescrever o arquivo.

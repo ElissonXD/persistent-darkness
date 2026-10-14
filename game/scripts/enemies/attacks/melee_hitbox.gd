@@ -5,11 +5,7 @@ extends Area2D
 # Só causa dano enquanto ativa e atinge cada alvo no máximo uma vez por golpe:
 # a lista de atingidos zera a cada activate().
 # Dano segue o contrato: take_damage(amount, knockback) no dono do hurtbox, se existir.
-
-@export_category('Debug')
-## Desenha a área da hitbox enquanto ela está ativa
-@export var DEBUG_DRAW : bool = true
-@export var DEBUG_COLOR : Color = Color(1, 0, 0, 0.35)
+# area_entered -> _on_area_entered é ligado na aba Sinais da cena que usa a hitbox.
 
 # Nodes
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
@@ -23,7 +19,6 @@ var hit_targets : Array[Node] = []
 
 func _ready() -> void:
 	set_deferred("monitoring", false)
-	area_entered.connect(_on_area_entered)
 
 func activate(amount: int, knockback_force: Vector2) -> void:
 	damage = amount
@@ -31,14 +26,12 @@ func activate(amount: int, knockback_force: Vector2) -> void:
 	hit_targets.clear()
 	active = true
 	set_deferred("monitoring", true)
-	queue_redraw()
 
 func deactivate() -> void:
 	# a flag desliga o dano na hora; o monitoring só pode mudar no fim do frame
 	active = false
 	hit_targets.clear()
 	set_deferred("monitoring", false)
-	queue_redraw()
 
 # Espelha a forma para o lado em que o dono está olhando
 func set_facing(direction: float) -> void:
@@ -47,7 +40,6 @@ func set_facing(direction: float) -> void:
 
 	facing = signf(direction)
 	collision_shape_2d.position.x = absf(collision_shape_2d.position.x) * facing
-	queue_redraw()
 
 func _on_area_entered(area: Area2D) -> void:
 	if not active:
@@ -63,12 +55,3 @@ func _on_area_entered(area: Area2D) -> void:
 	if direction == 0:
 		direction = facing
 	target.take_damage(damage, Vector2(absf(knockback.x) * direction, knockback.y))
-
-func _draw() -> void:
-	if not (active and DEBUG_DRAW):
-		return
-
-	var rect_shape := collision_shape_2d.shape as RectangleShape2D
-	if rect_shape == null:
-		return
-	draw_rect(Rect2(collision_shape_2d.position - rect_shape.size / 2, rect_shape.size), DEBUG_COLOR)
