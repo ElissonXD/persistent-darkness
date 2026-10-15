@@ -1,13 +1,19 @@
 [gd_scene format=3 uid="uid://io6404lxsbja"]
 
+[ext_resource type="Shader" uid="uid://dpl6j1820vjk1" path="res://assets/shaders/change_color.gdshader" id="1_3bavd"]
 [ext_resource type="Script" uid="uid://dynudqtvebgxk" path="res://game/scripts/projectiles/power_wave.gd" id="1_6y61h"]
 [ext_resource type="Texture2D" uid="uid://21cjfyq1gkb4" path="res://assets/sprites/projectiles/power_wave.png" id="2_v01y3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
-size = Vector2(50, 50)
+size = Vector2(82, 81)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mfnai"]
-size = Vector2(52, 50)
+size = Vector2(83, 81)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c0jn0"]
+shader = ExtResource("1_3bavd")
+shader_parameter/tint_color = Color(0.9372549, 0, 0, 0)
+shader_parameter/mix_weight = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3bavd"]
 atlas = ExtResource("2_v01y3")
@@ -84,6 +90,7 @@ script = ExtResource("1_6y61h")
 DURATION = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1107724837]
+position = Vector2(16, -15.5)
 shape = SubResource("RectangleShape2D_83sn4")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1589194335]
@@ -91,17 +98,16 @@ collision_layer = 8
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=339566048]
+position = Vector2(15.5, -15.5)
 shape = SubResource("RectangleShape2D_mfnai")
 debug_color = Color(0.7261184, 0, 0.10694278, 0.41960785)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1227645359]
-position = Vector2(-1.749999, -4.7500033)
-scale = Vector2(1.8593751, 2.171875)
+material = SubResource("ShaderMaterial_c0jn0")
+position = Vector2(13.249997, -28.000004)
+scale = Vector2(2.796875, 3.625)
 sprite_frames = SubResource("SpriteFrames_83sn4")
-animation = &"vanish"
 autoplay = "default"
-frame = 3
-frame_progress = 1.0
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]

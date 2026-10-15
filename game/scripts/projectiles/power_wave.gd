@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 @export_category("Dados")
+@export var STRONGER_VARIANT: bool = false # Versão mais forte (20% a mais de dano e 50% de velocidade)
 @export var SPEED: float = 400
 @export var DIRECTION: int = 1
 @export var DAMAGE: int = 20
@@ -11,7 +12,15 @@ extends RigidBody2D
 @onready var hitbox: Area2D = $Hitbox
 
 func _ready() -> void:
-	linear_velocity.x = SPEED
+	linear_velocity.x = SPEED * DIRECTION
+	
+	if DIRECTION < 0:
+		animated_sprite_2d.flip_h = true
+		
+	if STRONGER_VARIANT:
+		animated_sprite_2d.material.set_shader_parameter("mix_weight", 0.7)
+		DAMAGE *= 1.2
+		SPEED *= 1.5
 	return
 
 func _process(delta: float) -> void:
@@ -19,7 +28,7 @@ func _process(delta: float) -> void:
 	if DURATION > 0:
 		DURATION -= delta
 		
-		linear_velocity.x = SPEED
+		linear_velocity.x = SPEED * DIRECTION
 		if DURATION <= 0:
 			vanish()
 

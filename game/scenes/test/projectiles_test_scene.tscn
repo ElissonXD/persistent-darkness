@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://p7mg1ekvy812"]
 
-[ext_resource type="PackedScene" uid="uid://io6404lxsbja" path="res://game/scenes/projectiles/power_wave.tscn" id="1_ycstu"]
+[ext_resource type="PackedScene" uid="uid://io6404lxsbja" path="res://game/scenes/projectiles/power_wave.tscn" id="1_60icq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
 size = Vector2(96, 217)
@@ -14,5 +14,5 @@ collision_mask = 9
 position = Vector2(373, 107)
 shape = SubResource("RectangleShape2D_83sn4")
 
-[node name="PowerWave" parent="." unique_id=1259965705 instance=ExtResource("1_ycstu")]
-position = Vector2(-4, 75)
+[node name="PowerWave" parent="." unique_id=1259965705 instance=ExtResource("1_60icq")]
+position = Vector2(767, 78)
