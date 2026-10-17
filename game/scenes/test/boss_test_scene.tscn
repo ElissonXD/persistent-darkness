@@ -16,10 +16,10 @@ position = Vector2(100, 0)
 zoom = Vector2(0.5, 0.5)
 
 [node name="StateChartDebugger" parent="." unique_id=1578731241 instance=ExtResource("2_rw77u")]
-offset_left = 526.0
-offset_top = -559.0
-offset_right = 1034.5
-offset_bottom = -231.0
+offset_left = 143.0
+offset_top = -595.0
+offset_right = 1205.0
+offset_bottom = -37.0
 initial_node_to_watch = NodePath("../Boss")
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=1409815194]
