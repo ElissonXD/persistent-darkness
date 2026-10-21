@@ -25,7 +25,6 @@ func _on_state_entered() -> void:
 		HITBOX.activate(DAMAGE, KNOCKBACK)
 	else:
 		HITBOX.deactivate()
-	
 
 func _on_state_exited() -> void:
 	if HITBOX != null:
