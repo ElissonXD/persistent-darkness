@@ -19,6 +19,8 @@ var hit_targets : Array[Node] = []
 
 func _ready() -> void:
 	set_deferred("monitoring", false)
+	# forma desabilitada aparece cinza em "Formas de colisão visíveis"; ativa, aparece vermelha
+	collision_shape_2d.set_deferred("disabled", true)
 
 func activate(amount: int, knockback_force: Vector2) -> void:
 	damage = amount
@@ -26,12 +28,14 @@ func activate(amount: int, knockback_force: Vector2) -> void:
 	hit_targets.clear()
 	active = true
 	set_deferred("monitoring", true)
+	collision_shape_2d.set_deferred("disabled", false)
 
 func deactivate() -> void:
 	# a flag desliga o dano na hora; o monitoring só pode mudar no fim do frame
 	active = false
 	hit_targets.clear()
 	set_deferred("monitoring", false)
+	collision_shape_2d.set_deferred("disabled", true)
 
 # Espelha a forma para o lado em que o dono está olhando
 func set_facing(direction: float) -> void:

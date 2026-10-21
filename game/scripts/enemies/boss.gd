@@ -178,12 +178,18 @@ func _on_walk_state_physics_processing(_delta: float) -> void:
 
 # Durações viram expression properties (<prefixo>_telegraphy, _hit, _gap, _recovery) usadas nos
 # delay_in_seconds das transições; dano e knockback vão para as fases com hitbox ativa.
+# HITBOX e SPRITE vazios nas fases são preenchidos com a MeleeHitbox e o AnimatedSprite2D do boss.
 func configure_combo(combo: Node, prefix: String, telegraphy: float, hit: float, gap: float, recovery: float, damage: int, knockback: Vector2) -> void:
 	state_chart.set_expression_property(prefix + "_telegraphy", telegraphy)
 	state_chart.set_expression_property(prefix + "_hit", hit)
 	state_chart.set_expression_property(prefix + "_gap", gap)
 	state_chart.set_expression_property(prefix + "_recovery", recovery)
 	for phase in find_attack_phases(combo):
+		# fase sem HITBOX/SPRITE no Inspetor usa os do boss (sem isso a fase não liga a hitbox)
+		if phase.HITBOX == null:
+			phase.HITBOX = melee_hitbox
+		if phase.SPRITE == null:
+			phase.SPRITE = animated_sprite_2d
 		if phase.HITBOX_ACTIVE:
 			phase.DAMAGE = damage
 			phase.KNOCKBACK = knockback
