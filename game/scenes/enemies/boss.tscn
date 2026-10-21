@@ -414,10 +414,9 @@ delay_in_seconds = "combo_a_hit"
 [node name="Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1427744315]
 script = ExtResource("8_atkph")
 
-[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1" unique_id=1627320177]
+[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1/ComboA/Recovery" unique_id=1627320177]
 script = ExtResource("6_twjaa")
-to = NodePath("../../Attack2")
-event = &"go_to_attack_2"
+to = NodePath("../../../../Attack2")
 delay_in_seconds = "combo_a_recovery"
 
 [node name="Go Combo A" type="Node" parent="StateChart/Root/Attack1" unique_id=922783987]
@@ -471,17 +470,15 @@ delay_in_seconds = "combo_b_hit"
 [node name="Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=575098438]
 script = ExtResource("8_atkph")
 
-[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2" unique_id=1644967665]
+[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1644967665]
 script = ExtResource("6_twjaa")
-to = NodePath("../../Rest")
-event = &"go_rest"
+to = NodePath("../../../../Rest")
 guard = SubResource("Resource_pfar1")
 delay_in_seconds = "combo_b_recovery"
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2" unique_id=1660596667]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1660596667]
 script = ExtResource("6_twjaa")
-to = NodePath("../../Walk")
-event = &"go_walk"
+to = NodePath("../../../../Walk")
 delay_in_seconds = "combo_b_recovery"
 
 [node name="Go Combo B" type="Node" parent="StateChart/Root/Attack2" unique_id=531765325]
@@ -526,7 +523,6 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Recovery" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Recovery" to="StateChart/Root/Attack1/ComboA/Recovery" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/ComboA/Recovery" to="StateChart/Root/Attack1/ComboA/Recovery" method="_on_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Attack1/ComboA/Recovery" to="." method="_on_recovery_state1_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Attack2" to="." method="_on_state_entered" binds= [&"Attack2"]]
 [connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Telegraphy" to="StateChart/Root/Attack2/ComboB/Telegraphy" method="_on_state_entered"]
@@ -543,6 +539,5 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Recovery" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Recovery" to="StateChart/Root/Attack2/ComboB/Recovery" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/ComboB/Recovery" to="StateChart/Root/Attack2/ComboB/Recovery" method="_on_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Attack2/ComboB/Recovery" to="." method="_on_recovery_state2_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Rest" to="." method="_on_state_entered" binds= [&"Rest"]]
 [connection signal="state_entered" from="StateChart/Root/Stunned" to="." method="_on_state_entered" binds= [&"Stunned"]]

@@ -132,7 +132,8 @@ func _on_state_entered(state_name: StringName) -> void:
 func _on_attack_phase_entered() -> void:
 	# O addon avalia o guard de uma transição atrasada quando ela é enfileirada (na entrada
 	# da fase), não quando o delay termina. Por isso a distância é medida a cada fase: a
-	# decisão Rest/Walk do fim do Combo B usa a distância do início do Recovery.
+	# decisão Rest/Walk do fim do Combo B usa a distância do início do Recovery
+	# (este sinal é emitido antes do addon avaliar as transições da fase).
 	state_chart.set_expression_property(&"player_far", is_player_far())
 
 # ---------------ESTADOS DE PROCESSAMENTO ----------------
@@ -163,28 +164,10 @@ func _on_walk_state_physics_processing(_delta: float) -> void:
 
 	velocity.x = signf(distance_x) * WALK_SPEED
 
-func _on_recovery_state1_physics_processing(_delta):
-	## Temporario
-	## o correto é ter um state de recovery universal,
-	## as unicas diferenças seria a transição e as animações
-	await get_tree().create_timer(1).timeout
-	state_chart.send_event(&"go_to_attack_2")
-	return
-
-func _on_recovery_state2_physics_processing(_delta):
-	## Temporario
-	## o correto é ter um state de recovery universal,
-	## as unicas diferenças seria a transição e as animações
-	await get_tree().create_timer(1).timeout
-	# longe -> descansa; perto -> volta a andar. O guard do Go Rest usa player_far, então ele é
-	# atualizado aqui para não divergir da decisão do código.
-	var far := is_player_far()
-	state_chart.set_expression_property(&"player_far", far)
-	if far:
-		state_chart.send_event(&"go_rest")
-	else:
-		state_chart.send_event(&"go_walk")
-	return
+# Recovery é uma AttackPhase igual às outras: o que muda de um golpe para outro é só a animação
+# e a transição de saída (com delay), configuradas na cena:
+#   Attack1/<golpe>/Recovery -> Attack2
+#   Attack2/<golpe>/Recovery -> Rest (guard player_far) ou Walk
 
 # TODO: Stunned sempre volta para Walk (transição em boss.tscn). Para onde sair é decisão em aberto.
 
