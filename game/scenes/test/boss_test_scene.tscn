@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bu62hk8yvgm3j"]
+
+[ext_resource type="Script" uid="uid://otyg8bhmf1bq" path="res://game/scripts/test/boss_test_scene.gd" id="1_bts01"]
+[ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="2_bts02"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="2_rw77u"]
+[ext_resource type="PackedScene" path="res://game/scenes/test/player_dummy.tscn" id="3_bts03"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(3000, 100)
+
+[node name="BossTestScene" type="Node2D" unique_id=1655673890]
+script = ExtResource("1_bts01")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=597705290]
+position = Vector2(100, 0)
+zoom = Vector2(0.5, 0.5)
+
+[node name="StateChartDebugger" parent="." unique_id=1578731241 instance=ExtResource("2_rw77u")]
+offset_left = 143.0
+offset_top = -595.0
+offset_right = 1205.0
+offset_bottom = -37.0
+initial_node_to_watch = NodePath("../Boss")
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=1409815194]
+position = Vector2(0, 350)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=910327295]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="ColorRect" type="ColorRect" parent="Floor" unique_id=18097535]
+offset_left = -1500.0
+offset_top = -50.0
+offset_right = 1500.0
+offset_bottom = 50.0
+color = Color(0.25, 0.22, 0.2, 1)
+
+[node name="Boss" parent="." unique_id=863666509 instance=ExtResource("2_bts02")]
+position = Vector2(700, 130)
+
+[node name="PlayerDummy" parent="." unique_id=284349017 instance=ExtResource("3_bts03")]
+position = Vector2(-500, 255)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=511981732]
+
+[node name="DebugLabel" type="Label" parent="CanvasLayer" unique_id=232728972]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 816.0
+offset_bottom = 116.0
