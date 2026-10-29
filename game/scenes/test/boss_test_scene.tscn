@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://otyg8bhmf1bq" path="res://game/scripts/test/boss_test_scene.gd" id="1_bts01"]
 [ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="2_bts02"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="2_rw77u"]
-[ext_resource type="PackedScene" path="res://game/scenes/test/player_dummy.tscn" id="3_bts03"]
+[ext_resource type="PackedScene" uid="uid://xlicav4w42rg" path="res://game/scenes/test/player_dummy.tscn" id="3_bts03"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(3000, 100)

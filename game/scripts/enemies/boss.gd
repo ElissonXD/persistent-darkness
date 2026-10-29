@@ -57,6 +57,16 @@ var walk_timer : float = 0
 @export var COMBO_A_DAMAGE : int = 30
 @export var COMBO_A_KNOCKBACK : Vector2 = Vector2(250, -150)
 
+## Power wave
+var power_wave = preload("res://game/scenes/projectiles/power_wave.tscn") 
+@export_category('Power Wave')
+@export var POWER_WAVE_TELEGRAPHY : float = 0.3
+@export var POWER_WAVE_HIT : float = 0.5
+@export var POWER_WAVE_GAP : float = 1.5
+@export var POWER_WAVE_RECOVERY : float = 0.5
+@export var POWER_WAVE_DAMAGE : int = 10
+@export var POWER_WAVE_KNOCKBACK : Vector2 = Vector2(250, -150)
+
 @export_category('Combo B')
 ## Aviso mais curto: o Combo B é continuação do Combo A
 @export var COMBO_B_TELEGRAPHY : float = 0.3
@@ -76,7 +86,12 @@ var ELETRIC_BUILDUP = 0
 @onready var state_chart: StateChart = $StateChart
 @onready var combo_a: CompoundState = $StateChart/Root/Attack1/ComboA
 @onready var combo_b: CompoundState = $StateChart/Root/Attack2/ComboB
+@onready var power_wave_a: CompoundState = $StateChart/Root/Attack1/PowerWaveA
+@onready var power_wave_b: CompoundState = $StateChart/Root/Attack2/PowerWaveB
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
+@onready var marker_2d: Marker2D = $Marker2D
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 
 var player : Node2D = null
 
@@ -91,6 +106,8 @@ func _ready() -> void:
 	state_chart.set_expression_property(&"player_far", false)
 	configure_combo(combo_a, "combo_a", COMBO_A_TELEGRAPHY, COMBO_A_HIT, COMBO_A_GAP, COMBO_A_RECOVERY, COMBO_A_DAMAGE, COMBO_A_KNOCKBACK)
 	configure_combo(combo_b, "combo_b", COMBO_B_TELEGRAPHY, COMBO_B_HIT, COMBO_B_GAP, COMBO_B_RECOVERY, COMBO_B_DAMAGE, COMBO_B_KNOCKBACK)
+	configure_combo(power_wave_a, "power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY, POWER_WAVE_DAMAGE, POWER_WAVE_KNOCKBACK)
+	configure_combo(power_wave_b, "power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY, POWER_WAVE_DAMAGE, POWER_WAVE_KNOCKBACK)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -114,6 +131,8 @@ ESTADOS COMPOSTOS - 1 para cada elemento, 1 para fase 2
 func _on_state_entered(state_name: StringName) -> void:
 	# SEMPRE ao ir para um estado, ficar olhando pro player (antes de escolher o golpe)
 	face(player_distance())
+	# SEMPRE resetar animação
+	animation_player.play("RESET")
 
 	# só o Walk move o boss na horizontal
 	if state_name != &"Walk":
@@ -122,10 +141,21 @@ func _on_state_entered(state_name: StringName) -> void:
 	# --- CONDICIONAIS DE CADA ESTADO ---
 	if state_name == &"Walk":
 		walk_timer = WALK_MAX_DURATION
+		animated_sprite_2d.play("running")
 	if state_name == &"Attack1" or state_name == &"Attack2":
 		var attack := pick_attack(get_attack_state(state_name))
 		if attack != "":
 			state_chart.send_event(attack)
+
+func on_power_waveA_enter() -> void:
+	instatiate_power_wave(false)
+	return
+
+func on_power_waveB_enter() -> void:
+	instatiate_power_wave(true)
+	return
+
+
 
 # state_entered de cada AttackPhase. Chamado depois do _on_state_entered do estado pai
 # (o addon entra primeiro no pai)
@@ -163,6 +193,9 @@ func _on_walk_state_physics_processing(_delta: float) -> void:
 		return
 
 	velocity.x = signf(distance_x) * WALK_SPEED
+
+
+	
 
 # Recovery é uma AttackPhase igual às outras: o que muda de um golpe para outro é só a animação
 # e a transição de saída (com delay), configuradas na cena:
@@ -247,9 +280,22 @@ func face(direction_x: float) -> void:
 	if direction_x != 0:
 		animated_sprite_2d.flip_h = (direction_x < 0) == SPRITE_FACES_RIGHT
 		melee_hitbox.set_facing(direction_x)
+		marker_2d.position.x = abs(marker_2d.position.x) * sign(direction_x)
 
 # Contrato de dano: hurtbox do player (Area2D, camada 2) cujo dono tem take_damage()
 func deal_damage(hurtbox: Area2D, amount: int, knockback: Vector2) -> void:
 	var target = hurtbox.owner
 	if target != null and target.has_method("take_damage"):
 		target.take_damage(amount, knockback)
+
+func _on_gap_1_state_entered() -> void:
+	pass # Replace with function body.
+
+func instatiate_power_wave(isStronger:bool):
+	var instance = power_wave.instantiate()
+	if animated_sprite_2d.flip_h: instance.DIRECTION = 1
+	else: instance.DIRECTION = -1
+	instance.position = marker_2d.global_position
+	instance.STRONGER_VARIANT = isStronger;
+	get_tree().current_scene.add_child(instance)
+	return

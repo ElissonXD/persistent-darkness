@@ -11,6 +11,7 @@ size = Vector2(82, 81)
 size = Vector2(83, 81)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c0jn0"]
+resource_local_to_scene = true
 shader = ExtResource("1_3bavd")
 shader_parameter/tint_color = Color(0.9372549, 0, 0, 0)
 shader_parameter/mix_weight = 0.0
@@ -82,6 +83,7 @@ animations = [{
 
 [node name="PowerWave" type="RigidBody2D" unique_id=1259965705]
 collision_layer = 8
+collision_mask = 0
 gravity_scale = 0.0
 lock_rotation = true
 contact_monitor = true
@@ -91,21 +93,23 @@ DURATION = 2.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1107724837]
 position = Vector2(16, -15.5)
+scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_83sn4")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1589194335]
+scale = Vector2(2, 2)
 collision_layer = 8
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=339566048]
-position = Vector2(15.5, -15.5)
+position = Vector2(8, -7.5)
 shape = SubResource("RectangleShape2D_mfnai")
 debug_color = Color(0.7261184, 0, 0.10694278, 0.41960785)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1227645359]
 material = SubResource("ShaderMaterial_c0jn0")
 position = Vector2(13.249997, -28.000004)
-scale = Vector2(2.796875, 3.625)
+scale = Vector2(5, 6.48)
 sprite_frames = SubResource("SpriteFrames_83sn4")
 autoplay = "default"
 
