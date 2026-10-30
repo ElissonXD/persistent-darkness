@@ -12,6 +12,7 @@ extends AtomicState
 @export_category('Fase de ataque')
 ## Sprite que toca a animação da fase (o AnimatedSprite2D do boss)
 @export var SPRITE : AnimatedSprite2D
+@export var PLAYER: AnimationPlayer
 ## Animação do SpriteFrames tocada ao entrar na fase (padrão: <golpe>_<fase>, ex.: combo_a_telegraphy).
 ## Vazio = a fase não troca a animação.
 @export var ANIMATION : StringName = &""
@@ -39,10 +40,13 @@ func _on_state_exited() -> void:
 
 # Sempre recomeça do frame 0, mesmo que a fase anterior tenha usado a mesma animação (ex.: Hit1 e Hit2)
 func play_animation() -> void:
-	if SPRITE == null or ANIMATION == &"":
+	if (SPRITE == null and PLAYER == null) or ANIMATION == &"":
 		return
 	if not SPRITE.sprite_frames.has_animation(ANIMATION):
 		push_warning("AttackPhase %s: animação '%s' não existe no SpriteFrames" % [name, ANIMATION])
 		return
-	SPRITE.stop()
-	SPRITE.play(ANIMATION)
+	if SPRITE:
+		SPRITE.stop()
+		SPRITE.play(ANIMATION)
+	if PLAYER:
+		PLAYER.play(ANIMATION)

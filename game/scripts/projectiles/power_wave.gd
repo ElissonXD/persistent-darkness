@@ -36,7 +36,7 @@ func _process(delta: float) -> void:
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	var player_body = area.owner
 	# player_body = player_body as Player
-	# causar dano
+	player_body.take_damage(DAMAGE, Vector2(0,0)) #temporario
 	vanish()
 
 func _on_body_entered(body: Node) -> void:
