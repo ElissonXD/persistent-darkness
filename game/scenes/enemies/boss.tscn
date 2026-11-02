@@ -3,8 +3,11 @@
 [ext_resource type="Script" uid="uid://btq6k7gbmvvay" path="res://game/scripts/enemies/boss.gd" id="1_48gq0"]
 [ext_resource type="Texture2D" uid="uid://dhspp2bhg3hgv" path="res://assets/sprites/enemies/spritesheet_6x6_running.png" id="2_y2qqi"]
 [ext_resource type="Texture2D" uid="uid://c5aimv1lq75ig" path="res://assets/sprites/enemies/boss_uppercut.png" id="3_bhvv7"]
+[ext_resource type="Texture2D" uid="uid://2vlfouu6ijki" path="res://assets/sprites/enemies/boss_stinger_3.png" id="3_bv1ij"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_uoiu8"]
 [ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="4_jtqy8"]
+[ext_resource type="Texture2D" uid="uid://cs8eosjcigrr4" path="res://assets/sprites/enemies/boss_stinger_2.png" id="4_wruid"]
+[ext_resource type="Texture2D" uid="uid://b52ii70fan470" path="res://assets/sprites/enemies/boss_stinger.png" id="5_bfkjr"]
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bhvv7"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_twjaa"]
 [ext_resource type="Script" uid="uid://le5w1cm0ul8p" path="res://addons/godot_state_charts/expression_guard.gd" id="7_xgrd1"]
@@ -13,6 +16,9 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
 size = Vector2(180, 330)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhit1"]
+size = Vector2(200, 260)
 
 [sub_resource type="Animation" id="Animation_4ybrt"]
 length = 0.001
@@ -49,8 +55,32 @@ tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [Vector2(-6, 39)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MeleeHitbox/CollisionShape2D:shape")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("RectangleShape2D_mhit1")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MeleeHitbox/CollisionShape2D:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(200, 30)]
 }
 
 [sub_resource type="Animation" id="Animation_bv1ij"]
@@ -68,6 +98,138 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(),
 "update": 1,
 "values": []
+}
+
+[sub_resource type="Animation" id="Animation_msw4w"]
+resource_name = "stinger_hit"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stinger_hit"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(90, 45)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("MeleeHitbox/CollisionShape2D:shape")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [SubResource("RectangleShape2D_mhit1")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("MeleeHitbox/CollisionShape2D:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(130, 30)]
+}
+
+[sub_resource type="Animation" id="Animation_cknmc"]
+resource_name = "stinger_recovery"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stinger_recovery"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16666667, 0.26666668, 0.36666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(100, 30), Vector2(0, 30)]
+}
+
+[sub_resource type="Animation" id="Animation_dsmj6"]
+resource_name = "stinger_telegraphy"
+length = 0.39999999999999997
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"stinger_telegraphy"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.23333333, 0.33333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
 }
 
 [sub_resource type="Animation" id="Animation_bhvv7"]
@@ -193,6 +355,9 @@ tracks/2/keys = {
 _data = {
 &"RESET": SubResource("Animation_4ybrt"),
 &"idle": SubResource("Animation_bv1ij"),
+&"stinger_hit": SubResource("Animation_msw4w"),
+&"stinger_recovery": SubResource("Animation_cknmc"),
+&"stinger_telegraphy": SubResource("Animation_dsmj6"),
 &"uppercut_hit": SubResource("Animation_bhvv7"),
 &"uppercut_recovery": SubResource("Animation_wruid"),
 &"uppercut_telegraphy": SubResource("Animation_twjaa")
@@ -341,6 +506,42 @@ region = Rect2(640, 800, 160, 160)
 [sub_resource type="AtlasTexture" id="AtlasTexture_run35"]
 atlas = ExtResource("2_y2qqi")
 region = Rect2(800, 800, 160, 160)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qsqqt"]
+atlas = ExtResource("3_bv1ij")
+region = Rect2(426, 162, 171, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6w058"]
+atlas = ExtResource("3_bv1ij")
+region = Rect2(0, 0, 192, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_esicy"]
+atlas = ExtResource("4_wruid")
+region = Rect2(137, 162, 199, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fwxea"]
+atlas = ExtResource("3_bv1ij")
+region = Rect2(128, 162, 160, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4r3x5"]
+atlas = ExtResource("5_bfkjr")
+region = Rect2(0, 175, 146, 175)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v6gm3"]
+atlas = ExtResource("4_wruid")
+region = Rect2(437, 0, 164, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cu0c5"]
+atlas = ExtResource("4_wruid")
+region = Rect2(206, 0, 230, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iwqdr"]
+atlas = ExtResource("4_wruid")
+region = Rect2(15, 0, 188, 162)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ef37m"]
+atlas = ExtResource("5_bfkjr")
+region = Rect2(496, 175, 215, 175)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bhvv7"]
 atlas = ExtResource("3_bhvv7")
@@ -495,6 +696,48 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_qsqqt")
+}],
+"loop": 1,
+"name": &"stinger_hit",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6w058")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_esicy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fwxea")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4r3x5")
+}],
+"loop": 0,
+"name": &"stinger_recovery",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v6gm3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cu0c5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iwqdr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ef37m")
+}],
+"loop": 0,
+"name": &"stinger_telegraphy",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_bhvv7")
 }, {
 "duration": 1.0,
@@ -536,9 +779,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhit1"]
-size = Vector2(220, 260)
-
 [sub_resource type="Resource" id="Resource_pfar1"]
 script = ExtResource("7_xgrd1")
 expression = "player_far"
@@ -548,14 +788,17 @@ collision_layer = 4
 script = ExtResource("1_48gq0")
 LONG_ATTACKS_1 = Array[String](["go_power_wave_a"])
 CLOSE_ATTACKS_1 = Array[String](["go_combo_a"])
-LONG_ATTACKS_2 = Array[String](["go_power_wave_b"])
+LONG_ATTACKS_2 = Array[String](["go_power_wave_b", "go_stinger"])
+MEDIUM_ATTACKS_2 = Array[String](["go_stinger"])
 CLOSE_ATTACKS_2 = Array[String](["go_combo_b"])
 WALK_MAX_DURATION = 1.0
 POWER_WAVE_TELEGRAPHY = 1.0
 POWER_WAVE_GAP = 1.0
+STINGER_SPEED = 700.0
+STINGER_HIT = 0.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1036619247]
-position = Vector2(0, -6)
+position = Vector2(7, -6)
 shape = SubResource("RectangleShape2D_83sn4")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2027975258]
@@ -881,16 +1124,68 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../../../Walk")
 delay_in_seconds = "power_wave_recovery"
 
+[node name="Stinger" type="Node" parent="StateChart/Root/Attack2" unique_id=1711283376]
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Telegraphy")
+
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack2/Stinger" unique_id=1283187166 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"stinger_telegraphy"
+HITBOX = NodePath("../../../../../MeleeHitbox")
+
+[node name="Go Hit" type="Node" parent="StateChart/Root/Attack2/Stinger/Telegraphy" unique_id=1307351314]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Hit")
+delay_in_seconds = "stinger_telegraphy"
+
+[node name="Hit" type="Node" parent="StateChart/Root/Attack2/Stinger" unique_id=1818300085 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"stinger_hit"
+HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX_ACTIVE = true
+DAMAGE = 40
+KNOCKBACK = Vector2(50, -5)
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack2/Stinger/Hit" unique_id=1887114574]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Recovery")
+event = &"go_stinger_recovery"
+delay_in_seconds = "stinger_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Attack2/Stinger" unique_id=283382408 node_paths=PackedStringArray("PLAYER")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"stinger_recovery"
+
+[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2/Stinger/Recovery" unique_id=1428388896]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../../Rest")
+guard = SubResource("Resource_pfar1")
+delay_in_seconds = "stinger_recovery"
+
+[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/Stinger/Recovery" unique_id=1551921984]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../../Walk")
+delay_in_seconds = "stinger_recovery"
+
 [node name="Go Combo B" type="Node" parent="StateChart/Root/Attack2" unique_id=531765325]
 script = ExtResource("6_twjaa")
 to = NodePath("../ComboB")
 event = &"go_combo_b"
 delay_in_seconds = "0.0"
 
-[node name="Go Power Wave A" type="Node" parent="StateChart/Root/Attack2" unique_id=2098062596]
+[node name="Go Power Wave B" type="Node" parent="StateChart/Root/Attack2" unique_id=2098062596]
 script = ExtResource("6_twjaa")
 to = NodePath("../PowerWaveB")
 event = &"go_power_wave_b"
+delay_in_seconds = "0.0"
+
+[node name="Go Stinger" type="Node" parent="StateChart/Root/Attack2" unique_id=1878820838]
+script = ExtResource("6_twjaa")
+to = NodePath("../Stinger")
+event = &"go_stinger"
 delay_in_seconds = "0.0"
 
 [node name="Rest" type="Node" parent="StateChart/Root" unique_id=1543790628]
@@ -909,6 +1204,7 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../Walk")
 delay_in_seconds = "stun_duration"
 
+[connection signal="area_entered" from="MeleeHitbox" to="." method="_on_melee_hitbox_area_entered"]
 [connection signal="area_entered" from="MeleeHitbox" to="MeleeHitbox" method="_on_area_entered"]
 [connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_state_entered" binds= [&"Idle"]]
 [connection signal="state_entered" from="StateChart/Root/Walk" to="." method="_on_state_entered" binds= [&"Walk"]]
@@ -973,19 +1269,31 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Telegraphy" to="StateChart/Root/Attack2/PowerWaveB/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Telegraphy" to="StateChart/Root/Attack2/PowerWaveB/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="." method="on_power_waveB_enter"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="StateChart/Root/Attack2/PowerWaveB/Hit1" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="StateChart/Root/Attack2/PowerWaveB/Hit1" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Gap1" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Gap1" to="StateChart/Root/Attack2/PowerWaveB/Gap1" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Gap1" to="StateChart/Root/Attack2/PowerWaveB/Gap1" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="." method="on_power_waveB_enter"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="StateChart/Root/Attack2/PowerWaveB/Hit2" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="StateChart/Root/Attack2/PowerWaveB/Hit2" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Recovery" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Recovery" to="StateChart/Root/Attack2/PowerWaveB/Recovery" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Recovery" to="StateChart/Root/Attack2/PowerWaveB/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="StateChart/Root/Attack2/Stinger/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="StateChart/Root/Attack2/Stinger/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_enter"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="StateChart/Root/Attack2/Stinger/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_exit"]
+[connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Hit" to="StateChart/Root/Attack2/Stinger/Hit" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Recovery" to="StateChart/Root/Attack2/Stinger/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Recovery" to="StateChart/Root/Attack2/Stinger/Recovery" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Rest" to="." method="_on_state_entered" binds= [&"Rest"]]
 [connection signal="state_entered" from="StateChart/Root/Stunned" to="." method="_on_state_entered" binds= [&"Stunned"]]
