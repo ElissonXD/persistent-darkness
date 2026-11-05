@@ -100,6 +100,9 @@ var stinger_hit_timer : float
 @export var SWORD_THROW_RECOVERY : float = 0.6
 ## Distância horizontal que a espada percorre na ida
 @export var SWORD_THROW_RANGE : float = 900.0
+## Distância horizontal da mão do boss até o centro dele, para o lado em que ele olha (a espada sai e volta daqui).
+## Não usa o Marker2D: ele é o ponto de saída do Power Wave, no chão
+@export var SWORD_THROW_HAND_X : float = 105.0
 ## Altura do arremesso em relação à origem do boss (positivo = para baixo); deve ficar no peito do player
 @export var SWORD_THROW_HEIGHT : float = 110.0
 ## Dano por passagem (acerta até 2 vezes: ida e volta)
@@ -202,7 +205,7 @@ func on_stinger_hit_enter() -> void:
 # Ida: a espada sai da mão e vai em linha reta até o fim do alcance, para o lado em que o boss
 # está olhando (definido ao entrar no Attack1)
 func on_sword_throw_outward_enter() -> void:
-	sword_throw_origin = Vector2(marker_2d.global_position.x, global_position.y + SWORD_THROW_HEIGHT)
+	sword_throw_origin = global_position + Vector2(melee_hitbox.facing * SWORD_THROW_HAND_X, SWORD_THROW_HEIGHT)
 	var end := sword_throw_origin + Vector2(melee_hitbox.facing * SWORD_THROW_RANGE, 0)
 	thrown_sword.fly(sword_throw_origin, end, SWORD_THROW_OUTWARD)
 

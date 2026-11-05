@@ -1074,7 +1074,7 @@ shape = SubResource("RectangleShape2D_mhit1")
 debug_color = Color(0.9, 0.1, 0.1, 0.42)
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1514444269]
-position = Vector2(105, 0)
+position = Vector2(-128, 119)
 
 [node name="ThrownSword" parent="." unique_id=1679670851 instance=ExtResource("10_tswrd")]
 
