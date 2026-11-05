@@ -88,6 +88,26 @@ var stinger_direction : int
 var stinger_stop : bool
 var stinger_hit_timer : float
 
+# TODO: ajustar valores da espada arremessada (durações e alcance "a definir" no Notion)
+@export_category('Sword Throw')
+## Aviso antes do arremesso (sem dano): o boss recua o braço
+@export var SWORD_THROW_TELEGRAPHY : float = 0.7
+## Tempo da ida, até o fim do alcance (hitbox ativa)
+@export var SWORD_THROW_OUTWARD : float = 0.6
+## Tempo da volta pelo mesmo caminho (hitbox ativa)
+@export var SWORD_THROW_RETURN : float = 0.6
+## Janela de contra-ataque depois de pegar a espada de volta
+@export var SWORD_THROW_RECOVERY : float = 0.6
+## Distância horizontal que a espada percorre na ida
+@export var SWORD_THROW_RANGE : float = 900.0
+## Altura do arremesso em relação à origem do boss (positivo = para baixo); deve ficar no peito do player
+@export var SWORD_THROW_HEIGHT : float = 110.0
+## Dano por passagem (acerta até 2 vezes: ida e volta)
+@export var SWORD_THROW_DAMAGE : int = 25
+@export var SWORD_THROW_KNOCKBACK : Vector2 = Vector2(250, -150)
+# ponto de onde a espada sai e para onde ela volta (fixado na ida)
+var sword_throw_origin : Vector2
+
 @export_category('Effects buildups')
 var FIRE_BUILDUP = 0
 var FREEZE_BUILDUP = 0
@@ -101,6 +121,8 @@ var ELETRIC_BUILDUP = 0
 @onready var power_wave_a: CompoundState = $StateChart/Root/Attack1/PowerWaveA
 @onready var power_wave_b: CompoundState = $StateChart/Root/Attack2/PowerWaveB
 @onready var stinger: CompoundState = $StateChart/Root/Attack2/Stinger
+@onready var sword_throw: CompoundState = $StateChart/Root/Attack1/SwordThrow
+@onready var thrown_sword: ThrownSword = $ThrownSword
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -122,6 +144,9 @@ func _ready() -> void:
 	configure_combo(power_wave_a, "power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY, POWER_WAVE_DAMAGE, POWER_WAVE_KNOCKBACK)
 	configure_combo(power_wave_b, "power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY, POWER_WAVE_DAMAGE, POWER_WAVE_KNOCKBACK)
 	configure_combo(stinger, "stinger", STINGER_TELEGRAPHY, 0, 0, STINGER_RECOVERY, STINGER_DAMAGE, STINGER_KNOCKBACK)
+	configure_combo(sword_throw, "sword_throw", SWORD_THROW_TELEGRAPHY, 0, 0, SWORD_THROW_RECOVERY, SWORD_THROW_DAMAGE, SWORD_THROW_KNOCKBACK)
+	state_chart.set_expression_property(&"sword_throw_outward", SWORD_THROW_OUTWARD)
+	state_chart.set_expression_property(&"sword_throw_return", SWORD_THROW_RETURN)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -173,6 +198,17 @@ func on_stinger_hit_enter() -> void:
 	stinger_stop = false
 	stinger_hit_timer = STINGER_HIT
 	return
+
+# Ida: a espada sai da mão e vai em linha reta até o fim do alcance, para o lado em que o boss
+# está olhando (definido ao entrar no Attack1)
+func on_sword_throw_outward_enter() -> void:
+	sword_throw_origin = Vector2(marker_2d.global_position.x, global_position.y + SWORD_THROW_HEIGHT)
+	var end := sword_throw_origin + Vector2(melee_hitbox.facing * SWORD_THROW_RANGE, 0)
+	thrown_sword.fly(sword_throw_origin, end, SWORD_THROW_OUTWARD)
+
+# Volta: pelo mesmo caminho, do ponto onde a espada está até a mão do boss
+func on_sword_throw_return_enter() -> void:
+	thrown_sword.fly(thrown_sword.global_position, sword_throw_origin, SWORD_THROW_RETURN)
 
 
 # state_entered de cada AttackPhase. Chamado depois do _on_state_entered do estado pai
@@ -242,6 +278,11 @@ func on_stinger_hit_physics_processing(_delta:float) -> void:
 func on_stinger_hit_exit():
 	velocity.x = 0
 	return
+
+# Ligado no state_exited do Return (o boss pegou a espada) e do SwordThrow (golpe interrompido,
+# ex.: Stunned no meio da ida)
+func on_sword_throw_exit() -> void:
+	thrown_sword.stow()
 
 # ---------------UTILS----------------
 
