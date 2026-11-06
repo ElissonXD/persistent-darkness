@@ -773,41 +773,41 @@ _data = {
 &"uppercut_telegraphy": SubResource("Animation_twjaa")
 }
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ok7qu"]
-atlas = ExtResource("9_esicy")
-region = Rect2(0, 648, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_g4uc2"]
+atlas = ExtResource("2_wruid")
+region = Rect2(0, 313, 313, 313)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xocd4"]
-atlas = ExtResource("9_esicy")
-region = Rect2(216, 648, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_4uxt5"]
+atlas = ExtResource("2_wruid")
+region = Rect2(939, 626, 313, 313)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_t2g7e"]
-atlas = ExtResource("9_esicy")
-region = Rect2(0, 216, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_51fg4"]
+atlas = ExtResource("2_wruid")
+region = Rect2(626, 626, 313, 313)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2613q"]
-atlas = ExtResource("9_esicy")
-region = Rect2(216, 216, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_qxdhm"]
+atlas = ExtResource("2_wruid")
+region = Rect2(313, 626, 313, 313)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_np0aa"]
-atlas = ExtResource("9_esicy")
-region = Rect2(0, 432, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_v81b2"]
+atlas = ExtResource("2_wruid")
+region = Rect2(0, 626, 313, 313)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_l8meh"]
-atlas = ExtResource("9_esicy")
-region = Rect2(216, 432, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_8tkcw"]
+atlas = ExtResource("2_wruid")
+region = Rect2(939, 939, 313, 313)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_8aapm"]
-atlas = ExtResource("9_esicy")
-region = Rect2(0, 0, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_ulxms"]
+atlas = ExtResource("2_wruid")
+region = Rect2(626, 939, 313, 313)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kqnj6"]
-atlas = ExtResource("9_esicy")
-region = Rect2(216, 0, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3d5a"]
+atlas = ExtResource("2_wruid")
+region = Rect2(313, 939, 313, 313)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nf66q"]
-atlas = ExtResource("9_esicy")
-region = Rect2(432, 0, 216, 216)
+[sub_resource type="AtlasTexture" id="AtlasTexture_101ys"]
+atlas = ExtResource("2_wruid")
+region = Rect2(0, 939, 313, 313)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tc2hb"]
 atlas = ExtResource("2_wruid")
@@ -1017,6 +1017,42 @@ region = Rect2(15, 0, 188, 162)
 atlas = ExtResource("5_bfkjr")
 region = Rect2(496, 175, 215, 175)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ok7qu"]
+atlas = ExtResource("9_esicy")
+region = Rect2(0, 648, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xocd4"]
+atlas = ExtResource("9_esicy")
+region = Rect2(216, 648, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t2g7e"]
+atlas = ExtResource("9_esicy")
+region = Rect2(0, 216, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2613q"]
+atlas = ExtResource("9_esicy")
+region = Rect2(216, 216, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_np0aa"]
+atlas = ExtResource("9_esicy")
+region = Rect2(0, 432, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l8meh"]
+atlas = ExtResource("9_esicy")
+region = Rect2(216, 432, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8aapm"]
+atlas = ExtResource("9_esicy")
+region = Rect2(0, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kqnj6"]
+atlas = ExtResource("9_esicy")
+region = Rect2(216, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nf66q"]
+atlas = ExtResource("9_esicy")
+region = Rect2(432, 0, 216, 216)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_bhvv7"]
 atlas = ExtResource("3_bhvv7")
 region = Rect2(282, 216, 141, 216)
@@ -1057,19 +1093,19 @@ region = Rect2(432, 216, 144, 216)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ok7qu")
+"texture": SubResource("AtlasTexture_g4uc2")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xocd4")
+"texture": SubResource("AtlasTexture_4uxt5")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_t2g7e")
+"texture": SubResource("AtlasTexture_51fg4")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_2613q")
+"texture": SubResource("AtlasTexture_qxdhm")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_np0aa")
+"texture": SubResource("AtlasTexture_v81b2")
 }],
 "loop": 1,
 "name": &"high_hit",
@@ -1077,16 +1113,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_l8meh")
+"texture": SubResource("AtlasTexture_8tkcw")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_8aapm")
+"texture": SubResource("AtlasTexture_ulxms")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_kqnj6")
+"texture": SubResource("AtlasTexture_p3d5a")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_nf66q")
+"texture": SubResource("AtlasTexture_101ys")
 }],
 "loop": 1,
 "name": &"high_recovery",
@@ -1898,22 +1934,22 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Telegraphy" to="StateChart/Root/Attack1/PowerWaveA/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Telegraphy" to="StateChart/Root/Attack1/PowerWaveA/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="." method="on_power_waveA_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="." method="on_power_waveA_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="StateChart/Root/Attack1/PowerWaveA/Hit1" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="StateChart/Root/Attack1/PowerWaveA/Hit1" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Gap1" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Gap1" to="StateChart/Root/Attack1/PowerWaveA/Gap1" method="_on_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="." method="on_power_waveA_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="." method="on_power_waveA_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="StateChart/Root/Attack1/PowerWaveA/Hit2" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="StateChart/Root/Attack1/PowerWaveA/Hit2" method="_on_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="." method="on_power_waveA_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Gap2" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Gap2" to="StateChart/Root/Attack1/PowerWaveA/Gap2" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Gap2" to="StateChart/Root/Attack1/PowerWaveA/Gap2" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="." method="on_power_waveA_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="." method="on_power_waveA_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="StateChart/Root/Attack1/PowerWaveA/Hit3" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="StateChart/Root/Attack1/PowerWaveA/Hit3" method="_on_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="." method="on_power_waveA_physics_processing"]
