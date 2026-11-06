@@ -774,40 +774,40 @@ _data = {
 }
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ok7qu"]
-atlas = ExtResource("2_wruid")
-region = Rect2(0, 313, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(0, 648, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xocd4"]
-atlas = ExtResource("2_wruid")
-region = Rect2(939, 626, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(216, 648, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_t2g7e"]
-atlas = ExtResource("2_wruid")
-region = Rect2(626, 626, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(0, 216, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2613q"]
-atlas = ExtResource("2_wruid")
-region = Rect2(313, 626, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(216, 216, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_np0aa"]
-atlas = ExtResource("2_wruid")
-region = Rect2(0, 626, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(0, 432, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l8meh"]
-atlas = ExtResource("2_wruid")
-region = Rect2(939, 939, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(216, 432, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8aapm"]
-atlas = ExtResource("2_wruid")
-region = Rect2(626, 939, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(0, 0, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kqnj6"]
-atlas = ExtResource("2_wruid")
-region = Rect2(313, 939, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(216, 0, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nf66q"]
-atlas = ExtResource("2_wruid")
-region = Rect2(0, 939, 313, 313)
+atlas = ExtResource("9_esicy")
+region = Rect2(432, 0, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tc2hb"]
 atlas = ExtResource("2_wruid")
@@ -1016,42 +1016,6 @@ region = Rect2(15, 0, 188, 162)
 [sub_resource type="AtlasTexture" id="AtlasTexture_ef37m"]
 atlas = ExtResource("5_bfkjr")
 region = Rect2(496, 175, 215, 175)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ok7qu"]
-atlas = ExtResource("9_esicy")
-region = Rect2(0, 648, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xocd4"]
-atlas = ExtResource("9_esicy")
-region = Rect2(216, 648, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_t2g7e"]
-atlas = ExtResource("9_esicy")
-region = Rect2(0, 216, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2613q"]
-atlas = ExtResource("9_esicy")
-region = Rect2(216, 216, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_np0aa"]
-atlas = ExtResource("9_esicy")
-region = Rect2(0, 432, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l8meh"]
-atlas = ExtResource("9_esicy")
-region = Rect2(216, 432, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8aapm"]
-atlas = ExtResource("9_esicy")
-region = Rect2(0, 0, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kqnj6"]
-atlas = ExtResource("9_esicy")
-region = Rect2(216, 0, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_nf66q"]
-atlas = ExtResource("9_esicy")
-region = Rect2(432, 0, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bhvv7"]
 atlas = ExtResource("3_bhvv7")
@@ -1652,22 +1616,6 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../../../Attack2")
 delay_in_seconds = "uppercut_recovery"
 
-[node name="Go Combo A" type="Node" parent="StateChart/Root/Attack1" unique_id=922783987]
-script = ExtResource("6_twjaa")
-to = NodePath("../ComboA")
-event = &"go_combo_a"
-delay_in_seconds = "0.0"
-
-[node name="Go Power Wave A" type="Node" parent="StateChart/Root/Attack1" unique_id=1352581547]
-script = ExtResource("6_twjaa")
-to = NodePath("../PowerWaveA")
-event = &"go_power_wave_a"
-delay_in_seconds = "0.0"
-
-[node name="Go Uppercut" type="Node" parent="StateChart/Root/Attack1" unique_id=244863791]
-script = ExtResource("6_twjaa")
-to = NodePath("../Uppercut")
-event = &"go_uppercut"
 [node name="SwordThrow" type="Node" parent="StateChart/Root/Attack1" unique_id=672940048]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
@@ -1715,6 +1663,24 @@ ANIMATION = &"sword_throw_catch"
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Attack2")
 delay_in_seconds = "sword_throw_recovery"
+
+[node name="Go Combo A" type="Node" parent="StateChart/Root/Attack1" unique_id=922783987]
+script = ExtResource("6_twjaa")
+to = NodePath("../ComboA")
+event = &"go_combo_a"
+delay_in_seconds = "0.0"
+
+[node name="Go Power Wave A" type="Node" parent="StateChart/Root/Attack1" unique_id=1352581547]
+script = ExtResource("6_twjaa")
+to = NodePath("../PowerWaveA")
+event = &"go_power_wave_a"
+delay_in_seconds = "0.0"
+
+[node name="Go Uppercut" type="Node" parent="StateChart/Root/Attack1" unique_id=244863791]
+script = ExtResource("6_twjaa")
+to = NodePath("../Uppercut")
+event = &"go_uppercut"
+delay_in_seconds = "0.0"
 
 [node name="Go Sword Throw" type="Node" parent="StateChart/Root/Attack1" unique_id=1941706643]
 script = ExtResource("6_twjaa")
@@ -1984,12 +1950,12 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="StateChart/Root/Attack1/SwordThrow/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="StateChart/Root/Attack1/SwordThrow/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="." method="on_sword_throw_outward_enter"]
+[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="StateChart/Root/Attack1/SwordThrow/Outward" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Outward" to="StateChart/Root/Attack1/SwordThrow/Outward" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="on_sword_throw_return_enter"]
+[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="StateChart/Root/Attack1/SwordThrow/Return" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="on_sword_throw_exit"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Return" to="StateChart/Root/Attack1/SwordThrow/Return" method="_on_state_exited"]
@@ -2032,8 +1998,8 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="StateChart/Root/Attack2/Stinger/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="StateChart/Root/Attack2/Stinger/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_enter"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="StateChart/Root/Attack2/Stinger/Hit" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_exit"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Hit" to="StateChart/Root/Attack2/Stinger/Hit" method="_on_state_exited"]
