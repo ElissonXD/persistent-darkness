@@ -67,6 +67,16 @@ script = ExtResource("6_trn01")
 to = NodePath("../Dead")
 event = &"died"
 
+[node name="Go Hurt Grounded" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_trn01")
+to = NodePath("../Hurt/HurtGrounded")
+event = &"hurt_grounded"
+
+[node name="Go Hurt Airborne" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_trn01")
+to = NodePath("../Hurt/HurtAirborne")
+event = &"hurt_airborne"
+
 [node name="Grounded" type="Node" parent="StateChart/Root"]
 script = ExtResource("4_cmp01")
 initial_state = NodePath("Idle")
@@ -234,12 +244,38 @@ event = &"landed"
 [node name="Dead" type="Node" parent="StateChart/Root"]
 script = ExtResource("5_atm01")
 
+[node name="Hurt" type="Node" parent="StateChart/Root"]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("HurtGrounded")
+
+[node name="HurtGrounded" type="Node" parent="StateChart/Root/Hurt"]
+script = ExtResource("5_atm01")
+
+[node name="Return to Grounded" type="Node" parent="StateChart/Root/Hurt/HurtGrounded"]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Grounded")
+delay_in_seconds = "hurt_duration"
+
+[node name="HurtAirborne" type="Node" parent="StateChart/Root/Hurt"]
+script = ExtResource("5_atm01")
+
+[node name="Return to Airborne" type="Node" parent="StateChart/Root/Hurt/HurtAirborne"]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Airborne")
+delay_in_seconds = "hurt_duration"
+
 [connection signal="area_entered" from="MeleeHitbox" to="MeleeHitbox" method="_on_area_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Grounded/Idle" to="." method="_on_idle_state_physics_processing"]
 [connection signal="state_physics_processing" from="StateChart/Root/Grounded/Run" to="." method="_on_run_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Roll" to="." method="_on_roll_state_entered"]
+<<<<<<< HEAD
 [connection signal="state_entered" from="StateChart/Root/Grounded/Roll/Invulnerable" to="." method="_on_invulnerable_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Roll/Invulnerable" to="." method="_on_invulnerable_state_exited"]
+=======
+[connection signal="state_exited" from="StateChart/Root/Grounded/Roll" to="." method="_on_roll_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Hurt/HurtGrounded" to="." method="_on_hurt_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Hurt/HurtAirborne" to="." method="_on_hurt_state_entered"]
+>>>>>>> 0922ff43d0ad496b824032b6800fad4952dff0d4
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1" to="." method="_on_swing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1/Windup" to="StateChart/Root/Grounded/Attack/Swing1/Windup" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing1/Windup" to="StateChart/Root/Grounded/Attack/Swing1/Windup" method="_on_state_exited"]

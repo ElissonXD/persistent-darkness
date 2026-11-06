@@ -29,6 +29,10 @@ extends CharacterBody2D
 @export_category('Player Data')
 @export var STATS : PlayerStats
 
+# TODO: duração provisória; no futuro pode depender do ataque recebido e de um cálculo.
+@export_category('Hurt')
+@export var HURT_DURATION : float = 0.5
+
 # TODO: valores dos golpes provisórios, o grupo ainda não definiu
 @export_category('Swing 1')
 @export var SWING_1_WINDUP : float = 0.15
@@ -57,9 +61,16 @@ extends CharacterBody2D
 
 var facing : float = 1.0
 var invulnerable : bool = false
+var pending_knockback : Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	STATS.reset()
+<<<<<<< HEAD
+=======
+	state_chart.set_expression_property(&"hurt_duration", HURT_DURATION)
+
+	
+>>>>>>> 0922ff43d0ad496b824032b6800fad4952dff0d4
 	configure_swing(swing_1, "swing1", SWING_1_WINDUP, SWING_1_HIT, SWING_1_RECOVERY, SWING_1_KNOCKBACK)
 	configure_swing(swing_2, "swing2", SWING_2_WINDUP, SWING_2_HIT, SWING_2_RECOVERY, SWING_2_KNOCKBACK)
 	configure_swing(swing_3, "swing3", SWING_3_WINDUP, SWING_3_HIT, SWING_3_RECOVERY, SWING_3_KNOCKBACK)
@@ -71,6 +82,8 @@ func _physics_process(delta: float) -> void:
 	STATS.tick(delta)
 	move_and_slide()
 
+# TODO: A cena usa roll_duration na transição de saída, mas o script define roll_iframe_duration e
+# roll_recovery_duration; também há uma conexão para _on_roll_state_exited, método que ainda não existe.
 func _on_roll_state_entered() -> void:
 	STATS.spend_stamina(stat(&"ROLL_STAMINA_COST"))
 	velocity.x = facing * stat(&"ROLL_SPEED")
@@ -94,6 +107,11 @@ func _on_swing_state_entered() -> void:
 
 func _on_dead_state_entered() -> void:
 	velocity.x = 0
+
+func _on_hurt_state_entered() -> void:
+	velocity.x = pending_knockback.x
+	if pending_knockback.y != 0.0:
+		velocity.y = pending_knockback.y
 
 
 func _on_idle_state_physics_processing(_delta: float) -> void:
@@ -124,13 +142,19 @@ func _on_swing_2_recovery_state_physics_processing(_delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and STATS.has_stamina(stat(&"SWING_STAMINA_COST")):
 		state_chart.send_event(&"swing_3")
 
-# TODO: knockback ainda não é aplicado (precisa de um estado Hurt para não ser sobrescrito pelo movimento)
-func take_damage(amount: int, _knockback: Vector2) -> void:
+func take_damage(amount: int, knockback: Vector2) -> void:
 	if invulnerable or STATS.is_dead():
 		return
 	STATS.take_damage(amount)
 	if STATS.is_dead():
 		state_chart.send_event(&"died")
+		return
+
+	pending_knockback = knockback
+	if not is_on_floor() or knockback.y < 0.0:
+		state_chart.send_event(&"hurt_airborne")
+	else:
+		state_chart.send_event(&"hurt_grounded")
 
 func stat(stat_name: StringName) -> float:
 	return STATS.get_stat(stat_name)
@@ -147,6 +171,7 @@ func read_actions() -> bool:
 		state_chart.send_event(&"airborne")
 		return true
 	if Input.is_action_just_pressed("jump"):
+		# TODO: A altura máxima do salto é menor que a altura da hitbox do ataque à distância do boss, então não é possível desviar dela pulando.
 		velocity.y = -stat(&"JUMP_SPEED")
 		state_chart.send_event(&"airborne")
 		return true
