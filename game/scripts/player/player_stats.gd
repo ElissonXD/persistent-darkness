@@ -1,10 +1,6 @@
 class_name PlayerStats
 extends Resource
 
-# Valor final de um status = (BASE + bônus fixos) * (1 + bônus percentuais), sempre lido com
-# get_stat(&"NOME"). Nunca guarde o resultado em variável (no player.gd use stat(&"NOME")
-# na hora de usar), senão um bônus aplicado depois não vale.
-#
 # BASE x BÔNUS (duas coisas diferentes):
 #   BASE   = os @export daqui. Só mudam por LEVEL UP: STATS.raise_base(&"STRENGTH", 1.0).
 #            Permanente, não tem origem e não é removível.
@@ -19,29 +15,27 @@ extends Resource
 #   Assim cada efeito tira só o que ele mesmo colocou. Penalidade = valor negativo.
 #   Vida máxima: bônus NÃO cura sozinho; chame STATS.heal(quantidade) se quiser.
 #
+# HABILIDADES LIGA/DESLIGA (booleanos), ex.: ROLL_PASSES_THROUGH_ENEMIES: NÃO passam por get_stat nem
+#   add_modifier (que só tratam números). Leia e altere direto: STATS.ROLL_PASSES_THROUGH_ENEMIES = true.
+#   O StatModifier das cartas só aceita números, então a carta que ligar um booleano precisa de uma
+#   extensão no CardData/apply_card (ainda não existe).
+#
 # COMO ADICIONAR UM STATUS NOVO (ex.: ATTACK_SPEED):
 #   1. Crie um @export aqui, nome em MAIÚSCULAS, dentro de uma @export_category.
 #   2. No player.gd, onde usar o valor, leia com stat(&"ATTACK_SPEED").
 #   3. Pronto: cartas, level up e efeitos já funcionam com ele; nada mais aqui precisa mudar.
 #
-# LIMITES: nenhum status fica abaixo de 0 (e vida/estamina máximas ficam em 1 ou mais, ver
-#   MIN_STAT), então penalidades grandes não invertem velocidade nem duração. Se um bônus
-#   baixar o máximo, vida e estamina atuais são cortadas para o novo máximo.
-#   Por isso JUMP_SPEED é positivo (quanto maior, mais alto); o player aplica o sinal.
-#
 # ATENÇÃO (PERSISTÊNCIA): cartas e level up valem ALÉM da morte. Se a cena do boss recarrega
 # quando o player morre, este Resource NÃO pode morrer junto: o player.tscn traz um local à
 # cena só para testes. Na run de verdade, guarde o PlayerStats fora da cena (ex.: autoload) e
 # entregue ao player antes de adicioná-lo à árvore: player.STATS = stats_da_run.
-#
-# Quem usa deve chamar reset() ao iniciar cada luta (enche vida e estamina) e tick(delta) a cada
+
 
 signal health_changed(current: float, maximum: float)
 signal stamina_changed(current: float, maximum: float)
 signal stat_changed(stat: StringName)
 signal died
 
-# Mínimo de cada status; o que não estiver aqui tem mínimo 0
 const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
 
 @export_category('Vida')
@@ -65,6 +59,15 @@ const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
 @export var ROLL_DURATION : float = 0.4
 @export var ROLL_IFRAME_DURATION : float = 0.25
 @export var ROLL_STAMINA_COST : float = 25.0
+## Se verdadeiro, durante a rolagem o player atravessa inimigos (upgrade de carta). Falso = a rolagem colide com eles
+@export var ROLL_PASSES_THROUGH_ENEMIES : bool = false
+
+# TODO: valores provisórios, o grupo ainda não definiu
+@export_category('Cura')
+@export var HEAL_AMOUNT : float = 40.0
+@export var HEAL_DELAY : float = 0.8
+@export var HEAL_RECOVERY_DURATION : float = 0.5
+@export var HEAL_MOVE_SPEED_MULT : float = 0.3
 
 # TODO: valores provisórios, o grupo ainda não definiu
 @export_category('Ataque')
@@ -86,15 +89,11 @@ func reset() -> void:
 	health_changed.emit(health, get_stat(&"MAX_HEALTH"))
 	stamina_changed.emit(stamina, get_stat(&"MAX_STAMINA"))
 
-# ---------------BÔNUS E NÍVEL----------------
 
-# Soma um bônus a um status. flat soma ao base; mult é percentual (0.1 = +10%, negativo = penalidade).
-# source identifica quem causou o bônus, para remove_modifiers() tirar só ele.
 func add_modifier(stat: StringName, flat: float = 0.0, mult: float = 0.0, source: Variant = null) -> void:
 	modifiers.append({"stat": stat, "flat": flat, "mult": mult, "source": source})
 	update_stat(stat)
 
-# Remove todos os bônus que vieram dessa origem
 func remove_modifiers(source: Variant) -> void:
 	var affected : Array = []
 	for m in modifiers:
@@ -112,7 +111,6 @@ func apply_card(card: CardData) -> void:
 func remove_card(card: CardData) -> void:
 	remove_modifiers(card)
 
-# Level up: aumenta o valor BASE (permanente) de um status
 func raise_base(stat: StringName, amount: float) -> void:
 	set(stat, get(stat) + amount)
 	update_stat(stat)
@@ -142,6 +140,7 @@ func clamp_current() -> void:
 	if stamina > max_stamina:
 		stamina = max_stamina
 		stamina_changed.emit(stamina, max_stamina)
+
 
 func is_dead() -> bool:
 	return health <= 0.0
