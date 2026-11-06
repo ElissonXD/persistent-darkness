@@ -57,6 +57,16 @@ var walk_timer : float = 0
 @export var COMBO_A_DAMAGE : int = 30
 @export var COMBO_A_KNOCKBACK : Vector2 = Vector2(250, -150)
 
+## Uppercut
+@export_category('Uppercut')
+@export var UPPERCUT_TELEGRAPHY : float = 0.5
+@export var UPPERCUT_HIT : float = 0.5
+@export var UPPERCUT_RECOVERY : float = 0.5
+@export var UPPERCUT_DAMAGE : int = 40
+@export var UPPERCUT_KNOCKBACK : Vector2 = Vector2(250, -500)
+@export var UPPERCUT_STEP_VELOCITY : float = 500
+var uppercut_direction : int
+
 ## Power wave
 var power_wave = preload("res://game/scenes/projectiles/power_wave.tscn") 
 @export_category('Power Wave')
@@ -97,6 +107,7 @@ var ELETRIC_BUILDUP = 0
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var state_chart: StateChart = $StateChart
 @onready var combo_a: CompoundState = $StateChart/Root/Attack1/ComboA
+@onready var uppercut: CompoundState = $StateChart/Root/Attack1/Uppercut
 @onready var combo_b: CompoundState = $StateChart/Root/Attack2/ComboB
 @onready var power_wave_a: CompoundState = $StateChart/Root/Attack1/PowerWaveA
 @onready var power_wave_b: CompoundState = $StateChart/Root/Attack2/PowerWaveB
@@ -122,6 +133,7 @@ func _ready() -> void:
 	configure_combo(power_wave_a, "power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY, POWER_WAVE_DAMAGE, POWER_WAVE_KNOCKBACK)
 	configure_combo(power_wave_b, "power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY, POWER_WAVE_DAMAGE, POWER_WAVE_KNOCKBACK)
 	configure_combo(stinger, "stinger", STINGER_TELEGRAPHY, 0, 0, STINGER_RECOVERY, STINGER_DAMAGE, STINGER_KNOCKBACK)
+	configure_combo(uppercut, "uppercut", UPPERCUT_TELEGRAPHY, UPPERCUT_HIT, 0, UPPERCUT_RECOVERY, UPPERCUT_DAMAGE, UPPERCUT_KNOCKBACK)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -174,6 +186,11 @@ func on_stinger_hit_enter() -> void:
 	stinger_hit_timer = STINGER_HIT
 	return
 
+#------UPPERCUT-------
+func on_uppercut_hit_enter() -> void:
+	uppercut_direction = sign(player_distance())
+	velocity.x = 0
+	return
 
 # state_entered de cada AttackPhase. Chamado depois do _on_state_entered do estado pai
 # (o addon entra primeiro no pai)
@@ -227,9 +244,14 @@ func on_stinger_hit_physics_processing(_delta:float) -> void:
 		return
 	
 	return
-	
-	
 
+
+# -------UPPERCUT---------
+
+func on_uppercut_physics_processing(_delta: float) -> void:
+	velocity.x = move_toward(velocity.x, uppercut_direction*UPPERCUT_STEP_VELOCITY,UPPERCUT_STEP_VELOCITY* _delta)
+	melee_hitbox.set_facing(uppercut_direction)
+	return
 # Recovery é uma AttackPhase igual às outras: o que muda de um golpe para outro é só a animação
 # e a transição de saída (com delay), configuradas na cena:
 #   Attack1/<golpe>/Recovery -> Attack2
