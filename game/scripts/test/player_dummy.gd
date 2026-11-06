@@ -4,6 +4,7 @@ extends CharacterBody2D
 # hurtbox (Area2D, camada 2) + take_damage(amount, knockback) no dono.
 
 @export_category('Dummy Data')
+
 @export var MAX_HEALTH : int = 100
 @export var WALK_SPEED : float = 250.0
 ## Quanto o empurrão horizontal perde por segundo
