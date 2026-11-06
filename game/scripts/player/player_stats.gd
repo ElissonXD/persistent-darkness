@@ -1,7 +1,6 @@
 class_name PlayerStats
 extends Resource
 
-# IDEIA: tudo que carta, level up ou efeito externo pode mudar fica neste arquivo.
 # Valor final de um status = (BASE + bônus fixos) * (1 + bônus percentuais), sempre lido com
 # get_stat(&"NOME"). Nunca guarde o resultado em variável (no player.gd use stat(&"NOME")
 # na hora de usar), senão um bônus aplicado depois não vale.
@@ -20,15 +19,15 @@ extends Resource
 #   Assim cada efeito tira só o que ele mesmo colocou. Penalidade = valor negativo.
 #   Vida máxima: bônus NÃO cura sozinho; chame STATS.heal(quantidade) se quiser.
 #
-# NOMES VÁLIDOS (@exports abaixo): MAX_HEALTH, MAX_STAMINA, STAMINA_REGEN, STAMINA_REGEN_DELAY,
-#   STRENGTH, STRENGTH_DAMAGE_SCALE, MOVE_SPEED, JUMP_SPEED, ROLL_SPEED, ROLL_IFRAME_DURATION,
-#   ROLL_RECOVERY_DURATION, ROLL_STAMINA_COST, SWING_STAMINA_COST, SWING_1_DAMAGE, SWING_2_DAMAGE.
-#   O nome passado precisa ser EXATAMENTE o do @export (se errar, o get_stat dá erro no console).
-#
 # COMO ADICIONAR UM STATUS NOVO (ex.: ATTACK_SPEED):
 #   1. Crie um @export aqui, nome em MAIÚSCULAS, dentro de uma @export_category.
 #   2. No player.gd, onde usar o valor, leia com stat(&"ATTACK_SPEED").
 #   3. Pronto: cartas, level up e efeitos já funcionam com ele; nada mais aqui precisa mudar.
+#
+# LIMITES: nenhum status fica abaixo de 0 (e vida/estamina máximas ficam em 1 ou mais, ver
+#   MIN_STAT), então penalidades grandes não invertem velocidade nem duração. Se um bônus
+#   baixar o máximo, vida e estamina atuais são cortadas para o novo máximo.
+#   Por isso JUMP_SPEED é positivo (quanto maior, mais alto); o player aplica o sinal.
 #
 # ATENÇÃO (PERSISTÊNCIA): cartas e level up valem ALÉM da morte. Se a cena do boss recarrega
 # quando o player morre, este Resource NÃO pode morrer junto: o player.tscn traz um local à
@@ -36,7 +35,6 @@ extends Resource
 # entregue ao player antes de adicioná-lo à árvore: player.STATS = stats_da_run.
 #
 # Quem usa deve chamar reset() ao iniciar cada luta (enche vida e estamina) e tick(delta) a cada
-# frame de física (o player.gd já faz as duas coisas).
 
 signal health_changed(current: float, maximum: float)
 signal stamina_changed(current: float, maximum: float)
@@ -64,8 +62,8 @@ const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
 
 @export_category('Rolagem')
 @export var ROLL_SPEED : float = 600.0
+@export var ROLL_DURATION : float = 0.4
 @export var ROLL_IFRAME_DURATION : float = 0.25
-@export var ROLL_RECOVERY_DURATION : float = 0.15
 @export var ROLL_STAMINA_COST : float = 25.0
 
 # TODO: valores provisórios, o grupo ainda não definiu
@@ -73,6 +71,7 @@ const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
 @export var SWING_STAMINA_COST : float = 20.0
 @export var SWING_1_DAMAGE : float = 20.0
 @export var SWING_2_DAMAGE : float = 30.0
+@export var SWING_3_DAMAGE : float = 45.0
 
 var health : float = 0.0
 var stamina : float = 0.0
@@ -87,6 +86,7 @@ func reset() -> void:
 	health_changed.emit(health, get_stat(&"MAX_HEALTH"))
 	stamina_changed.emit(stamina, get_stat(&"MAX_STAMINA"))
 
+# ---------------BÔNUS E NÍVEL----------------
 
 # Soma um bônus a um status. flat soma ao base; mult é percentual (0.1 = +10%, negativo = penalidade).
 # source identifica quem causou o bônus, para remove_modifiers() tirar só ele.
@@ -94,6 +94,7 @@ func add_modifier(stat: StringName, flat: float = 0.0, mult: float = 0.0, source
 	modifiers.append({"stat": stat, "flat": flat, "mult": mult, "source": source})
 	update_stat(stat)
 
+# Remove todos os bônus que vieram dessa origem
 func remove_modifiers(source: Variant) -> void:
 	var affected : Array = []
 	for m in modifiers:
@@ -141,7 +142,6 @@ func clamp_current() -> void:
 	if stamina > max_stamina:
 		stamina = max_stamina
 		stamina_changed.emit(stamina, max_stamina)
-
 
 func is_dead() -> bool:
 	return health <= 0.0

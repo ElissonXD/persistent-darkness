@@ -103,12 +103,24 @@ to = NodePath("../../Idle")
 event = &"stop"
 
 [node name="Roll" type="Node" parent="StateChart/Root/Grounded"]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Invulnerable")
+
+[node name="Invulnerable" type="Node" parent="StateChart/Root/Grounded/Roll"]
 script = ExtResource("5_atm01")
 
-[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Roll"]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Grounded/Roll/Invulnerable"]
 script = ExtResource("6_trn01")
-to = NodePath("../../Idle")
-delay_in_seconds = "roll_duration"
+to = NodePath("../../Recovery")
+delay_in_seconds = "roll_iframe_duration"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Grounded/Roll"]
+script = ExtResource("5_atm01")
+
+[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Roll/Recovery"]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Idle")
+delay_in_seconds = "roll_recovery_duration"
 
 [node name="Attack" type="Node" parent="StateChart/Root/Grounded"]
 script = ExtResource("4_cmp01")
@@ -172,10 +184,44 @@ delay_in_seconds = "swing2_hit"
 [node name="Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2"]
 script = ExtResource("7_atk01")
 
+[node name="Go Swing3" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2/Recovery"]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Swing3")
+event = &"swing_3"
+
 [node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2/Recovery"]
 script = ExtResource("6_trn01")
 to = NodePath("../../../../Idle")
 delay_in_seconds = "swing2_recovery"
+
+[node name="Swing3" type="Node" parent="StateChart/Root/Grounded/Attack"]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Windup")
+
+[node name="Windup" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3"]
+script = ExtResource("7_atk01")
+
+[node name="Go Hit" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3/Windup"]
+script = ExtResource("6_trn01")
+to = NodePath("../../Hit")
+delay_in_seconds = "swing3_windup"
+
+[node name="Hit" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3"]
+script = ExtResource("7_atk01")
+HITBOX_ACTIVE = true
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3/Hit"]
+script = ExtResource("6_trn01")
+to = NodePath("../../Recovery")
+delay_in_seconds = "swing3_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3"]
+script = ExtResource("7_atk01")
+
+[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3/Recovery"]
+script = ExtResource("6_trn01")
+to = NodePath("../../../../Idle")
+delay_in_seconds = "swing3_recovery"
 
 [node name="Airborne" type="Node" parent="StateChart/Root"]
 script = ExtResource("5_atm01")
@@ -192,7 +238,8 @@ script = ExtResource("5_atm01")
 [connection signal="state_physics_processing" from="StateChart/Root/Grounded/Idle" to="." method="_on_idle_state_physics_processing"]
 [connection signal="state_physics_processing" from="StateChart/Root/Grounded/Run" to="." method="_on_run_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Roll" to="." method="_on_roll_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Grounded/Roll" to="." method="_on_roll_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Roll/Invulnerable" to="." method="_on_invulnerable_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Roll/Invulnerable" to="." method="_on_invulnerable_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1" to="." method="_on_swing_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1/Windup" to="StateChart/Root/Grounded/Attack/Swing1/Windup" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing1/Windup" to="StateChart/Root/Grounded/Attack/Swing1/Windup" method="_on_state_exited"]
@@ -210,3 +257,11 @@ script = ExtResource("5_atm01")
 [connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing2/Recovery" to="StateChart/Root/Grounded/Attack/Swing2/Recovery" method="_on_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Dead" to="." method="_on_dead_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3" to="." method="_on_swing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3/Windup" to="StateChart/Root/Grounded/Attack/Swing3/Windup" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing3/Windup" to="StateChart/Root/Grounded/Attack/Swing3/Windup" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3/Hit" to="StateChart/Root/Grounded/Attack/Swing3/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing3/Hit" to="StateChart/Root/Grounded/Attack/Swing3/Hit" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3/Recovery" to="StateChart/Root/Grounded/Attack/Swing3/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing3/Recovery" to="StateChart/Root/Grounded/Attack/Swing3/Recovery" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Grounded/Attack/Swing2/Recovery" to="." method="_on_swing_2_recovery_state_physics_processing"]

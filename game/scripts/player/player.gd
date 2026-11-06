@@ -42,22 +42,27 @@ extends CharacterBody2D
 @export var SWING_2_RECOVERY : float = 0.5
 @export var SWING_2_KNOCKBACK : Vector2 = Vector2(250, -150)
 
+@export_category('Swing 3')
+@export var SWING_3_WINDUP : float = 0.25
+@export var SWING_3_HIT : float = 0.18
+@export var SWING_3_RECOVERY : float = 0.6
+@export var SWING_3_KNOCKBACK : Vector2 = Vector2(400, -250)
+
 
 @onready var state_chart: StateChart = $StateChart
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
 @onready var swing_1: CompoundState = $StateChart/Root/Grounded/Attack/Swing1
 @onready var swing_2: CompoundState = $StateChart/Root/Grounded/Attack/Swing2
-
+@onready var swing_3: CompoundState = $StateChart/Root/Grounded/Attack/Swing3
 
 var facing : float = 1.0
 var invulnerable : bool = false
 
 func _ready() -> void:
 	STATS.reset()
-
-	
 	configure_swing(swing_1, "swing1", SWING_1_WINDUP, SWING_1_HIT, SWING_1_RECOVERY, SWING_1_KNOCKBACK)
 	configure_swing(swing_2, "swing2", SWING_2_WINDUP, SWING_2_HIT, SWING_2_RECOVERY, SWING_2_KNOCKBACK)
+	configure_swing(swing_3, "swing3", SWING_3_WINDUP, SWING_3_HIT, SWING_3_RECOVERY, SWING_3_KNOCKBACK)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -69,8 +74,10 @@ func _physics_process(delta: float) -> void:
 func _on_roll_state_entered() -> void:
 	STATS.spend_stamina(stat(&"ROLL_STAMINA_COST"))
 	velocity.x = facing * stat(&"ROLL_SPEED")
-	state_chart.set_expression_property(&"roll_iframe_duration", stat(&"ROLL_IFRAME_DURATION"))
-	state_chart.set_expression_property(&"roll_recovery_duration", stat(&"ROLL_RECOVERY_DURATION"))
+	var duration := stat(&"ROLL_DURATION")
+	var iframes := minf(stat(&"ROLL_IFRAME_DURATION"), duration)
+	state_chart.set_expression_property(&"roll_iframe_duration", iframes)
+	state_chart.set_expression_property(&"roll_recovery_duration", duration - iframes)
 
 func _on_invulnerable_state_entered() -> void:
 	invulnerable = true
@@ -83,6 +90,7 @@ func _on_swing_state_entered() -> void:
 	velocity.x = 0
 	set_swing_damage(swing_1, &"SWING_1_DAMAGE")
 	set_swing_damage(swing_2, &"SWING_2_DAMAGE")
+	set_swing_damage(swing_3, &"SWING_3_DAMAGE")
 
 func _on_dead_state_entered() -> void:
 	velocity.x = 0
@@ -112,6 +120,9 @@ func _on_swing_1_recovery_state_physics_processing(_delta: float) -> void:
 	if Input.is_action_just_pressed("attack") and STATS.has_stamina(stat(&"SWING_STAMINA_COST")):
 		state_chart.send_event(&"swing_2")
 
+func _on_swing_2_recovery_state_physics_processing(_delta: float) -> void:
+	if Input.is_action_just_pressed("attack") and STATS.has_stamina(stat(&"SWING_STAMINA_COST")):
+		state_chart.send_event(&"swing_3")
 
 # TODO: knockback ainda não é aplicado (precisa de um estado Hurt para não ser sobrescrito pelo movimento)
 func take_damage(amount: int, _knockback: Vector2) -> void:
@@ -120,7 +131,6 @@ func take_damage(amount: int, _knockback: Vector2) -> void:
 	STATS.take_damage(amount)
 	if STATS.is_dead():
 		state_chart.send_event(&"died")
-
 
 func stat(stat_name: StringName) -> float:
 	return STATS.get_stat(stat_name)
