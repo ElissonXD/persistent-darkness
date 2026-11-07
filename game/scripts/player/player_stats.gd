@@ -34,9 +34,11 @@ extends Resource
 signal health_changed(current: float, maximum: float)
 signal stamina_changed(current: float, maximum: float)
 signal stat_changed(stat: StringName)
+signal ability_changed(ability: StringName)
 signal died
 
 const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
+const ON_HIT_EFFECTS : Array[StringName] = [&"BURN_BUILDUP", &"PARALYSIS_BUILDUP", &"FROSTBITE_BUILDUP"]
 
 @export_category('Vida')
 @export var MAX_HEALTH : float = 100.0
@@ -76,11 +78,19 @@ const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
 @export var SWING_2_DAMAGE : float = 30.0
 @export var SWING_3_DAMAGE : float = 45.0
 
+@export_category('Efeitos na arma')
+@export var BURN_BUILDUP : float = 0.0
+@export var PARALYSIS_BUILDUP : float = 0.0
+@export var FROSTBITE_BUILDUP : float = 0.0
+
 var health : float = 0.0
 var stamina : float = 0.0
 var regen_timer : float = 0.0
 # Bônus ativos: cada item é {"stat", "flat", "mult", "source"}
 var modifiers : Array = []
+
+# Habilidades concedidas por cartas: cada item é {"ability", "source"}
+var ability_grants : Array = []
 
 func reset() -> void:
 	health = get_stat(&"MAX_HEALTH")
@@ -107,9 +117,12 @@ func remove_modifiers(source: Variant) -> void:
 func apply_card(card: CardData) -> void:
 	for m in card.MODIFIERS:
 		add_modifier(m.STAT, m.FLAT, m.MULT, card)
+	for ability in card.ABILITIES:
+		grant_ability(ability, card)
 
 func remove_card(card: CardData) -> void:
 	remove_modifiers(card)
+	remove_abilities(card)
 
 func raise_base(stat: StringName, amount: float) -> void:
 	set(stat, get(stat) + amount)
@@ -117,6 +130,7 @@ func raise_base(stat: StringName, amount: float) -> void:
 
 func clear_modifiers() -> void:
 	modifiers.clear()
+	ability_grants.clear()
 
 func get_stat(stat: StringName) -> float:
 	var flat := 0.0
@@ -141,6 +155,29 @@ func clamp_current() -> void:
 		stamina = max_stamina
 		stamina_changed.emit(stamina, max_stamina)
 
+func grant_ability(ability: StringName, source: Variant = null) -> void:
+	if typeof(get(ability)) != TYPE_BOOL:
+		push_error("PlayerStats: '%s' não é uma habilidade booleana válida" % ability)
+		return
+	ability_grants.append({"ability": ability, "source": source})
+	ability_changed.emit(ability)
+
+func remove_abilities(source: Variant) -> void:
+	var affected : Array = []
+	for g in ability_grants:
+		if g.source == source:
+			affected.append(g.ability)
+	ability_grants = ability_grants.filter(func(g): return g.source != source)
+	for ability in affected:
+		ability_changed.emit(ability)
+
+func has_ability(ability: StringName) -> bool:
+	if get(ability) == true:
+		return true
+	for g in ability_grants:
+		if g.ability == ability:
+			return true
+	return false
 
 func is_dead() -> bool:
 	return health <= 0.0
@@ -178,3 +215,11 @@ func tick(delta: float) -> void:
 
 func attack_damage(damage_stat: StringName) -> int:
 	return roundi(get_stat(damage_stat) * (1.0 + get_stat(&"STRENGTH") * get_stat(&"STRENGTH_DAMAGE_SCALE")))
+
+func on_hit_buildups() -> Dictionary:
+	var result := {}
+	for effect in ON_HIT_EFFECTS:
+		var amount := get_stat(effect)
+		if amount > 0.0:
+			result[effect] = amount
+	return result

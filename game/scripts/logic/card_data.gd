@@ -15,10 +15,11 @@ extends Resource
 # COMO USAR (quem controla o fluxo da run): player.STATS.apply_card(carta). Para tirar:
 # player.STATS.remove_card(carta). A RARITY serve para a tela de escolha e o sorteio.
 
-enum Rarity { COMMON, NORMAL, LEGENDARY }
+enum Rarity { COMMON, RARE, LEGENDARY }
 
 @export_category('Carta')
 @export var CARD_NAME : String = ''
 @export_multiline var DESCRIPTION : String = ''
 @export var RARITY : Rarity = Rarity.COMMON
 @export var MODIFIERS : Array[StatModifier] = []
+@export var ABILITIES : Array[StringName] = []
