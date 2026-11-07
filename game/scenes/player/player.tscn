@@ -1,0 +1,307 @@
+[gd_scene format=3 uid="uid://hqtd1c7k1d2l"]
+
+[ext_resource type="Script" uid="uid://bmggfsrsx55ix" path="res://game/scripts/player/player.gd" id="1_plr01"]
+[ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="2_plr02"]
+[ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_sch01"]
+[ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="4_cmp01"]
+[ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_atm01"]
+[ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_trn01"]
+[ext_resource type="Script" uid="uid://b411mffelg75g" path="res://game/scripts/enemies/attacks/attack_phase.gd" id="7_atk01"]
+[ext_resource type="Script" uid="uid://brv01bwrynsnk" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="8_mhb01"]
+
+[sub_resource type="Resource" id="Resource_stats1"]
+resource_local_to_scene = true
+script = ExtResource("2_plr02")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body1"]
+size = Vector2(48, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt1"]
+size = Vector2(44, 76)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhit1"]
+size = Vector2(70, 60)
+
+[node name="Player" type="CharacterBody2D" unique_id=116187027 groups=["player"]]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_plr01")
+STATS = SubResource("Resource_stats1")
+
+[node name="Body" type="Polygon2D" parent="." unique_id=799461936]
+color = Color(0.6, 0.8, 1, 1)
+polygon = PackedVector2Array(-24, -40, 24, -40, 24, 40, -24, 40)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1115508565]
+shape = SubResource("RectangleShape2D_body1")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1113441319]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1177348109]
+shape = SubResource("RectangleShape2D_hurt1")
+
+[node name="MeleeHitbox" type="Area2D" parent="." unique_id=572401791]
+collision_layer = 0
+collision_mask = 4
+monitoring = false
+script = ExtResource("8_mhb01")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitbox" unique_id=1079478499]
+position = Vector2(60, 0)
+shape = SubResource("RectangleShape2D_mhit1")
+debug_color = Color(0.9, 0.1, 0.1, 0.42)
+
+[node name="StateChart" type="Node" parent="." unique_id=881128997]
+script = ExtResource("3_sch01")
+metadata/_custom_type_script = "uid://couw105c3bde4"
+
+[node name="Root" type="Node" parent="StateChart" unique_id=150629112]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Grounded")
+
+[node name="Go Dead" type="Node" parent="StateChart/Root" unique_id=1193902380]
+script = ExtResource("6_trn01")
+to = NodePath("../Dead")
+event = &"died"
+delay_in_seconds = "0.0"
+
+[node name="Grounded" type="Node" parent="StateChart/Root" unique_id=1903854318]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Idle")
+
+[node name="Go Airborne" type="Node" parent="StateChart/Root/Grounded" unique_id=2096306765]
+script = ExtResource("6_trn01")
+to = NodePath("../../Airborne")
+event = &"airborne"
+delay_in_seconds = "0.0"
+
+[node name="Go Roll" type="Node" parent="StateChart/Root/Grounded" unique_id=228140474]
+script = ExtResource("6_trn01")
+to = NodePath("../Roll")
+event = &"roll"
+delay_in_seconds = "0.0"
+
+[node name="Go Attack" type="Node" parent="StateChart/Root/Grounded" unique_id=333185544]
+script = ExtResource("6_trn01")
+to = NodePath("../Attack")
+event = &"attack"
+delay_in_seconds = "0.0"
+
+[node name="Go Heal" type="Node" parent="StateChart/Root/Grounded" unique_id=1410271214]
+script = ExtResource("6_trn01")
+to = NodePath("../Heal")
+event = &"heal"
+delay_in_seconds = "0.0"
+
+[node name="Idle" type="Node" parent="StateChart/Root/Grounded" unique_id=1970966794]
+script = ExtResource("5_atm01")
+
+[node name="Go Run" type="Node" parent="StateChart/Root/Grounded/Idle" unique_id=1926153493]
+script = ExtResource("6_trn01")
+to = NodePath("../../Run")
+event = &"move"
+delay_in_seconds = "0.0"
+
+[node name="Run" type="Node" parent="StateChart/Root/Grounded" unique_id=1484744716]
+script = ExtResource("5_atm01")
+
+[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Run" unique_id=767961814]
+script = ExtResource("6_trn01")
+to = NodePath("../../Idle")
+event = &"stop"
+delay_in_seconds = "0.0"
+
+[node name="Roll" type="Node" parent="StateChart/Root/Grounded" unique_id=687967036]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Invulnerable")
+
+[node name="Invulnerable" type="Node" parent="StateChart/Root/Grounded/Roll" unique_id=1953087506]
+script = ExtResource("5_atm01")
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Grounded/Roll/Invulnerable" unique_id=1342550626]
+script = ExtResource("6_trn01")
+to = NodePath("../../Recovery")
+delay_in_seconds = "roll_iframe_duration"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Grounded/Roll" unique_id=972461974]
+script = ExtResource("5_atm01")
+
+[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Roll/Recovery" unique_id=1525041118]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Idle")
+delay_in_seconds = "roll_recovery_duration"
+
+[node name="Heal" type="Node" parent="StateChart/Root/Grounded" unique_id=876080152]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Drinking")
+
+[node name="Drinking" type="Node" parent="StateChart/Root/Grounded/Heal" unique_id=1328424969]
+script = ExtResource("5_atm01")
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Grounded/Heal/Drinking" unique_id=1150405402]
+script = ExtResource("6_trn01")
+to = NodePath("../../Recovery")
+delay_in_seconds = "heal_delay"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Grounded/Heal" unique_id=445325954]
+script = ExtResource("5_atm01")
+
+[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Heal/Recovery" unique_id=1585878574]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Idle")
+delay_in_seconds = "heal_recovery_duration"
+
+[node name="Attack" type="Node" parent="StateChart/Root/Grounded" unique_id=1535112220]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Swing1")
+
+[node name="Swing1" type="Node" parent="StateChart/Root/Grounded/Attack" unique_id=1907210363]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Windup")
+
+[node name="Windup" type="Node" parent="StateChart/Root/Grounded/Attack/Swing1" unique_id=664633736]
+script = ExtResource("7_atk01")
+
+[node name="Go Hit" type="Node" parent="StateChart/Root/Grounded/Attack/Swing1/Windup" unique_id=999632991]
+script = ExtResource("6_trn01")
+to = NodePath("../../Hit")
+delay_in_seconds = "swing1_windup"
+
+[node name="Hit" type="Node" parent="StateChart/Root/Grounded/Attack/Swing1" unique_id=573898065]
+script = ExtResource("7_atk01")
+HITBOX_ACTIVE = true
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing1/Hit" unique_id=1043357719]
+script = ExtResource("6_trn01")
+to = NodePath("../../Recovery")
+delay_in_seconds = "swing1_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing1" unique_id=380493214]
+script = ExtResource("7_atk01")
+
+[node name="Go Swing2" type="Node" parent="StateChart/Root/Grounded/Attack/Swing1/Recovery" unique_id=482501030]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Swing2")
+event = &"swing_2"
+delay_in_seconds = "0.0"
+
+[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Attack/Swing1/Recovery" unique_id=1873412451]
+script = ExtResource("6_trn01")
+to = NodePath("../../../../Idle")
+delay_in_seconds = "swing1_recovery"
+
+[node name="Swing2" type="Node" parent="StateChart/Root/Grounded/Attack" unique_id=465509633]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Windup")
+
+[node name="Windup" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2" unique_id=412986151]
+script = ExtResource("7_atk01")
+
+[node name="Go Hit" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2/Windup" unique_id=1965819388]
+script = ExtResource("6_trn01")
+to = NodePath("../../Hit")
+delay_in_seconds = "swing2_windup"
+
+[node name="Hit" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2" unique_id=297608095]
+script = ExtResource("7_atk01")
+HITBOX_ACTIVE = true
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2/Hit" unique_id=370503406]
+script = ExtResource("6_trn01")
+to = NodePath("../../Recovery")
+delay_in_seconds = "swing2_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2" unique_id=124260252]
+script = ExtResource("7_atk01")
+
+[node name="Go Swing3" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2/Recovery" unique_id=1173510734]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Swing3")
+event = &"swing_3"
+delay_in_seconds = "0.0"
+
+[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Attack/Swing2/Recovery" unique_id=1211808482]
+script = ExtResource("6_trn01")
+to = NodePath("../../../../Idle")
+delay_in_seconds = "swing2_recovery"
+
+[node name="Swing3" type="Node" parent="StateChart/Root/Grounded/Attack" unique_id=936988317]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Windup")
+
+[node name="Windup" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3" unique_id=129850712]
+script = ExtResource("7_atk01")
+
+[node name="Go Hit" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3/Windup" unique_id=610524471]
+script = ExtResource("6_trn01")
+to = NodePath("../../Hit")
+delay_in_seconds = "swing3_windup"
+
+[node name="Hit" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3" unique_id=1923662677]
+script = ExtResource("7_atk01")
+HITBOX_ACTIVE = true
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3/Hit" unique_id=536836654]
+script = ExtResource("6_trn01")
+to = NodePath("../../Recovery")
+delay_in_seconds = "swing3_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3" unique_id=938652575]
+script = ExtResource("7_atk01")
+
+[node name="Go Idle" type="Node" parent="StateChart/Root/Grounded/Attack/Swing3/Recovery" unique_id=1555286663]
+script = ExtResource("6_trn01")
+to = NodePath("../../../../Idle")
+delay_in_seconds = "swing3_recovery"
+
+[node name="Airborne" type="Node" parent="StateChart/Root" unique_id=560600621]
+script = ExtResource("5_atm01")
+
+[node name="Go Grounded" type="Node" parent="StateChart/Root/Airborne" unique_id=1213039734]
+script = ExtResource("6_trn01")
+to = NodePath("../../Grounded")
+event = &"landed"
+delay_in_seconds = "0.0"
+
+[node name="Dead" type="Node" parent="StateChart/Root" unique_id=1568967772]
+script = ExtResource("5_atm01")
+
+[connection signal="area_entered" from="MeleeHitbox" to="MeleeHitbox" method="_on_area_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Grounded/Idle" to="." method="_on_idle_state_physics_processing"]
+[connection signal="state_physics_processing" from="StateChart/Root/Grounded/Run" to="." method="_on_run_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Roll" to="." method="_on_roll_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Roll" to="." method="_on_roll_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Roll/Invulnerable" to="." method="_on_invulnerable_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Roll/Invulnerable" to="." method="_on_invulnerable_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Heal" to="." method="_on_heal_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Grounded/Heal/Drinking" to="." method="_on_heal_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Heal/Recovery" to="." method="_on_heal_recovery_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Grounded/Heal/Recovery" to="." method="_on_heal_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1" to="." method="_on_swing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1/Windup" to="StateChart/Root/Grounded/Attack/Swing1/Windup" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing1/Windup" to="StateChart/Root/Grounded/Attack/Swing1/Windup" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1/Hit" to="StateChart/Root/Grounded/Attack/Swing1/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing1/Hit" to="StateChart/Root/Grounded/Attack/Swing1/Hit" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1/Recovery" to="StateChart/Root/Grounded/Attack/Swing1/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing1/Recovery" to="StateChart/Root/Grounded/Attack/Swing1/Recovery" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Grounded/Attack/Swing1/Recovery" to="." method="_on_swing_1_recovery_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing2" to="." method="_on_swing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing2/Windup" to="StateChart/Root/Grounded/Attack/Swing2/Windup" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing2/Windup" to="StateChart/Root/Grounded/Attack/Swing2/Windup" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing2/Hit" to="StateChart/Root/Grounded/Attack/Swing2/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing2/Hit" to="StateChart/Root/Grounded/Attack/Swing2/Hit" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing2/Recovery" to="StateChart/Root/Grounded/Attack/Swing2/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing2/Recovery" to="StateChart/Root/Grounded/Attack/Swing2/Recovery" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Grounded/Attack/Swing2/Recovery" to="." method="_on_swing_2_recovery_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3" to="." method="_on_swing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3/Windup" to="StateChart/Root/Grounded/Attack/Swing3/Windup" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing3/Windup" to="StateChart/Root/Grounded/Attack/Swing3/Windup" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3/Hit" to="StateChart/Root/Grounded/Attack/Swing3/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing3/Hit" to="StateChart/Root/Grounded/Attack/Swing3/Hit" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3/Recovery" to="StateChart/Root/Grounded/Attack/Swing3/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing3/Recovery" to="StateChart/Root/Grounded/Attack/Swing3/Recovery" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Dead" to="." method="_on_dead_state_entered"]
