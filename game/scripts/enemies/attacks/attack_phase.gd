@@ -37,6 +37,8 @@ func _on_state_entered() -> void:
 func _on_state_exited() -> void:
 	if HITBOX != null:
 		HITBOX.deactivate()
+	if PLAYER:
+		PLAYER.play('RESET')
 
 # Sempre recomeça do frame 0, mesmo que a fase anterior tenha usado a mesma animação (ex.: Hit1 e Hit2)
 func play_animation() -> void:

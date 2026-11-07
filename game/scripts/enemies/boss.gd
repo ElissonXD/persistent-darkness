@@ -76,6 +76,18 @@ var power_wave = preload("res://game/scenes/projectiles/power_wave.tscn")
 @export var COMBO_B_DAMAGE : int = 30
 @export var COMBO_B_KNOCKBACK : Vector2 = Vector2(250, -150)
 
+@export_category('Stinger')
+@export var STINGER_SPEED : float = 200
+@export var STINGER_TELEGRAPHY:float = 0.4
+@export var STINGER_HIT:float = 1.0
+@export var STINGER_RECOVERY : float = 0.4
+@export var STINGER_DAMAGE : int = 40
+@export var STINGER_KNOCKBACK : Vector2 = Vector2(1000, -150)
+var stinger_distance : float
+var stinger_direction : int
+var stinger_stop : bool
+var stinger_hit_timer : float
+
 @export_category('Effects buildups')
 var FIRE_BUILDUP = 0
 var FREEZE_BUILDUP = 0
@@ -88,6 +100,7 @@ var ELETRIC_BUILDUP = 0
 @onready var combo_b: CompoundState = $StateChart/Root/Attack2/ComboB
 @onready var power_wave_a: CompoundState = $StateChart/Root/Attack1/PowerWaveA
 @onready var power_wave_b: CompoundState = $StateChart/Root/Attack2/PowerWaveB
+@onready var stinger: CompoundState = $StateChart/Root/Attack2/Stinger
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -108,6 +121,7 @@ func _ready() -> void:
 	configure_combo(combo_b, "combo_b", COMBO_B_TELEGRAPHY, COMBO_B_HIT, COMBO_B_GAP, COMBO_B_RECOVERY, COMBO_B_DAMAGE, COMBO_B_KNOCKBACK)
 	configure_combo(power_wave_a, "power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY, POWER_WAVE_DAMAGE, POWER_WAVE_KNOCKBACK)
 	configure_combo(power_wave_b, "power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY, POWER_WAVE_DAMAGE, POWER_WAVE_KNOCKBACK)
+	configure_combo(stinger, "stinger", STINGER_TELEGRAPHY, 0, 0, STINGER_RECOVERY, STINGER_DAMAGE, STINGER_KNOCKBACK)
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -123,16 +137,13 @@ qualquer estado vai pra stun
 ESTADOS COMPOSTOS - 1 para cada elemento, 1 para fase 2 
 """
 
-
-
 # ---------------ESTADOS DE ENTRADA----------------
 
 # state_entered de cada filho do Root, com o nome do estado como bind
 func _on_state_entered(state_name: StringName) -> void:
+
 	# SEMPRE ao ir para um estado, ficar olhando pro player (antes de escolher o golpe)
 	face(player_distance())
-	# SEMPRE resetar animação
-	animation_player.play("RESET")
 
 	# só o Walk move o boss na horizontal
 	if state_name != &"Walk":
@@ -155,6 +166,13 @@ func on_power_waveB_enter() -> void:
 	instatiate_power_wave(true)
 	return
 
+func on_stinger_hit_enter() -> void:
+	stinger_distance = player_distance()
+	stinger_direction = signf(stinger_distance)
+	velocity.x = stinger_direction * STINGER_SPEED
+	stinger_stop = false
+	stinger_hit_timer = STINGER_HIT
+	return
 
 
 # state_entered de cada AttackPhase. Chamado depois do _on_state_entered do estado pai
@@ -194,7 +212,22 @@ func _on_walk_state_physics_processing(_delta: float) -> void:
 
 	velocity.x = signf(distance_x) * WALK_SPEED
 
-
+func on_stinger_hit_physics_processing(_delta:float) -> void:
+	velocity.x = move_toward(velocity.x, stinger_direction*stinger_distance, stinger_direction*STINGER_SPEED * _delta)
+	
+	melee_hitbox.set_facing(stinger_direction)
+	
+	stinger_hit_timer -= _delta
+	
+	if stinger_hit_timer <= 0:
+		stinger_stop = true
+	
+	if stinger_stop:
+		state_chart.send_event(&'go_stinger_recovery')
+		return
+	
+	return
+	
 	
 
 # Recovery é uma AttackPhase igual às outras: o que muda de um golpe para outro é só a animação
@@ -206,6 +239,9 @@ func _on_walk_state_physics_processing(_delta: float) -> void:
 
 # ---------------ESTADOS DE SAÍDA----------------
 
+func on_stinger_hit_exit():
+	velocity.x = 0
+	return
 
 # ---------------UTILS----------------
 
@@ -287,6 +323,8 @@ func deal_damage(hurtbox: Area2D, amount: int, knockback: Vector2) -> void:
 	var target = hurtbox.owner
 	if target != null and target.has_method("take_damage"):
 		target.take_damage(amount, knockback)
+		
+
 
 func _on_gap_1_state_entered() -> void:
 	pass # Replace with function body.
@@ -299,3 +337,7 @@ func instatiate_power_wave(isStronger:bool):
 	instance.STRONGER_VARIANT = isStronger;
 	get_tree().current_scene.add_child(instance)
 	return
+
+
+func _on_melee_hitbox_area_entered(area: Area2D) -> void:
+	stinger_stop = true

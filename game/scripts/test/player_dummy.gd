@@ -43,7 +43,7 @@ func set_invulnerable(value: bool) -> void:
 	sprite_2d.modulate.a = INVULNERABLE_ALPHA if value else 1.0
 
 func take_damage(amount: int, knockback: Vector2) -> void:
-	if invulnerable or health <= 0:
+	if invulnerable:
 		return
 
 	health = maxi(health - amount, 0)
