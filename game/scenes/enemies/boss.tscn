@@ -1909,6 +1909,72 @@ to = NodePath("../Stinger")
 event = &"go_stinger"
 delay_in_seconds = "0.0"
 
+[node name="SwordSpawn" type="Node" parent="StateChart/Root" unique_id=1556790051]
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Telegraphy")
+
+[node name="Telegraphy" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=850513776 node_paths=PackedStringArray("PLAYER")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"uppercut_telegraphy"
+
+[node name="Go Hit1" type="Node" parent="StateChart/Root/SwordSpawn/Telegraphy" unique_id=1942846672]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Hit1")
+delay_in_seconds = "power_wave_telegraphy"
+
+[node name="Hit1" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1931924997 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"uppercut_hit"
+HITBOX = NodePath("../../../../MeleeHitbox")
+HITBOX_ACTIVE = true
+DAMAGE = 20
+
+[node name="Go Gap" type="Node" parent="StateChart/Root/SwordSpawn/Hit1" unique_id=1239880140]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Gap")
+delay_in_seconds = "power_wave_hit"
+
+[node name="Gap" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1242765082 node_paths=PackedStringArray("PLAYER")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"uppercut_telegraphy"
+
+[node name="Go Hit 2" type="Node" parent="StateChart/Root/SwordSpawn/Gap" unique_id=1402877407]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Hit2")
+delay_in_seconds = "power_wave_gap"
+
+[node name="Hit2" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1071634030 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"uppercut_hit"
+HITBOX = NodePath("../../../../MeleeHitbox")
+HITBOX_ACTIVE = true
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/SwordSpawn/Hit2" unique_id=1499461176]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Recovery")
+delay_in_seconds = "power_wave_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=2030918825 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"uppercut_recovery"
+HITBOX = NodePath("../../../../MeleeHitbox")
+
+[node name="Go Rest" type="Node" parent="StateChart/Root/SwordSpawn/Recovery" unique_id=834730284]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../Rest")
+guard = SubResource("Resource_pfar1")
+delay_in_seconds = "stinger_recovery"
+
+[node name="Go Walk" type="Node" parent="StateChart/Root/SwordSpawn/Recovery" unique_id=890792752]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../Walk")
+delay_in_seconds = "stinger_recovery"
+
 [node name="Rest" type="Node" parent="StateChart/Root" unique_id=1543790628]
 script = ExtResource("5_bhvv7")
 
@@ -2043,5 +2109,15 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Recovery" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Recovery" to="StateChart/Root/Attack2/Stinger/Recovery" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Recovery" to="StateChart/Root/Attack2/Stinger/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Telegraphy" to="StateChart/Root/SwordSpawn/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Telegraphy" to="StateChart/Root/SwordSpawn/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit1" to="StateChart/Root/SwordSpawn/Hit1" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Hit1" to="StateChart/Root/SwordSpawn/Hit1" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Gap" to="StateChart/Root/SwordSpawn/Gap" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Gap" to="StateChart/Root/SwordSpawn/Gap" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit2" to="StateChart/Root/SwordSpawn/Hit2" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Hit2" to="StateChart/Root/SwordSpawn/Hit2" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Rest" to="." method="_on_state_entered" binds= [&"Rest"]]
 [connection signal="state_entered" from="StateChart/Root/Stunned" to="." method="_on_state_entered" binds= [&"Stunned"]]
