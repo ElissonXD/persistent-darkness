@@ -1,10 +1,6 @@
 class_name PlayerStats
 extends Resource
 
-# Valor final de um status = (BASE + bônus fixos) * (1 + bônus percentuais), sempre lido com
-# get_stat(&"NOME"). Nunca guarde o resultado em variável (no player.gd use stat(&"NOME")
-# na hora de usar), senão um bônus aplicado depois não vale.
-#
 # BASE x BÔNUS (duas coisas diferentes):
 #   BASE   = os @export daqui. Só mudam por LEVEL UP: STATS.raise_base(&"STRENGTH", 1.0).
 #            Permanente, não tem origem e não é removível.
@@ -19,30 +15,30 @@ extends Resource
 #   Assim cada efeito tira só o que ele mesmo colocou. Penalidade = valor negativo.
 #   Vida máxima: bônus NÃO cura sozinho; chame STATS.heal(quantidade) se quiser.
 #
+# HABILIDADES LIGA/DESLIGA (booleanos), ex.: ROLL_PASSES_THROUGH_ENEMIES: NÃO passam por get_stat nem
+#   add_modifier (que só tratam números). Leia e altere direto: STATS.ROLL_PASSES_THROUGH_ENEMIES = true.
+#   O StatModifier das cartas só aceita números, então a carta que ligar um booleano precisa de uma
+#   extensão no CardData/apply_card (ainda não existe).
+#
 # COMO ADICIONAR UM STATUS NOVO (ex.: ATTACK_SPEED):
 #   1. Crie um @export aqui, nome em MAIÚSCULAS, dentro de uma @export_category.
 #   2. No player.gd, onde usar o valor, leia com stat(&"ATTACK_SPEED").
 #   3. Pronto: cartas, level up e efeitos já funcionam com ele; nada mais aqui precisa mudar.
 #
-# LIMITES: nenhum status fica abaixo de 0 (e vida/estamina máximas ficam em 1 ou mais, ver
-#   MIN_STAT), então penalidades grandes não invertem velocidade nem duração. Se um bônus
-#   baixar o máximo, vida e estamina atuais são cortadas para o novo máximo.
-#   Por isso JUMP_SPEED é positivo (quanto maior, mais alto); o player aplica o sinal.
-#
 # ATENÇÃO (PERSISTÊNCIA): cartas e level up valem ALÉM da morte. Se a cena do boss recarrega
 # quando o player morre, este Resource NÃO pode morrer junto: o player.tscn traz um local à
 # cena só para testes. Na run de verdade, guarde o PlayerStats fora da cena (ex.: autoload) e
 # entregue ao player antes de adicioná-lo à árvore: player.STATS = stats_da_run.
-#
-# Quem usa deve chamar reset() ao iniciar cada luta (enche vida e estamina) e tick(delta) a cada
+
 
 signal health_changed(current: float, maximum: float)
 signal stamina_changed(current: float, maximum: float)
 signal stat_changed(stat: StringName)
+signal ability_changed(ability: StringName)
 signal died
 
-# Mínimo de cada status; o que não estiver aqui tem mínimo 0
 const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
+const ON_HIT_EFFECTS : Array[StringName] = [&"BURN_BUILDUP", &"PARALYSIS_BUILDUP", &"FROSTBITE_BUILDUP"]
 
 @export_category('Vida')
 @export var MAX_HEALTH : float = 100.0
@@ -65,6 +61,15 @@ const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
 @export var ROLL_DURATION : float = 0.4
 @export var ROLL_IFRAME_DURATION : float = 0.25
 @export var ROLL_STAMINA_COST : float = 25.0
+## Se verdadeiro, durante a rolagem o player atravessa inimigos (upgrade de carta). Falso = a rolagem colide com eles
+@export var ROLL_PASSES_THROUGH_ENEMIES : bool = false
+
+# TODO: valores provisórios, o grupo ainda não definiu
+@export_category('Cura')
+@export var HEAL_AMOUNT : float = 40.0
+@export var HEAL_DELAY : float = 0.8
+@export var HEAL_RECOVERY_DURATION : float = 0.5
+@export var HEAL_MOVE_SPEED_MULT : float = 0.3
 
 # TODO: valores provisórios, o grupo ainda não definiu
 @export_category('Ataque')
@@ -73,11 +78,19 @@ const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
 @export var SWING_2_DAMAGE : float = 30.0
 @export var SWING_3_DAMAGE : float = 45.0
 
+@export_category('Efeitos na arma')
+@export var BURN_BUILDUP : float = 0.0
+@export var PARALYSIS_BUILDUP : float = 0.0
+@export var FROSTBITE_BUILDUP : float = 0.0
+
 var health : float = 0.0
 var stamina : float = 0.0
 var regen_timer : float = 0.0
 # Bônus ativos: cada item é {"stat", "flat", "mult", "source"}
 var modifiers : Array = []
+
+# Habilidades concedidas por cartas: cada item é {"ability", "source"}
+var ability_grants : Array = []
 
 func reset() -> void:
 	health = get_stat(&"MAX_HEALTH")
@@ -86,15 +99,11 @@ func reset() -> void:
 	health_changed.emit(health, get_stat(&"MAX_HEALTH"))
 	stamina_changed.emit(stamina, get_stat(&"MAX_STAMINA"))
 
-# ---------------BÔNUS E NÍVEL----------------
 
-# Soma um bônus a um status. flat soma ao base; mult é percentual (0.1 = +10%, negativo = penalidade).
-# source identifica quem causou o bônus, para remove_modifiers() tirar só ele.
 func add_modifier(stat: StringName, flat: float = 0.0, mult: float = 0.0, source: Variant = null) -> void:
 	modifiers.append({"stat": stat, "flat": flat, "mult": mult, "source": source})
 	update_stat(stat)
 
-# Remove todos os bônus que vieram dessa origem
 func remove_modifiers(source: Variant) -> void:
 	var affected : Array = []
 	for m in modifiers:
@@ -108,17 +117,20 @@ func remove_modifiers(source: Variant) -> void:
 func apply_card(card: CardData) -> void:
 	for m in card.MODIFIERS:
 		add_modifier(m.STAT, m.FLAT, m.MULT, card)
+	for ability in card.ABILITIES:
+		grant_ability(ability, card)
 
 func remove_card(card: CardData) -> void:
 	remove_modifiers(card)
+	remove_abilities(card)
 
-# Level up: aumenta o valor BASE (permanente) de um status
 func raise_base(stat: StringName, amount: float) -> void:
 	set(stat, get(stat) + amount)
 	update_stat(stat)
 
 func clear_modifiers() -> void:
 	modifiers.clear()
+	ability_grants.clear()
 
 func get_stat(stat: StringName) -> float:
 	var flat := 0.0
@@ -142,6 +154,30 @@ func clamp_current() -> void:
 	if stamina > max_stamina:
 		stamina = max_stamina
 		stamina_changed.emit(stamina, max_stamina)
+
+func grant_ability(ability: StringName, source: Variant = null) -> void:
+	if typeof(get(ability)) != TYPE_BOOL:
+		push_error("PlayerStats: '%s' não é uma habilidade booleana válida" % ability)
+		return
+	ability_grants.append({"ability": ability, "source": source})
+	ability_changed.emit(ability)
+
+func remove_abilities(source: Variant) -> void:
+	var affected : Array = []
+	for g in ability_grants:
+		if g.source == source:
+			affected.append(g.ability)
+	ability_grants = ability_grants.filter(func(g): return g.source != source)
+	for ability in affected:
+		ability_changed.emit(ability)
+
+func has_ability(ability: StringName) -> bool:
+	if get(ability) == true:
+		return true
+	for g in ability_grants:
+		if g.ability == ability:
+			return true
+	return false
 
 func is_dead() -> bool:
 	return health <= 0.0
@@ -179,3 +215,11 @@ func tick(delta: float) -> void:
 
 func attack_damage(damage_stat: StringName) -> int:
 	return roundi(get_stat(damage_stat) * (1.0 + get_stat(&"STRENGTH") * get_stat(&"STRENGTH_DAMAGE_SCALE")))
+
+func on_hit_buildups() -> Dictionary:
+	var result := {}
+	for effect in ON_HIT_EFFECTS:
+		var amount := get_stat(effect)
+		if amount > 0.0:
+			result[effect] = amount
+	return result

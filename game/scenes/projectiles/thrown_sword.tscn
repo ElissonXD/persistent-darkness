@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://cp6u7dsgm72lu"]
+
+[ext_resource type="Script" uid="uid://lkvddaxvpi45" path="res://game/scripts/projectiles/thrown_sword.gd" id="1_tswrd"]
+[ext_resource type="Texture2D" uid="uid://dt82ildcghcqe" path="res://assets/sprites/projectiles/thrown_sword_2x3.png" id="2_ie05s"]
+[ext_resource type="Script" uid="uid://brv01bwrynsnk" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="2_mhbox"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2wnh"]
+atlas = ExtResource("2_ie05s")
+region = Rect2(0, 0, 1330, 322)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_klggg"]
+atlas = ExtResource("2_ie05s")
+region = Rect2(1330, 0, 1330, 322)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bowcj"]
+atlas = ExtResource("2_ie05s")
+region = Rect2(0, 322, 1330, 322)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0w6fp"]
+atlas = ExtResource("2_ie05s")
+region = Rect2(1330, 322, 1330, 322)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pxi23"]
+atlas = ExtResource("2_ie05s")
+region = Rect2(0, 644, 1330, 322)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vm47x"]
+atlas = ExtResource("2_ie05s")
+region = Rect2(1330, 644, 1330, 322)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w7v6v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2wnh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_klggg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bowcj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0w6fp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pxi23")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vm47x")
+}],
+"loop": 1,
+"name": &"fly",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tswrd"]
+size = Vector2(160, 40)
+
+[node name="ThrownSword" type="Node2D" unique_id=1872812533]
+top_level = true
+script = ExtResource("1_tswrd")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=335698776]
+position = Vector2(0.9999995, 0)
+scale = Vector2(0.11801243, 0.11801242)
+sprite_frames = SubResource("SpriteFrames_w7v6v")
+animation = &"fly"
+frame_progress = 0.039515667
+
+[node name="MeleeHitbox" type="Area2D" parent="." unique_id=631861022]
+collision_layer = 8
+collision_mask = 2
+monitoring = false
+script = ExtResource("2_mhbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitbox" unique_id=1628983900]
+shape = SubResource("RectangleShape2D_tswrd")
+debug_color = Color(0.9, 0.1, 0.1, 0.42)
+
+[connection signal="area_entered" from="MeleeHitbox" to="MeleeHitbox" method="_on_area_entered"]
