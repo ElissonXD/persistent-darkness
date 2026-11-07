@@ -68,6 +68,7 @@ const ENEMY_LAYER : int = 3
 @onready var swing_1: CompoundState = $StateChart/Root/Grounded/Attack/Swing1
 @onready var swing_2: CompoundState = $StateChart/Root/Grounded/Attack/Swing2
 @onready var swing_3: CompoundState = $StateChart/Root/Grounded/Attack/Swing3
+@onready var hurtbox: Area2D = $Hurtbox
 
 var facing : float = 1.0
 var invulnerable : bool = false
@@ -99,9 +100,13 @@ func _on_roll_state_exited() -> void:
 
 func _on_invulnerable_state_entered() -> void:
 	invulnerable = true
+	hurtbox.monitorable = false
+	hurtbox.monitoring = false
 
 func _on_invulnerable_state_exited() -> void:
 	invulnerable = false
+	hurtbox.monitorable = true
+	hurtbox.monitoring = true
 
 
 func _on_heal_state_entered() -> void:
