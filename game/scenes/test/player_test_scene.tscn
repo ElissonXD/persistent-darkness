@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://bs8vxbjhqp5o7"]
+
+[ext_resource type="Script" uid="uid://0xmi4vocwjo6" path="res://game/scripts/test/player_test_scene.gd" id="1_pts01"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="2_pts02"]
+[ext_resource type="PackedScene" path="res://game/scenes/player/player.tscn" id="3_pts03"]
+[ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="4_lxymc"]
+[ext_resource type="PackedScene" path="res://game/scenes/test/target_dummy.tscn" id="4_pts04"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(3000, 100)
+
+[sub_resource type="Resource" id="Resource_lxymc"]
+resource_local_to_scene = true
+script = ExtResource("4_lxymc")
+
+[node name="PlayerTestScene" type="Node2D" unique_id=113363173]
+script = ExtResource("1_pts01")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1709773047]
+position = Vector2(100, 0)
+zoom = Vector2(0.5, 0.5)
+
+[node name="StateChartDebugger" parent="." unique_id=537679760 instance=ExtResource("2_pts02")]
+offset_left = 143.0
+offset_top = -595.0
+offset_right = 1205.0
+offset_bottom = -37.0
+initial_node_to_watch = NodePath("../Player")
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=312716855]
+position = Vector2(0, 350)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1757993307]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="ColorRect" type="ColorRect" parent="Floor" unique_id=192973487]
+offset_left = -1500.0
+offset_top = -50.0
+offset_right = 1500.0
+offset_bottom = 50.0
+color = Color(0.25, 0.22, 0.2, 1)
+
+[node name="Player" parent="." unique_id=1362745723 instance=ExtResource("3_pts03")]
+position = Vector2(-300, 255)
+STATS = SubResource("Resource_lxymc")
+
+[node name="TargetDummy" parent="." unique_id=1315966701 instance=ExtResource("4_pts04")]
+position = Vector2(200, 260)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=935333413]
+
+[node name="DebugLabel" type="Label" parent="CanvasLayer" unique_id=521602428]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 816.0
+offset_bottom = 116.0

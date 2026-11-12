@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://opfkae7k6i88"]
+
+[ext_resource type="Script" uid="uid://cmtuy2i6bn5qe" path="res://game/scripts/test/boss_player_test_scene.gd" id="1_test"]
+[ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="2_debugger"]
+[ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="3_boss"]
+[ext_resource type="Script" uid="uid://sic1xil6xvjx" path="res://game/scripts/test/boss_player_test_target.gd" id="4_boss_test"]
+[ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="5_a7eoh"]
+[ext_resource type="PackedScene" path="res://game/scenes/player/player.tscn" id="5_player"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(3000, 100)
+
+[sub_resource type="Resource" id="Resource_1i5uw"]
+resource_local_to_scene = true
+script = ExtResource("5_a7eoh")
+
+[node name="BossPlayerTestScene" type="Node2D" unique_id=1211429991]
+script = ExtResource("1_test")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=517410215]
+position = Vector2(100, 0)
+zoom = Vector2(0.5, 0.5)
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=1135798023]
+position = Vector2(0, 350)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=772466556]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="ColorRect" type="ColorRect" parent="Floor" unique_id=309193099]
+offset_left = -1500.0
+offset_top = -50.0
+offset_right = 1500.0
+offset_bottom = 50.0
+color = Color(0.25, 0.22, 0.2, 1)
+
+[node name="Boss" parent="." unique_id=214317371 instance=ExtResource("3_boss")]
+position = Vector2(700, 130)
+script = ExtResource("4_boss_test")
+
+[node name="Player" parent="." unique_id=1843619374 instance=ExtResource("5_player")]
+position = Vector2(-500, 255)
+STATS = SubResource("Resource_1i5uw")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=141449474]
+
+[node name="DebugLabel" type="Label" parent="CanvasLayer" unique_id=58878410]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 816.0
+offset_bottom = 72.0
+
+[node name="BossStateChartDebugger" parent="CanvasLayer" unique_id=1478152010 instance=ExtResource("2_debugger")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -162.0
+offset_top = 293.0
+offset_right = 342.0
+offset_bottom = 633.0
+grow_horizontal = 1
+grow_vertical = 1
+initial_node_to_watch = NodePath("../../Boss")
+
+[node name="PlayerStateChartDebugger" parent="CanvasLayer" unique_id=1448809649 instance=ExtResource("2_debugger")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 885.0
+offset_top = 450.0
+offset_right = 1389.0
+offset_bottom = 790.0
+grow_horizontal = 1
+grow_vertical = 1
+initial_node_to_watch = NodePath("../../Player")
