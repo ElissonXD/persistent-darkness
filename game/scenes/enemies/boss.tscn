@@ -18,7 +18,7 @@
 [ext_resource type="Script" uid="uid://brv01bwrynsnk" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="9_mhbox"]
 [ext_resource type="PackedScene" uid="uid://cp6u7dsgm72lu" path="res://game/scenes/projectiles/thrown_sword.tscn" id="10_tswrd"]
 [ext_resource type="PackedScene" path="res://game/scenes/enemies/attacks/area_wave.tscn" id="11_arwav"]
-[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss_area_attack.png" id="12_arsht"]
+[ext_resource type="Texture2D" uid="uid://b11nvp10gju2c" path="res://assets/sprites/enemies/boss_area_attack.png" id="12_arsht"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
 size = Vector2(180, 330)
@@ -111,6 +111,126 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_arhit"]
+resource_name = "area_attack_hit"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"area_attack_hit"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083, 0.167),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -5)]
+}
+
+[sub_resource type="Animation" id="Animation_arrecovery"]
+resource_name = "area_attack_recovery"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"area_attack_recovery"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -5)]
+}
+
+[sub_resource type="Animation" id="Animation_artelegraphy"]
+resource_name = "area_attack_telegraphy"
+length = 1.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"area_attack_telegraphy"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.7, 1.05),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -5)]
 }
 
 [sub_resource type="Animation" id="Animation_esicy"]
@@ -876,126 +996,6 @@ tracks/2/keys = {
 "values": [0, 1, 2, 3, 4]
 }
 
-[sub_resource type="Animation" id="Animation_artelegraphy"]
-resource_name = "area_attack_telegraphy"
-length = 1.4
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:animation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"area_attack_telegraphy"]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.0, 0.35, 0.7, 1.05),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(-6, -5)]
-}
-
-[sub_resource type="Animation" id="Animation_arhit"]
-resource_name = "area_attack_hit"
-length = 0.25
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:animation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"area_attack_hit"]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.0, 0.083, 0.167),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [0, 1, 2]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(-6, -5)]
-}
-
-[sub_resource type="Animation" id="Animation_arrecovery"]
-resource_name = "area_attack_recovery"
-length = 1.2
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:animation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"area_attack_recovery"]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.0, 0.4, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [0, 1, 2]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("AnimatedSprite2D:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [Vector2(-6, -5)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wruid"]
 _data = {
 &"RESET": SubResource("Animation_4ybrt"),
@@ -1020,6 +1020,46 @@ _data = {
 &"uppercut_recovery": SubResource("Animation_wruid"),
 &"uppercut_telegraphy": SubResource("Animation_twjaa")
 }
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arhit0"]
+atlas = ExtResource("12_arsht")
+region = Rect2(0, 216, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arhit1"]
+atlas = ExtResource("12_arsht")
+region = Rect2(216, 216, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arhit2"]
+atlas = ExtResource("12_arsht")
+region = Rect2(432, 216, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery0"]
+atlas = ExtResource("12_arsht")
+region = Rect2(0, 432, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery1"]
+atlas = ExtResource("12_arsht")
+region = Rect2(216, 432, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery2"]
+atlas = ExtResource("12_arsht")
+region = Rect2(432, 432, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy0"]
+atlas = ExtResource("12_arsht")
+region = Rect2(0, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy1"]
+atlas = ExtResource("12_arsht")
+region = Rect2(216, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy2"]
+atlas = ExtResource("12_arsht")
+region = Rect2(432, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy3"]
+atlas = ExtResource("12_arsht")
+region = Rect2(648, 0, 216, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8cn5p"]
 atlas = ExtResource("2_cknmc")
@@ -1409,65 +1449,8 @@ region = Rect2(0, 0, 144, 216)
 atlas = ExtResource("3_bhvv7")
 region = Rect2(432, 216, 144, 216)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy0"]
-atlas = ExtResource("12_arsht")
-region = Rect2(0, 0, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy1"]
-atlas = ExtResource("12_arsht")
-region = Rect2(216, 0, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy2"]
-atlas = ExtResource("12_arsht")
-region = Rect2(432, 0, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy3"]
-atlas = ExtResource("12_arsht")
-region = Rect2(648, 0, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_arhit0"]
-atlas = ExtResource("12_arsht")
-region = Rect2(0, 216, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_arhit1"]
-atlas = ExtResource("12_arsht")
-region = Rect2(216, 216, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_arhit2"]
-atlas = ExtResource("12_arsht")
-region = Rect2(432, 216, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery0"]
-atlas = ExtResource("12_arsht")
-region = Rect2(0, 432, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery1"]
-atlas = ExtResource("12_arsht")
-region = Rect2(216, 432, 216, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery2"]
-atlas = ExtResource("12_arsht")
-region = Rect2(432, 432, 216, 216)
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_83sn4"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_artelegraphy0")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_artelegraphy1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_artelegraphy2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_artelegraphy3")
-}],
-"loop": false,
-"name": &"area_attack_telegraphy",
-"speed": 2.86
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_arhit0")
@@ -1478,7 +1461,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_arhit2")
 }],
-"loop": false,
+"loop": 0,
 "name": &"area_attack_hit",
 "speed": 12.0
 }, {
@@ -1492,9 +1475,26 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_arrecovery2")
 }],
-"loop": false,
+"loop": 0,
 "name": &"area_attack_recovery",
-"speed": 2.5
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_artelegraphy0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_artelegraphy1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_artelegraphy2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_artelegraphy3")
+}],
+"loop": 0,
+"name": &"area_attack_telegraphy",
+"speed": 2.86
 }, {
 "frames": [{
 "duration": 1.0,
@@ -2655,12 +2655,12 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/AreaAttack" to="." method="_on_state_entered" binds= [&"AreaAttack"]]
 [connection signal="state_exited" from="StateChart/Root/AreaAttack" to="AreaWave" method="hide_all"]
 [connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="StateChart/Root/AreaAttack/Telegraphy" method="_on_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="AreaWave" method="show_warning"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="StateChart/Root/AreaAttack/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/AreaAttack/Telegraphy" to="StateChart/Root/AreaAttack/Telegraphy" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="StateChart/Root/AreaAttack/Hit" method="_on_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="AreaWave" method="show_wave"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="StateChart/Root/AreaAttack/Hit" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/AreaAttack/Hit" to="StateChart/Root/AreaAttack/Hit" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/AreaAttack/Recovery" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/AreaAttack/Recovery" to="StateChart/Root/AreaAttack/Recovery" method="_on_state_entered"]
