@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://bnuxes5anq6i7"]
+
+[ext_resource type="Script" uid="uid://cxoqb7akq3y6n" path="res://game/scripts/projectiles/swords_area.gd" id="1_nrqk8"]
+[ext_resource type="PackedScene" uid="uid://drd0vlytun63q" path="res://game/scenes/projectiles/up_sword.tscn" id="2_5rquh"]
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_83sn4"]
+b = Vector2(1041, -1)
+
+[node name="SwordsArea" type="Area2D" unique_id=730430638 groups=["sword_area"]]
+script = ExtResource("1_nrqk8")
+SwordObject = ExtResource("2_5rquh")
+SPACE_BETWEEN = 100.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1910629506]
+position = Vector2(3, 0)
+shape = SubResource("SegmentShape2D_83sn4")
+
+[node name="End" type="Marker2D" parent="." unique_id=1844926113]
+position = Vector2(1041, 0)

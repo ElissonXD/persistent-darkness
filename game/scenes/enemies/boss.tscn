@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://8mvh8343eyu3"]
 
 [ext_resource type="Script" uid="uid://btq6k7gbmvvay" path="res://game/scripts/enemies/boss.gd" id="1_48gq0"]
+[ext_resource type="Texture2D" uid="uid://58f1l6cd2jg7" path="res://assets/sprites/enemies/sword_ground.png" id="2_cknmc"]
 [ext_resource type="Texture2D" uid="uid://cf4yevitbemnf" path="res://assets/sprites/enemies/boss_high.png" id="2_wruid"]
 [ext_resource type="Texture2D" uid="uid://dhspp2bhg3hgv" path="res://assets/sprites/enemies/spritesheet_6x6_running.png" id="2_y2qqi"]
 [ext_resource type="Texture2D" uid="uid://c5aimv1lq75ig" path="res://assets/sprites/enemies/boss_uppercut.png" id="3_bhvv7"]
@@ -110,6 +111,125 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_esicy"]
+resource_name = "ground_hit"
+length = 2.5000000000000004
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"ground_hit"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16666669, 0.36666667, 0.56666666, 0.76666665, 0.96666664, 1.1666666, 1.3666667, 1.5666667, 1.7666668, 1.9666667, 2.1666667, 2.3666666),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 2, 1, 2, 1, 2, 1, 2, 1, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(90, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fwxea"]
+resource_name = "ground_recovery"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"ground_recovery"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16666669, 0.36666667, 0.56666666, 0.76666665, 0.96666664),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(90, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_4r3x5"]
+resource_name = "ground_telegraphy"
+length = 1.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"ground_telegraphy"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16666669, 0.36666667, 0.56666666, 0.76666665, 0.96666664, 1.1666666, 1.3666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(90, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_bfkjr"]
@@ -882,6 +1002,9 @@ _data = {
 &"area_attack_hit": SubResource("Animation_arhit"),
 &"area_attack_recovery": SubResource("Animation_arrecovery"),
 &"area_attack_telegraphy": SubResource("Animation_artelegraphy"),
+&"ground_hit": SubResource("Animation_esicy"),
+&"ground_recovery": SubResource("Animation_fwxea"),
+&"ground_telegraphy": SubResource("Animation_4r3x5"),
 &"high_hit": SubResource("Animation_bfkjr"),
 &"high_recovery": SubResource("Animation_qsqqt"),
 &"high_telegraphy": SubResource("Animation_6w058"),
@@ -897,6 +1020,78 @@ _data = {
 &"uppercut_recovery": SubResource("Animation_wruid"),
 &"uppercut_telegraphy": SubResource("Animation_twjaa")
 }
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8cn5p"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(512, 341, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_461kg"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(768, 341, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrhni"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(1024, 341, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tmpqn"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(1280, 341, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1nmso"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(0, 682, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_drbv6"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(256, 682, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1wbxf"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(512, 682, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w8ple"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(768, 682, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eg7xc"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(1024, 682, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b01sl"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(1280, 682, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eoyia"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(0, 0, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_to0v5"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(256, 0, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sjf4f"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(512, 0, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lavkm"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(768, 0, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pjbkv"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(1024, 0, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1lvfj"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(1280, 0, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5jkn6"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(0, 341, 256, 341)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n8tul"]
+atlas = ExtResource("2_cknmc")
+region = Rect2(256, 341, 256, 341)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g4uc2"]
 atlas = ExtResource("2_wruid")
@@ -1303,6 +1498,75 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_8cn5p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_461kg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrhni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tmpqn")
+}],
+"loop": 1,
+"name": &"ground_hit",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1nmso")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_drbv6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1wbxf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w8ple")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eg7xc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b01sl")
+}],
+"loop": 0,
+"name": &"ground_recovery",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eoyia")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_to0v5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sjf4f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lavkm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pjbkv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1lvfj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5jkn6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n8tul")
+}],
+"loop": 0,
+"name": &"ground_telegraphy",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_g4uc2")
 }, {
 "duration": 1.0,
@@ -1625,11 +1889,16 @@ CLOSE_ATTACKS_1 = Array[String](["go_combo_a", "go_uppercut"])
 LONG_ATTACKS_2 = Array[String](["go_power_wave_b", "go_stinger"])
 MEDIUM_ATTACKS_2 = Array[String](["go_stinger"])
 CLOSE_ATTACKS_2 = Array[String](["go_combo_b"])
+EXCLUSIVE_ATTACKS = Array[String](["go_to_sword_spawn"])
 WALK_MAX_DURATION = 1.0
 POWER_WAVE_TELEGRAPHY = 1.0
 POWER_WAVE_GAP = 1.0
 STINGER_SPEED = 700.0
 STINGER_HIT = 0.5
+SWORD_SPAWN_TELEGRAPHY = 1.5
+SWORD_SPAWN_HIT = 2.5
+SWORD_SPAWN_GAP = 1.5
+SWORD_SPAWN_RECOVERY = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1036619247]
 position = Vector2(7, -6)
@@ -1694,6 +1963,12 @@ script = ExtResource("5_bhvv7")
 script = ExtResource("6_twjaa")
 to = NodePath("../../Attack1")
 event = &"go_attack_1"
+delay_in_seconds = "0.0"
+
+[node name="Go SwordSpawn" type="Node" parent="StateChart/Root/Walk" unique_id=777937577]
+script = ExtResource("6_twjaa")
+to = NodePath("../../SwordSpawn")
+event = &"go_to_sword_spawn"
 delay_in_seconds = "0.0"
 
 [node name="Attack1" type="Node" parent="StateChart/Root" unique_id=640913275]
@@ -2179,6 +2454,70 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../../Walk")
 delay_in_seconds = "area_attack_recovery"
 
+[node name="SwordSpawn" type="Node" parent="StateChart/Root" unique_id=1556790051]
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Telegraphy")
+
+[node name="Telegraphy" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=850513776 node_paths=PackedStringArray("PLAYER")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"ground_telegraphy"
+
+[node name="Go Hit1" type="Node" parent="StateChart/Root/SwordSpawn/Telegraphy" unique_id=1942846672]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Hit1")
+delay_in_seconds = "sword_spawn_telegraphy"
+
+[node name="Hit1" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1931924997 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"ground_hit"
+HITBOX = NodePath("../../../../MeleeHitbox")
+DAMAGE = 20
+
+[node name="Go Gap" type="Node" parent="StateChart/Root/SwordSpawn/Hit1" unique_id=1239880140]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Gap")
+delay_in_seconds = "sword_spawn_hit"
+
+[node name="Gap" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1242765082 node_paths=PackedStringArray("PLAYER")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"ground_telegraphy"
+
+[node name="Go Hit 2" type="Node" parent="StateChart/Root/SwordSpawn/Gap" unique_id=1402877407]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Hit2")
+delay_in_seconds = "sword_spawn_gap"
+
+[node name="Hit2" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1071634030 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"ground_hit"
+HITBOX = NodePath("../../../../MeleeHitbox")
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/SwordSpawn/Hit2" unique_id=1499461176]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Recovery")
+delay_in_seconds = "sword_spawn_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=2030918825 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"ground_recovery"
+HITBOX = NodePath("../../../../MeleeHitbox")
+
+[node name="Go Rest" type="Node" parent="StateChart/Root/SwordSpawn/Recovery" unique_id=834730284]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../Rest")
+guard = SubResource("Resource_pfar1")
+delay_in_seconds = "sword_spawn_recovery"
+
+[node name="Go Walk" type="Node" parent="StateChart/Root/SwordSpawn/Recovery" unique_id=890792752]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../Walk")
+delay_in_seconds = "sword_spawn_recovery"
+
 [node name="Rest" type="Node" parent="StateChart/Root" unique_id=1543790628]
 script = ExtResource("5_bhvv7")
 
@@ -2244,8 +2583,8 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Telegraphy" to="StateChart/Root/Attack1/Uppercut/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/Uppercut/Telegraphy" to="StateChart/Root/Attack1/Uppercut/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Hit" to="." method="on_uppercut_hit_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Hit" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Hit" to="." method="on_uppercut_hit_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Hit" to="StateChart/Root/Attack1/Uppercut/Hit" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/Uppercut/Hit" to="StateChart/Root/Attack1/Uppercut/Hit" method="_on_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Attack1/Uppercut/Hit" to="." method="on_uppercut_physics_processing"]
@@ -2256,12 +2595,12 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="StateChart/Root/Attack1/SwordThrow/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="StateChart/Root/Attack1/SwordThrow/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="." method="on_sword_throw_outward_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="." method="on_sword_throw_outward_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="StateChart/Root/Attack1/SwordThrow/Outward" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Outward" to="StateChart/Root/Attack1/SwordThrow/Outward" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="on_sword_throw_return_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="on_sword_throw_return_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="StateChart/Root/Attack1/SwordThrow/Return" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="on_sword_throw_exit"]
 [connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Return" to="StateChart/Root/Attack1/SwordThrow/Return" method="_on_state_exited"]
@@ -2304,8 +2643,8 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="StateChart/Root/Attack2/Stinger/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="StateChart/Root/Attack2/Stinger/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_enter"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="StateChart/Root/Attack2/Stinger/Hit" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_exit"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Hit" to="StateChart/Root/Attack2/Stinger/Hit" method="_on_state_exited"]
@@ -2326,5 +2665,19 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/AreaAttack/Recovery" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/AreaAttack/Recovery" to="StateChart/Root/AreaAttack/Recovery" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/AreaAttack/Recovery" to="StateChart/Root/AreaAttack/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn" to="." method="_on_state_entered" binds= [&"SwordSpawn"]]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Telegraphy" to="StateChart/Root/SwordSpawn/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Telegraphy" to="StateChart/Root/SwordSpawn/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit1" to="." method="_on_swordspawn_hit1_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit1" to="StateChart/Root/SwordSpawn/Hit1" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Hit1" to="StateChart/Root/SwordSpawn/Hit1" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Gap" to="StateChart/Root/SwordSpawn/Gap" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Gap" to="StateChart/Root/SwordSpawn/Gap" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit2" to="." method="_on_swordspawn_hit2_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit2" to="StateChart/Root/SwordSpawn/Hit2" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Hit2" to="StateChart/Root/SwordSpawn/Hit2" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Rest" to="." method="_on_state_entered" binds= [&"Rest"]]
 [connection signal="state_entered" from="StateChart/Root/Stunned" to="." method="_on_state_entered" binds= [&"Stunned"]]

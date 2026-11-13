@@ -25,7 +25,8 @@ extends CharacterBody2D
 @export var MEDIUM_ATTACKS_2 : Array[String]
 ## Golpes do Attack2 com o player perto (< MEDIUM_DISTANCE)
 @export var CLOSE_ATTACKS_2 : Array[String]
-## Golpes exclusivos da fase 2 (ainda não usados)
+## Golpes exclusivos da fase 2 (ex.: go_to_sword_spawn). Sorteados junto com o Attack1 quando o
+## Walk acaba o tempo sem alcançar o player; na fase 1 não entram no sorteio
 @export var EXCLUSIVE_ATTACKS : Array[String]
 
 @export_category('IA')
@@ -152,6 +153,13 @@ var phase_2 : bool = false
 # tempo que falta para o ataque em área ficar pronto de novo
 var area_attack_cooldown_left : float = 0.0
 
+@export_category("Sword Spawn")
+@export var SWORD_SPAWN_TELEGRAPHY : float = 0.3
+@export var SWORD_SPAWN_HIT : float = 0.15
+@export var SWORD_SPAWN_GAP : float = 0.35
+@export var SWORD_SPAWN_RECOVERY : float = 0.5
+
+
 @export_category('Effects buildups')
 var FIRE_BUILDUP = 0
 var FREEZE_BUILDUP = 0
@@ -171,6 +179,7 @@ var ELETRIC_BUILDUP = 0
 @onready var area_attack: CompoundState = $StateChart/Root/AreaAttack
 @onready var area_wave: AreaWave = $AreaWave
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var sword_spawn: CompoundState = $StateChart/Root/SwordSpawn
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -194,6 +203,7 @@ func _ready() -> void:
 	configure_combo(stinger, "stinger", STINGER_TELEGRAPHY, 0, 0, STINGER_RECOVERY, STINGER_DAMAGE, STINGER_KNOCKBACK)
 	configure_combo(uppercut, "uppercut", UPPERCUT_TELEGRAPHY, UPPERCUT_HIT, 0, UPPERCUT_RECOVERY, UPPERCUT_DAMAGE, UPPERCUT_KNOCKBACK)
 	configure_combo(sword_throw, "sword_throw", SWORD_THROW_TELEGRAPHY, 0, 0, SWORD_THROW_RECOVERY, SWORD_THROW_DAMAGE, SWORD_THROW_KNOCKBACK)
+	configure_combo(sword_spawn, "sword_spawn", SWORD_SPAWN_TELEGRAPHY, SWORD_SPAWN_HIT, SWORD_SPAWN_GAP, SWORD_SPAWN_RECOVERY, 0, Vector2.ZERO)
 	state_chart.set_expression_property(&"sword_throw_outward", SWORD_THROW_OUTWARD)
 	state_chart.set_expression_property(&"sword_throw_return", SWORD_THROW_RETURN)
 
@@ -290,6 +300,23 @@ func _on_attack_phase_entered() -> void:
 	# guard da saída Attack2 -> AreaAttack (vem depois do Go Rest, então só vale com o player perto)
 	state_chart.set_expression_property(&"area_attack_ready", is_area_attack_ready())
 
+#====== SWORDSPAWN
+func _on_swordspawn_telegraphy_state_entered() -> void:
+	velocity = Vector2.ZERO
+	return
+
+func _on_swordspawn_hit1_state_entered() -> void:
+	var area_spawn = get_tree().get_first_node_in_group('sword_area')
+	if area_spawn:
+		area_spawn.invoke_swords(false)
+	return
+
+func _on_swordspawn_hit2_state_entered() -> void:
+	var area_spawn = get_tree().get_first_node_in_group('sword_area')
+	if area_spawn:
+		area_spawn.invoke_swords(true)
+	return
+
 # ---------------ESTADOS DE PROCESSAMENTO ----------------
 
 func _on_walk_state_physics_processing(_delta: float) -> void:
@@ -309,10 +336,11 @@ func _on_walk_state_physics_processing(_delta: float) -> void:
 		return
 	
 	if walk_timer <= 0:
-		# aqui vou ir para qualquer estado de ataque 1 ou ataque exclusivo
-		# if fase 2....choice ataque 1 ou exclsuivo
-		# por enquanto vai pra ataque 1 ja que nao tem fase 2
-		state_chart.send_event(&'go_attack_1')
+		# fase 1: sempre Attack1. Fase 2: sorteia entre o Attack1 e um golpe exclusivo
+		var attacks = [&'go_attack_1']
+		if phase_2 and not EXCLUSIVE_ATTACKS.is_empty():
+			attacks.append(EXCLUSIVE_ATTACKS.pick_random())
+		state_chart.send_event(attacks.pick_random())
 		velocity.x = 0
 		return
 
