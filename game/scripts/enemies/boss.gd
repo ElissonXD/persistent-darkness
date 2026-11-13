@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export var BUILDUP_VALUE : float = 100.0
 @export var WALK_SPEED : float = 300.0
 @export var JUMP_VELOCITY : float = -400.0
-## Marque se o desenho do spritesheet olha para a direita (o spritesheet_6x6_running olha para a esquerda)
+## Marque se o desenho do spritesheet olha para a direita (os sheets do boss olham para a esquerda)
 @export var SPRITE_FACES_RIGHT : bool = false
 
 @export_category('Ataques')
@@ -248,7 +248,7 @@ func _on_state_entered(state_name: StringName) -> void:
 	# --- CONDICIONAIS DE CADA ESTADO ---
 	if state_name == &"Walk":
 		walk_timer = WALK_MAX_DURATION
-		animated_sprite_2d.play("running")
+		animated_sprite_2d.play("walk")
 	if state_name == &"Attack1" or state_name == &"Attack2":
 		var attack := pick_attack(get_attack_state(state_name))
 		if attack != "":
