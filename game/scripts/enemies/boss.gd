@@ -121,6 +121,37 @@ var stinger_hit_timer : float
 # ponto de onde a espada sai e para onde ela volta (fixado na ida)
 var sword_throw_origin : Vector2
 
+@export_category('Fase 2')
+## Fração da vida máxima (HEALTH) em que o boss entra na fase 2 (0.5 = 50%)
+@export_range(0.0, 1.0, 0.05) var PHASE_2_HEALTH_RATIO : float = 0.5
+# vida atual (começa em HEALTH)
+var health : float
+# vira true uma vez e não volta (enter_phase_2)
+var phase_2 : bool = false
+
+# TODO: valores provisórios do ataque em área (Notion: "a definir"); escolhidos para o player
+# (MOVE_SPEED 300, rolagem de 240 px com 0.25 s de i-frames, 100 de vida) conseguir reagir
+@export_category('Ataque em área')
+## Aviso com a marca do raio no chão (sem dano). Mais longo que os outros golpes: dá tempo de sair
+## andando do raio mesmo colado no boss (~1 s andando + tempo de reação)
+@export var AREA_ATTACK_TELEGRAPHY : float = 1.4
+## Tempo com a onda ativa. Menor que os i-frames da rolagem, então rolar na hora certa também esquiva
+@export var AREA_ATTACK_HIT : float = 0.25
+## Boss parado depois da onda: janela para o player contra-atacar
+@export var AREA_ATTACK_RECOVERY : float = 1.2
+## Alcance horizontal da onda para cada lado do boss (maior que MEDIUM_DISTANCE: pega quem está perto)
+@export var AREA_ATTACK_RADIUS : float = 400.0
+## Altura da onda a partir do pé do boss: acima disso (plataforma, pulo no ápice) não acerta
+@export var AREA_ATTACK_HEIGHT : float = 120.0
+## Tempo mínimo entre dois ataques em área (conta a partir do início do golpe)
+@export var AREA_ATTACK_COOLDOWN : float = 12.0
+## Dano: 3 acertos matam o player (menos que o Uppercut/Stinger, porque é bem avisado e cobre área)
+@export var AREA_ATTACK_DAMAGE : int = 35
+## Empurrão para longe do boss
+@export var AREA_ATTACK_KNOCKBACK : Vector2 = Vector2(600, -250)
+# tempo que falta para o ataque em área ficar pronto de novo
+var area_attack_cooldown_left : float = 0.0
+
 @export_category('Effects buildups')
 var FIRE_BUILDUP = 0
 var FREEZE_BUILDUP = 0
@@ -137,6 +168,9 @@ var ELETRIC_BUILDUP = 0
 @onready var stinger: CompoundState = $StateChart/Root/Attack2/Stinger
 @onready var sword_throw: CompoundState = $StateChart/Root/Attack1/SwordThrow
 @onready var thrown_sword: ThrownSword = $ThrownSword
+@onready var area_attack: CompoundState = $StateChart/Root/AreaAttack
+@onready var area_wave: AreaWave = $AreaWave
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -163,7 +197,19 @@ func _ready() -> void:
 	state_chart.set_expression_property(&"sword_throw_outward", SWORD_THROW_OUTWARD)
 	state_chart.set_expression_property(&"sword_throw_return", SWORD_THROW_RETURN)
 
+	# fase 2 e ataque em área
+	health = HEALTH
+	state_chart.set_expression_property(&"phase_2", false)
+	state_chart.set_expression_property(&"area_attack_ready", false)
+	configure_combo(area_attack, "area_attack", AREA_ATTACK_TELEGRAPHY, AREA_ATTACK_HIT, 0, AREA_ATTACK_RECOVERY, AREA_ATTACK_DAMAGE, AREA_ATTACK_KNOCKBACK)
+	# a onda nasce no pé do boss (base da colisão)
+	var body_shape := collision_shape_2d.shape as RectangleShape2D
+	area_wave.position = Vector2(0, collision_shape_2d.position.y + body_shape.size.y / 2.0)
+	area_wave.setup(AREA_ATTACK_RADIUS, AREA_ATTACK_HEIGHT)
+
 func _physics_process(delta: float) -> void:
+	area_attack_cooldown_left = maxf(area_attack_cooldown_left - delta, 0.0)
+
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -197,6 +243,8 @@ func _on_state_entered(state_name: StringName) -> void:
 		var attack := pick_attack(get_attack_state(state_name))
 		if attack != "":
 			state_chart.send_event(attack)
+	if state_name == &"AreaAttack":
+		area_attack_cooldown_left = AREA_ATTACK_COOLDOWN
 
 func on_power_waveA_enter() -> void:
 	instatiate_power_wave(false)
@@ -239,6 +287,8 @@ func _on_attack_phase_entered() -> void:
 	# decisão Rest/Walk do fim do Combo B usa a distância do início do Recovery
 	# (este sinal é emitido antes do addon avaliar as transições da fase).
 	state_chart.set_expression_property(&"player_far", is_player_far())
+	# guard da saída Attack2 -> AreaAttack (vem depois do Go Rest, então só vale com o player perto)
+	state_chart.set_expression_property(&"area_attack_ready", is_area_attack_ready())
 
 # ---------------ESTADOS DE PROCESSAMENTO ----------------
 
@@ -354,6 +404,23 @@ func player_abs_distance() -> float:
 
 func is_player_far() -> bool:
 	return player_abs_distance() >= LONG_DISTANCE
+
+# Ataque em área: só na fase 2, com o cooldown zerado e o player perto (< MEDIUM_DISTANCE)
+func is_area_attack_ready() -> bool:
+	return phase_2 and area_attack_cooldown_left <= 0.0 and player_abs_distance() < MEDIUM_DISTANCE
+
+# Dano recebido pelo boss. Ao chegar em PHASE_2_HEALTH_RATIO da vida, entra na fase 2
+func take_damage(amount: int, _knockback: Vector2) -> void:
+	health = maxf(health - amount, 0.0)
+	if health <= HEALTH * PHASE_2_HEALTH_RATIO:
+		enter_phase_2()
+
+# Libera os golpes da fase 2. Também chamado pelas cenas de teste para forçar a fase 2
+func enter_phase_2() -> void:
+	if phase_2:
+		return
+	phase_2 = true
+	state_chart.set_expression_property(&"phase_2", true)
 
 # Listas de golpes do estado de ataque: [longos, médios, curtos], nessa ordem
 func get_attack_state(state_number : String) -> Array:
