@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 @export var player_stats : PlayerStats
+@export_file("*.tscn") var main_menu_path: String = "res://game/scenes/ui/main_menu.tscn"
 
 const AVAILABLE_UPGRADES : Array = [
 	{"stat": &"MAX_HEALTH", "amount": 20.0, "text": "Aumentar Vida Máxima (+20)"},
@@ -11,14 +12,25 @@ const AVAILABLE_UPGRADES : Array = [
 ]
 
 @onready var buttons_container: VBoxContainer = $Control/MarginContainer/VBoxContainer
+@onready var death_count_label: Label = $Control/MarginContainer/VBoxContainer/DeathCountLabel 
+@onready var menu_button: Button = $Control/MarginContainer/VBoxContainer/MenuButton        
 
 var current_options : Array = []
 
 func _ready() -> void:
 	hide()
+	if menu_button:
+		if not menu_button.pressed.is_connected(_on_menu_button_pressed):
+			menu_button.pressed.connect(_on_menu_button_pressed)
 
 func show_death_screen() -> void:
 	get_tree().paused = true
+	
+	if player_stats:
+		player_stats.add_death()
+		if death_count_label:
+			death_count_label.text = "Total de Mortes: %d" % player_stats.death_count
+			
 	show()
 	generate_random_choices()
 
@@ -31,21 +43,37 @@ func generate_random_choices() -> void:
 		current_options.append(pool[i])
 	
 	var child_buttons = buttons_container.get_children()
-	for i in range(current_options.size()):
-		if i < child_buttons.size() and child_buttons[i] is Button:
-			child_buttons[i].text = current_options[i]["text"]
-			
-			if child_buttons[i].pressed.is_connected(_on_upgrade_selected):
-				child_buttons[i].pressed.disconnect(_on_upgrade_selected)
+	var option_index = 0
+	
+	for child in child_buttons:
+		if child is Button and child != menu_button:
+			if option_index < current_options.size():
+				child.show()
+				child.text = current_options[option_index]["text"]
 				
-			child_buttons[i].pressed.connect(_on_upgrade_selected.bind(i))
+				if child.pressed.is_connected(_on_upgrade_selected):
+					child.pressed.disconnect(_on_upgrade_selected)
+					
+				child.pressed.connect(_on_upgrade_selected.bind(option_index))
+				option_index += 1
+			else:
+				child.hide()
 
 func _on_upgrade_selected(option_index: int) -> void:
+	
+	if option_index < 0 or option_index >= current_options.size():
+		return
+		
 	var chosen = current_options[option_index]
 	
 	if player_stats:
 		player_stats.raise_base(chosen["stat"], chosen["amount"])
 		player_stats.reset()
+		
 	
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+func _on_menu_button_pressed() -> void:
+	get_tree().paused = false
+	get_tree().change_scene_to_file(main_menu_path)

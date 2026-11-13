@@ -83,6 +83,8 @@ const ON_HIT_EFFECTS : Array[StringName] = [&"BURN_BUILDUP", &"PARALYSIS_BUILDUP
 @export var PARALYSIS_BUILDUP : float = 0.0
 @export var FROSTBITE_BUILDUP : float = 0.0
 
+@export var death_count: int = 0
+
 var health : float = 0.0
 var stamina : float = 0.0
 var regen_timer : float = 0.0
@@ -99,7 +101,20 @@ func reset() -> void:
 	health_changed.emit(health, get_stat(&"MAX_HEALTH"))
 	stamina_changed.emit(stamina, get_stat(&"MAX_STAMINA"))
 
+func add_death() -> void:
+	death_count += 1
 
+func reset_progress() -> void:
+	death_count = 0
+	
+	MAX_HEALTH = 100.0  
+	MAX_STAMINA = 100.0  
+	STRENGTH = 10.0  
+	MOVE_SPEED = 300.0   
+	STAMINA_REGEN = 10.0
+	
+	reset()
+	
 func add_modifier(stat: StringName, flat: float = 0.0, mult: float = 0.0, source: Variant = null) -> void:
 	modifiers.append({"stat": stat, "flat": flat, "mult": mult, "source": source})
 	update_stat(stat)

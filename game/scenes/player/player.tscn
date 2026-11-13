@@ -1,17 +1,13 @@
 [gd_scene format=3 uid="uid://hqtd1c7k1d2l"]
 
 [ext_resource type="Script" uid="uid://bmggfsrsx55ix" path="res://game/scripts/player/player.gd" id="1_plr01"]
-[ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="2_plr02"]
+[ext_resource type="Resource" uid="uid://bcurergqlttyj" path="res://game/scripts/autoloads/player_stats.tres" id="2_s5p3y"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_sch01"]
 [ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="4_cmp01"]
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_atm01"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_trn01"]
 [ext_resource type="Script" uid="uid://b411mffelg75g" path="res://game/scripts/enemies/attacks/attack_phase.gd" id="7_atk01"]
 [ext_resource type="Script" uid="uid://brv01bwrynsnk" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="8_mhb01"]
-
-[sub_resource type="Resource" id="Resource_stats1"]
-resource_local_to_scene = true
-script = ExtResource("2_plr02")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body1"]
 size = Vector2(48, 80)
@@ -26,7 +22,7 @@ size = Vector2(70, 60)
 collision_layer = 2
 collision_mask = 5
 script = ExtResource("1_plr01")
-STATS = SubResource("Resource_stats1")
+STATS = ExtResource("2_s5p3y")
 
 [node name="Body" type="Polygon2D" parent="." unique_id=799461936]
 color = Color(0.6, 0.8, 1, 1)
