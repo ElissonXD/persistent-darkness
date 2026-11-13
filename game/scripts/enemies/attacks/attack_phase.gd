@@ -38,7 +38,11 @@ func _on_state_exited() -> void:
 	if HITBOX != null:
 		HITBOX.deactivate()
 	if PLAYER:
+		# aplica a RESET na hora (seek com update): a próxima fase chama play() no mesmo frame e,
+		# sem isso, a RESET nunca é aplicada e a escala/posição de um golpe (ex.: high_* do Uppercut
+		# usa escala 1.1) vaza para os golpes seguintes, que não têm trilha de escala
 		PLAYER.play('RESET')
+		PLAYER.seek(0, true)
 
 # Sempre recomeça do frame 0, mesmo que a fase anterior tenha usado a mesma animação (ex.: Hit1 e Hit2)
 func play_animation() -> void:
