@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="2_bts02"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="2_rw77u"]
 [ext_resource type="PackedScene" uid="uid://xlicav4w42rg" path="res://game/scenes/test/player_dummy.tscn" id="3_bts03"]
+[ext_resource type="PackedScene" uid="uid://bnuxes5anq6i7" path="res://game/scenes/projectiles/swords_area.tscn" id="5_348wo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(3000, 100)
@@ -17,9 +18,9 @@ zoom = Vector2(0.5, 0.5)
 
 [node name="StateChartDebugger" parent="." unique_id=1578731241 instance=ExtResource("2_rw77u")]
 offset_left = 100.0
-offset_top = -532.0
+offset_top = -345.0
 offset_right = 1162.0
-offset_bottom = 26.0
+offset_bottom = 213.0
 initial_node_to_watch = NodePath("../Boss")
 
 [node name="Floor" type="StaticBody2D" parent="." unique_id=1409815194]
@@ -49,3 +50,8 @@ offset_left = 16.0
 offset_top = 16.0
 offset_right = 816.0
 offset_bottom = 116.0
+
+[node name="SwordsArea" parent="." unique_id=730430638 instance=ExtResource("5_348wo")]
+position = Vector2(-1051, 313)
+scale = Vector2(3, 1)
+SPACE_BETWEEN = 150.0

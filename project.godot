@@ -23,6 +23,10 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/godot_state_charts/plugin.cfg")
 
+[global_group]
+
+sword_area=""
+
 [layer_names]
 
 2d_physics/layer_1="terrain"
