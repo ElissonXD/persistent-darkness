@@ -59,3 +59,4 @@ STATS = SubResource("Resource_fv2ru")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2040716281]
 
 [node name="UI" parent="." unique_id=2020152070 instance=ExtResource("5_fv2ru")]
+visible = false

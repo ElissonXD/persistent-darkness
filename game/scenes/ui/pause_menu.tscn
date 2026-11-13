@@ -5,6 +5,13 @@
 [node name="PauseMenu" type="CanvasLayer" unique_id=1123546098]
 script = ExtResource("1_t4l40")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1265147405]
+offset_left = -36.0
+offset_top = -34.0
+offset_right = 1185.0
+offset_bottom = 662.0
+color = Color(0.15686275, 0.09019608, 0.019607844, 0.34901962)
+
 [node name="Control" type="Control" parent="." unique_id=1023980083]
 layout_mode = 3
 anchors_preset = 15

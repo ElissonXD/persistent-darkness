@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://dtsjd12o23aht"]
 
 [ext_resource type="PackedScene" uid="uid://cygdf4lk0xlf1" path="res://game/scenes/ui/pause_menu.tscn" id="1_lkrw8"]
+[ext_resource type="Script" uid="uid://jo5qtsubn2ie" path="res://game/scripts/ui/status.gd" id="2_wfxka"]
 [ext_resource type="Script" uid="uid://c315hmix62ap5" path="res://game/scripts/player/health_bar.gd" id="2_xbo3i"]
+[ext_resource type="PackedScene" uid="uid://duxqdinv8ki6l" path="res://game/scenes/ui/death_upgrade_menu.tscn" id="3_xbo3i"]
 
 [node name="Hud" type="Node2D" unique_id=2020152070]
 
@@ -12,10 +14,31 @@ process_mode = 3
 
 [node name="Status" type="CanvasLayer" parent="UI" unique_id=1453756588]
 follow_viewport_enabled = true
+script = ExtResource("2_wfxka")
 
 [node name="HealthBar" type="ProgressBar" parent="UI/Status" unique_id=1268628906]
 offset_left = -527.0
-offset_top = -197.0
+offset_top = -307.0
 offset_right = -303.0
-offset_bottom = -170.0
+offset_bottom = -280.0
 script = ExtResource("2_xbo3i")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Status" unique_id=1957092923]
+offset_left = -527.0
+offset_top = -257.0
+offset_right = -526.0
+offset_bottom = -153.0
+
+[node name="HealthLabel" type="Label" parent="UI/Status/VBoxContainer" unique_id=1128772930]
+layout_mode = 2
+
+[node name="StaminaLabel" type="Label" parent="UI/Status/VBoxContainer" unique_id=325989472]
+layout_mode = 2
+
+[node name="StrengthLabel" type="Label" parent="UI/Status/VBoxContainer" unique_id=2060210419]
+layout_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="UI/Status/VBoxContainer" unique_id=509227067]
+layout_mode = 2
+
+[node name="DeathUpgradeMenu" parent="." unique_id=172480228 instance=ExtResource("3_xbo3i")]
