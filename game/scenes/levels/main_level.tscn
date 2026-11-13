@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dkxp33s2kksmi"]
 
 [ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="2_rhup1"]
-[ext_resource type="PackedScene" uid="uid://xlicav4w42rg" path="res://game/scenes/test/player_dummy.tscn" id="3_fv2ru"]
 [ext_resource type="Texture2D" uid="uid://h108q2lp0s1q" path="res://assets/sprites/backgrounds/background.jpg" id="3_rhup1"]
-[ext_resource type="PackedScene" uid="uid://cygdf4lk0xlf1" path="res://game/scenes/ui/pause_menu.tscn" id="4_rhup1"]
-[ext_resource type="Script" uid="uid://c315hmix62ap5" path="res://game/scripts/player/health_bar.gd" id="5_fv2ru"]
+[ext_resource type="PackedScene" uid="uid://hqtd1c7k1d2l" path="res://game/scenes/player/player.tscn" id="4_y6h0r"]
+[ext_resource type="PackedScene" uid="uid://dtsjd12o23aht" path="res://game/scenes/ui/hud.tscn" id="5_fv2ru"]
+[ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="5_obyst"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rhup1"]
 size = Vector2(1252, 23.5)
@@ -14,6 +14,10 @@ size = Vector2(159.5, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_56eqj"]
 size = Vector2(154.5, 20)
+
+[sub_resource type="Resource" id="Resource_fv2ru"]
+resource_local_to_scene = true
+script = ExtResource("5_obyst")
 
 [node name="MainLevel" type="Node2D" unique_id=1301530298]
 
@@ -48,23 +52,10 @@ one_way_collision = true
 position = Vector2(143, 81.000015)
 scale = Vector2(0.7, 0.7)
 
-[node name="PlayerDummy" parent="World2D" unique_id=1177915776 instance=ExtResource("3_fv2ru")]
-position = Vector2(-306, 223)
-
-[node name="UI" type="CanvasLayer" parent="." unique_id=1127590101]
-
-[node name="PauseMenu" parent="UI" unique_id=551273172 instance=ExtResource("4_rhup1")]
-process_mode = 3
-
-[node name="Status" type="CanvasLayer" parent="UI" unique_id=759110050]
-follow_viewport_enabled = true
-
-[node name="HealthBar" type="ProgressBar" parent="UI/Status" unique_id=639353162 node_paths=PackedStringArray("player_dummy")]
-offset_left = -527.0
-offset_top = -197.0
-offset_right = -303.0
-offset_bottom = -170.0
-script = ExtResource("5_fv2ru")
-player_dummy = NodePath("../../../World2D/PlayerDummy")
+[node name="Player" parent="World2D" unique_id=116187027 instance=ExtResource("4_y6h0r")]
+position = Vector2(-300, 255)
+STATS = SubResource("Resource_fv2ru")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2040716281]
+
+[node name="UI" parent="." unique_id=2020152070 instance=ExtResource("5_fv2ru")]
