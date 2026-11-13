@@ -4,6 +4,5 @@
 
 [resource]
 script = ExtResource("1_8plac")
-MAX_HEALTH = 120.0
 death_count = 2
 metadata/_custom_type_script = "uid://dddt7ecqhvuec"
