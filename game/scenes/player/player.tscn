@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://dg41jpkcxyvbr"]
+[gd_scene format=3 uid="uid://hqtd1c7k1d2l"]
 
-[ext_resource type="Script" path="res://game/scripts/player/player.gd" id="1_plr01"]
-[ext_resource type="Script" path="res://game/scripts/player/player_stats.gd" id="2_plr02"]
+[ext_resource type="Script" uid="uid://bmggfsrsx55ix" path="res://game/scripts/player/player.gd" id="1_plr01"]
+[ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="2_plr02"]
 [ext_resource type="Script" uid="uid://couw105c3bde4" path="res://addons/godot_state_charts/state_chart.gd" id="3_sch01"]
 [ext_resource type="Script" uid="uid://jk2jm1g6q853" path="res://addons/godot_state_charts/compound_state.gd" id="4_cmp01"]
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_atm01"]

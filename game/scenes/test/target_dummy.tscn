@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/scripts/test/target_dummy.gd" id="1_tdm01"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt1"]
+size = Vector2(60, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body1"]
+size = Vector2(60, 80)
+
+[node name="TargetDummy" type="Node2D"]
+script = ExtResource("1_tdm01")
+
+[node name="Body" type="Polygon2D" parent="."]
+color = Color(0.8, 0.3, 0.3, 1)
+polygon = PackedVector2Array(-30, -40, 30, -40, 30, 40, -30, 40)
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_hurt1")
+debug_color = Color(0.9, 0.5, 0, 0.42)
+
+[node name="PhysicsBody" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PhysicsBody"]
+shape = SubResource("RectangleShape2D_body1")
