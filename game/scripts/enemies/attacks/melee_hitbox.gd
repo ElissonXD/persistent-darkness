@@ -45,6 +45,11 @@ func set_facing(direction: float) -> void:
 	facing = signf(direction)
 	collision_shape_2d.position.x = absf(collision_shape_2d.position.x) * facing
 
+# Animações do AnimationPlayer (RESET, high_*, stinger_*) gravam a posição da forma sempre para a
+# direita e desfazem o set_facing. Reaplica o lado a cada frame de física, antes da checagem de colisão
+func _physics_process(_delta: float) -> void:
+	collision_shape_2d.position.x = absf(collision_shape_2d.position.x) * facing
+
 func _on_area_entered(area: Area2D) -> void:
 	if not active:
 		return

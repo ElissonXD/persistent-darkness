@@ -17,6 +17,10 @@
 [ext_resource type="Texture2D" uid="uid://bf3agwwtugtfd" path="res://assets/sprites/enemies/boss_sword_throw.png" id="9_esicy"]
 [ext_resource type="Script" uid="uid://brv01bwrynsnk" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="9_mhbox"]
 [ext_resource type="PackedScene" uid="uid://cp6u7dsgm72lu" path="res://game/scenes/projectiles/thrown_sword.tscn" id="10_tswrd"]
+[ext_resource type="PackedScene" path="res://game/scenes/enemies/attacks/area_wave.tscn" id="11_arwav"]
+[ext_resource type="Texture2D" uid="uid://b11nvp10gju2c" path="res://assets/sprites/enemies/boss_area_attack.png" id="12_arsht"]
+[ext_resource type="Texture2D" uid="uid://bs2o2382bvqu" path="res://assets/sprites/enemies/boss_combos.png" id="13_combos"]
+[ext_resource type="Texture2D" uid="uid://ce8blxf8v5470" path="res://assets/sprites/enemies/boss_walk_sheet.png" id="14_walk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
 size = Vector2(180, 330)
@@ -36,7 +40,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(-6, 39)]
+"values": [Vector2(-6, -5)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -48,7 +52,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [&"running"]
+"values": [&"walk"]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -109,6 +113,526 @@ tracks/6/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_arhit"]
+resource_name = "area_attack_hit"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"area_attack_hit"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083, 0.167),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -5)]
+}
+
+[sub_resource type="Animation" id="Animation_arrecovery"]
+resource_name = "area_attack_recovery"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"area_attack_recovery"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -5)]
+}
+
+[sub_resource type="Animation" id="Animation_artelegraphy"]
+resource_name = "area_attack_telegraphy"
+length = 1.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"area_attack_telegraphy"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.7, 1.05),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -5)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_a_gap"]
+resource_name = "combo_a_gap"
+length = 0.35
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_a_gap"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.175),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_a_hit1"]
+resource_name = "combo_a_hit1"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_a_hit1"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.075),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_a_hit2"]
+resource_name = "combo_a_hit2"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_a_hit2"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.075),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_a_recovery"]
+resource_name = "combo_a_recovery"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_a_recovery"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_a_telegraphy"]
+resource_name = "combo_a_telegraphy"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_a_telegraphy"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_b_gap"]
+resource_name = "combo_b_gap"
+length = 0.35
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_b_gap"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.175),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_b_hit1"]
+resource_name = "combo_b_hit1"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_b_hit1"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.075),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_b_hit2"]
+resource_name = "combo_b_hit2"
+length = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_b_hit2"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_b_recovery"]
+resource_name = "combo_b_recovery"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_b_recovery"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.167, 0.333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_combo_b_telegraphy"]
+resource_name = "combo_b_telegraphy"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"combo_b_telegraphy"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(-6, -25.4)]
 }
 
 [sub_resource type="Animation" id="Animation_esicy"]
@@ -877,6 +1401,19 @@ tracks/2/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wruid"]
 _data = {
 &"RESET": SubResource("Animation_4ybrt"),
+&"area_attack_hit": SubResource("Animation_arhit"),
+&"area_attack_recovery": SubResource("Animation_arrecovery"),
+&"area_attack_telegraphy": SubResource("Animation_artelegraphy"),
+&"combo_a_gap": SubResource("Animation_combo_a_gap"),
+&"combo_a_hit1": SubResource("Animation_combo_a_hit1"),
+&"combo_a_hit2": SubResource("Animation_combo_a_hit2"),
+&"combo_a_recovery": SubResource("Animation_combo_a_recovery"),
+&"combo_a_telegraphy": SubResource("Animation_combo_a_telegraphy"),
+&"combo_b_gap": SubResource("Animation_combo_b_gap"),
+&"combo_b_hit1": SubResource("Animation_combo_b_hit1"),
+&"combo_b_hit2": SubResource("Animation_combo_b_hit2"),
+&"combo_b_recovery": SubResource("Animation_combo_b_recovery"),
+&"combo_b_telegraphy": SubResource("Animation_combo_b_telegraphy"),
 &"ground_hit": SubResource("Animation_esicy"),
 &"ground_recovery": SubResource("Animation_fwxea"),
 &"ground_telegraphy": SubResource("Animation_4r3x5"),
@@ -895,6 +1432,138 @@ _data = {
 &"uppercut_recovery": SubResource("Animation_wruid"),
 &"uppercut_telegraphy": SubResource("Animation_twjaa")
 }
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arhit0"]
+atlas = ExtResource("12_arsht")
+region = Rect2(0, 216, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arhit1"]
+atlas = ExtResource("12_arsht")
+region = Rect2(216, 216, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arhit2"]
+atlas = ExtResource("12_arsht")
+region = Rect2(432, 216, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery0"]
+atlas = ExtResource("12_arsht")
+region = Rect2(0, 432, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery1"]
+atlas = ExtResource("12_arsht")
+region = Rect2(216, 432, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_arrecovery2"]
+atlas = ExtResource("12_arsht")
+region = Rect2(432, 432, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy0"]
+atlas = ExtResource("12_arsht")
+region = Rect2(0, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy1"]
+atlas = ExtResource("12_arsht")
+region = Rect2(216, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy2"]
+atlas = ExtResource("12_arsht")
+region = Rect2(432, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_artelegraphy3"]
+atlas = ExtResource("12_arsht")
+region = Rect2(648, 0, 216, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_gap_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 480, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_gap_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 480, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_hit1_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 240, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_hit1_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 240, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_hit2_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 720, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_hit2_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 720, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_recovery_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 960, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_recovery_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 960, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_telegraphy_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 0, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_telegraphy_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 0, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_a_telegraphy_2"]
+atlas = ExtResource("13_combos")
+region = Rect2(768, 0, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_gap_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 1680, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_gap_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 1680, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_hit1_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 1440, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_hit1_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 1440, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_hit2_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 1920, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_hit2_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 1920, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_hit2_2"]
+atlas = ExtResource("13_combos")
+region = Rect2(768, 1920, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_recovery_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 2160, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_recovery_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 2160, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_recovery_2"]
+atlas = ExtResource("13_combos")
+region = Rect2(768, 2160, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_telegraphy_0"]
+atlas = ExtResource("13_combos")
+region = Rect2(0, 1200, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_telegraphy_1"]
+atlas = ExtResource("13_combos")
+region = Rect2(384, 1200, 384, 240)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8cn5p"]
 atlas = ExtResource("2_cknmc")
@@ -1284,8 +1953,204 @@ region = Rect2(0, 0, 144, 216)
 atlas = ExtResource("3_bhvv7")
 region = Rect2(432, 216, 144, 216)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_0"]
+atlas = ExtResource("14_walk")
+region = Rect2(0, 0, 152, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_1"]
+atlas = ExtResource("14_walk")
+region = Rect2(152, 0, 152, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_2"]
+atlas = ExtResource("14_walk")
+region = Rect2(304, 0, 152, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_3"]
+atlas = ExtResource("14_walk")
+region = Rect2(456, 0, 152, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_4"]
+atlas = ExtResource("14_walk")
+region = Rect2(608, 0, 152, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_5"]
+atlas = ExtResource("14_walk")
+region = Rect2(760, 0, 152, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_6"]
+atlas = ExtResource("14_walk")
+region = Rect2(912, 0, 152, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_walk_7"]
+atlas = ExtResource("14_walk")
+region = Rect2(1064, 0, 152, 216)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_83sn4"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arhit0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arhit1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arhit2")
+}],
+"loop": 0,
+"name": &"area_attack_hit",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arrecovery0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arrecovery1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_arrecovery2")
+}],
+"loop": 0,
+"name": &"area_attack_recovery",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_artelegraphy0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_artelegraphy1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_artelegraphy2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_artelegraphy3")
+}],
+"loop": 0,
+"name": &"area_attack_telegraphy",
+"speed": 2.86
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_gap_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_gap_1")
+}],
+"loop": 0,
+"name": &"combo_a_gap",
+"speed": 5.71
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_hit1_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_hit1_1")
+}],
+"loop": 0,
+"name": &"combo_a_hit1",
+"speed": 13.33
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_hit2_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_hit2_1")
+}],
+"loop": 0,
+"name": &"combo_a_hit2",
+"speed": 13.33
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_recovery_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_recovery_1")
+}],
+"loop": 0,
+"name": &"combo_a_recovery",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_telegraphy_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_telegraphy_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_a_telegraphy_2")
+}],
+"loop": 0,
+"name": &"combo_a_telegraphy",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_gap_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_gap_1")
+}],
+"loop": 0,
+"name": &"combo_b_gap",
+"speed": 5.71
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_hit1_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_hit1_1")
+}],
+"loop": 0,
+"name": &"combo_b_hit1",
+"speed": 13.33
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_hit2_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_hit2_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_hit2_2")
+}],
+"loop": 0,
+"name": &"combo_b_hit2",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_recovery_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_recovery_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_recovery_2")
+}],
+"loop": 0,
+"name": &"combo_b_recovery",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_telegraphy_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_combo_b_telegraphy_1")
+}],
+"loop": 0,
+"name": &"combo_b_telegraphy",
+"speed": 6.67
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8cn5p")
@@ -1661,11 +2526,44 @@ animations = [{
 "loop": 0,
 "name": &"uppercut_telegraphy",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_walk_7")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 7.0
 }]
 
 [sub_resource type="Resource" id="Resource_pfar1"]
 script = ExtResource("7_xgrd1")
 expression = "player_far"
+
+[sub_resource type="Resource" id="Resource_arready"]
+script = ExtResource("7_xgrd1")
+expression = "area_attack_ready"
 
 [node name="SoulCinder" type="CharacterBody2D" unique_id=1100173584]
 collision_layer = 4
@@ -1695,11 +2593,11 @@ libraries/ = SubResource("AnimationLibrary_wruid")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1427939567]
 texture_filter = 1
-position = Vector2(-6, 39)
+position = Vector2(-6, -5)
 scale = Vector2(1.75, 1.7037038)
 sprite_frames = SubResource("SpriteFrames_83sn4")
-animation = &"running"
-autoplay = "running"
+animation = &"walk"
+autoplay = "walk"
 flip_h = true
 
 [node name="MeleeHitbox" type="Area2D" parent="." unique_id=1410678488]
@@ -1717,6 +2615,8 @@ debug_color = Color(0.9, 0.1, 0.1, 0.42)
 position = Vector2(-128, 119)
 
 [node name="ThrownSword" parent="." unique_id=1679670851 instance=ExtResource("10_tswrd")]
+
+[node name="AreaWave" parent="." unique_id=1736205981 instance=ExtResource("11_arwav")]
 
 [node name="StateChart" type="Node" parent="." unique_id=1980650167]
 script = ExtResource("3_uoiu8")
@@ -1845,16 +2745,20 @@ delay_in_seconds = "power_wave_recovery"
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1987827595]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1987827595 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_a_telegraphy"
 
 [node name="Go Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA/Telegraphy" unique_id=2056651043]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit1")
 delay_in_seconds = "combo_a_telegraphy"
 
-[node name="Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1615647313]
+[node name="Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1615647313 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_a_hit1"
 HITBOX_ACTIVE = true
 
 [node name="Go Gap" type="Node" parent="StateChart/Root/Attack1/ComboA/Hit1" unique_id=804212589]
@@ -1862,16 +2766,20 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../Gap")
 delay_in_seconds = "combo_a_hit"
 
-[node name="Gap" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1117113080]
+[node name="Gap" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1117113080 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_a_gap"
 
 [node name="Go Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA/Gap" unique_id=308261849]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit2")
 delay_in_seconds = "combo_a_gap"
 
-[node name="Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=991153172]
+[node name="Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=991153172 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_a_hit2"
 HITBOX_ACTIVE = true
 
 [node name="Go Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA/Hit2" unique_id=1437630967]
@@ -1879,8 +2787,10 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "combo_a_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1427744315]
+[node name="Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1427744315 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_a_recovery"
 
 [node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1/ComboA/Recovery" unique_id=1627320177]
 script = ExtResource("6_twjaa")
@@ -2007,16 +2917,20 @@ initial_state = NodePath("ComboB")
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1877258970]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1877258970 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_b_telegraphy"
 
 [node name="Go Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB/Telegraphy" unique_id=1648625623]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit1")
 delay_in_seconds = "combo_b_telegraphy"
 
-[node name="Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1994299432]
+[node name="Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1994299432 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_b_hit1"
 HITBOX_ACTIVE = true
 
 [node name="Go Gap" type="Node" parent="StateChart/Root/Attack2/ComboB/Hit1" unique_id=608973990]
@@ -2024,16 +2938,20 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../Gap")
 delay_in_seconds = "combo_b_hit"
 
-[node name="Gap" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1906219080]
+[node name="Gap" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1906219080 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_b_gap"
 
 [node name="Go Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB/Gap" unique_id=1360827419]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit2")
 delay_in_seconds = "combo_b_gap"
 
-[node name="Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=258177799]
+[node name="Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=258177799 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_b_hit2"
 HITBOX_ACTIVE = true
 
 [node name="Go Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB/Hit2" unique_id=140193930]
@@ -2041,13 +2959,21 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "combo_b_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=575098438]
+[node name="Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=575098438 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../../AnimationPlayer")
+ANIMATION = &"combo_b_recovery"
 
 [node name="Go Rest" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1644967665]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Rest")
 guard = SubResource("Resource_pfar1")
+delay_in_seconds = "combo_b_recovery"
+
+[node name="Go Area Attack" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1739518204]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../../AreaAttack")
+guard = SubResource("Resource_arready")
 delay_in_seconds = "combo_b_recovery"
 
 [node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1660596667]
@@ -2115,6 +3041,12 @@ to = NodePath("../../../../Rest")
 guard = SubResource("Resource_pfar1")
 delay_in_seconds = "power_wave_recovery"
 
+[node name="Go Area Attack" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Recovery" unique_id=1739518205]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../../AreaAttack")
+guard = SubResource("Resource_arready")
+delay_in_seconds = "power_wave_recovery"
+
 [node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Recovery" unique_id=803367303]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Walk")
@@ -2161,6 +3093,12 @@ to = NodePath("../../../../Rest")
 guard = SubResource("Resource_pfar1")
 delay_in_seconds = "stinger_recovery"
 
+[node name="Go Area Attack" type="Node" parent="StateChart/Root/Attack2/Stinger/Recovery" unique_id=1739518206]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../../AreaAttack")
+guard = SubResource("Resource_arready")
+delay_in_seconds = "stinger_recovery"
+
 [node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/Stinger/Recovery" unique_id=1551921984]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Walk")
@@ -2183,6 +3121,42 @@ script = ExtResource("6_twjaa")
 to = NodePath("../Stinger")
 event = &"go_stinger"
 delay_in_seconds = "0.0"
+
+[node name="AreaAttack" type="Node" parent="StateChart/Root" unique_id=1739518210]
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Telegraphy")
+
+[node name="Telegraphy" type="Node" parent="StateChart/Root/AreaAttack" unique_id=1739518211 node_paths=PackedStringArray("PLAYER")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"area_attack_telegraphy"
+
+[node name="Go Hit" type="Node" parent="StateChart/Root/AreaAttack/Telegraphy" unique_id=1739518212]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Hit")
+delay_in_seconds = "area_attack_telegraphy"
+
+[node name="Hit" type="Node" parent="StateChart/Root/AreaAttack" unique_id=1739518213 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"area_attack_hit"
+HITBOX = NodePath("../../../../AreaWave/MeleeHitbox")
+HITBOX_ACTIVE = true
+
+[node name="Go Recovery" type="Node" parent="StateChart/Root/AreaAttack/Hit" unique_id=1739518214]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Recovery")
+delay_in_seconds = "area_attack_hit"
+
+[node name="Recovery" type="Node" parent="StateChart/Root/AreaAttack" unique_id=1739518215 node_paths=PackedStringArray("PLAYER")]
+script = ExtResource("8_atkph")
+PLAYER = NodePath("../../../../AnimationPlayer")
+ANIMATION = &"area_attack_recovery"
+
+[node name="Go Walk" type="Node" parent="StateChart/Root/AreaAttack/Recovery" unique_id=1739518216]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../Walk")
+delay_in_seconds = "area_attack_recovery"
 
 [node name="SwordSpawn" type="Node" parent="StateChart/Root" unique_id=1556790051]
 script = ExtResource("4_jtqy8")
@@ -2382,6 +3356,20 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Recovery" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Recovery" to="StateChart/Root/Attack2/Stinger/Recovery" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Recovery" to="StateChart/Root/Attack2/Stinger/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack" to="." method="_on_state_entered" binds= [&"AreaAttack"]]
+[connection signal="state_exited" from="StateChart/Root/AreaAttack" to="AreaWave" method="hide_all"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="AreaWave" method="show_warning"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="StateChart/Root/AreaAttack/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/AreaAttack/Telegraphy" to="StateChart/Root/AreaAttack/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="AreaWave" method="show_wave"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="StateChart/Root/AreaAttack/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/AreaAttack/Hit" to="StateChart/Root/AreaAttack/Hit" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/AreaAttack/Recovery" to="StateChart/Root/AreaAttack/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/AreaAttack/Recovery" to="StateChart/Root/AreaAttack/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn" to="." method="_on_state_entered" binds= [&"SwordSpawn"]]
 [connection signal="state_entered" from="StateChart/Root/SwordSpawn/Telegraphy" to="StateChart/Root/SwordSpawn/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/SwordSpawn/Telegraphy" to="StateChart/Root/SwordSpawn/Telegraphy" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit1" to="." method="_on_swordspawn_hit1_state_entered"]
@@ -2392,6 +3380,7 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit2" to="." method="_on_swordspawn_hit2_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit2" to="StateChart/Root/SwordSpawn/Hit2" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/SwordSpawn/Hit2" to="StateChart/Root/SwordSpawn/Hit2" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Recovery" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Rest" to="." method="_on_state_entered" binds= [&"Rest"]]
