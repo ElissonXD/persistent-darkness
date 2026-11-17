@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://8mvh8343eyu3"]
 
 [ext_resource type="Script" uid="uid://btq6k7gbmvvay" path="res://game/scripts/enemies/boss.gd" id="1_48gq0"]
+[ext_resource type="Shader" uid="uid://dpl6j1820vjk1" path="res://assets/shaders/change_color.gdshader" id="2_4r3x5"]
 [ext_resource type="Texture2D" uid="uid://58f1l6cd2jg7" path="res://assets/sprites/enemies/sword_ground.png" id="2_cknmc"]
 [ext_resource type="Texture2D" uid="uid://cf4yevitbemnf" path="res://assets/sprites/enemies/boss_high.png" id="2_wruid"]
 [ext_resource type="Texture2D" uid="uid://dhspp2bhg3hgv" path="res://assets/sprites/enemies/spritesheet_6x6_running.png" id="2_y2qqi"]
@@ -21,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://b11nvp10gju2c" path="res://assets/sprites/enemies/boss_area_attack.png" id="12_arsht"]
 [ext_resource type="Texture2D" uid="uid://bs2o2382bvqu" path="res://assets/sprites/enemies/boss_combos.png" id="13_combos"]
 [ext_resource type="Texture2D" uid="uid://ce8blxf8v5470" path="res://assets/sprites/enemies/boss_walk_sheet.png" id="14_walk"]
+[ext_resource type="Script" uid="uid://c1vp0ojjvaby1" path="res://addons/godot_state_charts/parallel_state.gd" id="17_fwxea"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
 size = Vector2(180, 330)
@@ -1433,6 +1435,11 @@ _data = {
 &"uppercut_telegraphy": SubResource("Animation_twjaa")
 }
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fwxea"]
+shader = ExtResource("2_4r3x5")
+shader_parameter/tint_color = Color(1, 0, 0, 1)
+shader_parameter/mix_weight = 0.0
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_arhit0"]
 atlas = ExtResource("12_arsht")
 region = Rect2(0, 216, 216, 216)
@@ -2583,6 +2590,9 @@ SWORD_SPAWN_TELEGRAPHY = 1.5
 SWORD_SPAWN_HIT = 2.5
 SWORD_SPAWN_GAP = 1.5
 SWORD_SPAWN_RECOVERY = 1.0
+MAX_FIRE_BUILDUP = 60.0
+MAX_FREEZE_BUILDUP = 40.0
+MAX_ELETRIC_BUILDUP = 30.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1036619247]
 position = Vector2(7, -6)
@@ -2593,6 +2603,7 @@ libraries/ = SubResource("AnimationLibrary_wruid")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1427939567]
 texture_filter = 1
+material = SubResource("ShaderMaterial_fwxea")
 position = Vector2(-6, -5)
 scale = Vector2(1.75, 1.7037038)
 sprite_frames = SubResource("SpriteFrames_83sn4")
@@ -2622,766 +2633,830 @@ position = Vector2(-128, 119)
 script = ExtResource("3_uoiu8")
 metadata/_custom_type_script = "uid://couw105c3bde4"
 
-[node name="Root" type="Node" parent="StateChart" unique_id=875210573]
+[node name="Root" type="Node" parent="StateChart" unique_id=927926081]
+script = ExtResource("17_fwxea")
+
+[node name="Machine" type="Node" parent="StateChart/Root" unique_id=778491169]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Idle")
+metadata/_custom_type_script = "uid://c1vp0ojjvaby1"
 
-[node name="Go Stunned" type="Node" parent="StateChart/Root" unique_id=1394027716]
+[node name="Go Stunned" type="Node" parent="StateChart/Root/Machine" unique_id=1394027716]
 script = ExtResource("6_twjaa")
 to = NodePath("../Stunned")
 event = &"posture_broken"
 delay_in_seconds = "0.0"
 
-[node name="Idle" type="Node" parent="StateChart/Root" unique_id=373310700]
+[node name="Idle" type="Node" parent="StateChart/Root/Machine" unique_id=373310700]
 script = ExtResource("5_bhvv7")
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Idle" unique_id=658592514]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Machine/Idle" unique_id=658592514]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Walk")
 delay_in_seconds = "idle_duration"
 
-[node name="Walk" type="Node" parent="StateChart/Root" unique_id=804597078]
+[node name="Walk" type="Node" parent="StateChart/Root/Machine" unique_id=804597078]
 script = ExtResource("5_bhvv7")
 
-[node name="Go Attack1" type="Node" parent="StateChart/Root/Walk" unique_id=1720459313]
+[node name="Go Attack1" type="Node" parent="StateChart/Root/Machine/Walk" unique_id=1720459313]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Attack1")
 event = &"go_attack_1"
 delay_in_seconds = "0.0"
 
-[node name="Go SwordSpawn" type="Node" parent="StateChart/Root/Walk" unique_id=777937577]
+[node name="Go SwordSpawn" type="Node" parent="StateChart/Root/Machine/Walk" unique_id=777937577]
 script = ExtResource("6_twjaa")
 to = NodePath("../../SwordSpawn")
 event = &"go_to_sword_spawn"
 delay_in_seconds = "0.0"
 
-[node name="Attack1" type="Node" parent="StateChart/Root" unique_id=640913275]
+[node name="Attack1" type="Node" parent="StateChart/Root/Machine" unique_id=640913275]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("ComboA")
 
-[node name="PowerWaveA" type="Node" parent="StateChart/Root/Attack1" unique_id=933239825]
+[node name="PowerWaveA" type="Node" parent="StateChart/Root/Machine/Attack1" unique_id=933239825]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack1/PowerWaveA" unique_id=1153956704 node_paths=PackedStringArray("PLAYER")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA" unique_id=1153956704 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_telegraphy"
 
-[node name="Go Hit1" type="Node" parent="StateChart/Root/Attack1/PowerWaveA/Telegraphy" unique_id=1401567070]
+[node name="Go Hit1" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA/Telegraphy" unique_id=1401567070]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit1")
 delay_in_seconds = "power_wave_telegraphy"
 
-[node name="Hit1" type="Node" parent="StateChart/Root/Attack1/PowerWaveA" unique_id=1467846659 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit1" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA" unique_id=1467846659 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_hit"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 DAMAGE = 20
 
-[node name="Go Gap1" type="Node" parent="StateChart/Root/Attack1/PowerWaveA/Hit1" unique_id=978013285]
+[node name="Go Gap1" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA/Hit1" unique_id=978013285]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Gap1")
 delay_in_seconds = "power_wave_hit"
 
-[node name="Gap1" type="Node" parent="StateChart/Root/Attack1/PowerWaveA" unique_id=928407455 node_paths=PackedStringArray("PLAYER")]
+[node name="Gap1" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA" unique_id=928407455 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_telegraphy"
 
-[node name="Go Hit 2" type="Node" parent="StateChart/Root/Attack1/PowerWaveA/Gap1" unique_id=255249462]
+[node name="Go Hit 2" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA/Gap1" unique_id=255249462]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit2")
 delay_in_seconds = "power_wave_gap"
 
-[node name="Hit2" type="Node" parent="StateChart/Root/Attack1/PowerWaveA" unique_id=1459440426 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit2" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA" unique_id=1459440426 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_hit"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 
-[node name="Go Gap2" type="Node" parent="StateChart/Root/Attack1/PowerWaveA/Hit2" unique_id=1941267061]
+[node name="Go Gap2" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA/Hit2" unique_id=1941267061]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Gap2")
 delay_in_seconds = "power_wave_hit"
 
-[node name="Gap2" type="Node" parent="StateChart/Root/Attack1/PowerWaveA" unique_id=413108164 node_paths=PackedStringArray("PLAYER")]
+[node name="Gap2" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA" unique_id=413108164 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_telegraphy"
 
-[node name="Go Hit3" type="Node" parent="StateChart/Root/Attack1/PowerWaveA/Gap2" unique_id=1104401843]
+[node name="Go Hit3" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA/Gap2" unique_id=1104401843]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit3")
 delay_in_seconds = "power_wave_gap"
 
-[node name="Hit3" type="Node" parent="StateChart/Root/Attack1/PowerWaveA" unique_id=1611118638 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit3" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA" unique_id=1611118638 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_hit"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack1/PowerWaveA/Hit3" unique_id=621640066]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA/Hit3" unique_id=621640066]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "power_wave_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack1/PowerWaveA" unique_id=1576367440 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA" unique_id=1576367440 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_recovery"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 
-[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1/PowerWaveA/Recovery" unique_id=1467683625]
+[node name="Go Attack2" type="Node" parent="StateChart/Root/Machine/Attack1/PowerWaveA/Recovery" unique_id=1467683625]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Attack2")
 delay_in_seconds = "power_wave_recovery"
 
-[node name="ComboA" type="Node" parent="StateChart/Root/Attack1" unique_id=1334557635]
+[node name="ComboA" type="Node" parent="StateChart/Root/Machine/Attack1" unique_id=1334557635]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1987827595 node_paths=PackedStringArray("PLAYER")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA" unique_id=1987827595 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_a_telegraphy"
 
-[node name="Go Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA/Telegraphy" unique_id=2056651043]
+[node name="Go Hit1" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA/Telegraphy" unique_id=2056651043]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit1")
 delay_in_seconds = "combo_a_telegraphy"
 
-[node name="Hit1" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1615647313 node_paths=PackedStringArray("PLAYER")]
+[node name="Hit1" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA" unique_id=1615647313 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_a_hit1"
 HITBOX_ACTIVE = true
 
-[node name="Go Gap" type="Node" parent="StateChart/Root/Attack1/ComboA/Hit1" unique_id=804212589]
+[node name="Go Gap" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA/Hit1" unique_id=804212589]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Gap")
 delay_in_seconds = "combo_a_hit"
 
-[node name="Gap" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1117113080 node_paths=PackedStringArray("PLAYER")]
+[node name="Gap" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA" unique_id=1117113080 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_a_gap"
 
-[node name="Go Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA/Gap" unique_id=308261849]
+[node name="Go Hit2" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA/Gap" unique_id=308261849]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit2")
 delay_in_seconds = "combo_a_gap"
 
-[node name="Hit2" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=991153172 node_paths=PackedStringArray("PLAYER")]
+[node name="Hit2" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA" unique_id=991153172 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_a_hit2"
 HITBOX_ACTIVE = true
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA/Hit2" unique_id=1437630967]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA/Hit2" unique_id=1437630967]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "combo_a_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack1/ComboA" unique_id=1427744315 node_paths=PackedStringArray("PLAYER")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA" unique_id=1427744315 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_a_recovery"
 
-[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1/ComboA/Recovery" unique_id=1627320177]
+[node name="Go Attack2" type="Node" parent="StateChart/Root/Machine/Attack1/ComboA/Recovery" unique_id=1627320177]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Attack2")
 delay_in_seconds = "0.0
 "
 
-[node name="Uppercut" type="Node" parent="StateChart/Root/Attack1" unique_id=1927369696]
+[node name="Uppercut" type="Node" parent="StateChart/Root/Machine/Attack1" unique_id=1927369696]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack1/Uppercut" unique_id=283054213 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/Attack1/Uppercut" unique_id=283054213 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"high_telegraphy"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 
-[node name="Go Hit" type="Node" parent="StateChart/Root/Attack1/Uppercut/Telegraphy" unique_id=317654412]
+[node name="Go Hit" type="Node" parent="StateChart/Root/Machine/Attack1/Uppercut/Telegraphy" unique_id=317654412]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit")
 delay_in_seconds = "uppercut_telegraphy"
 
-[node name="Hit" type="Node" parent="StateChart/Root/Attack1/Uppercut" unique_id=1130512502 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit" type="Node" parent="StateChart/Root/Machine/Attack1/Uppercut" unique_id=1130512502 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"high_hit"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 DAMAGE = 40
 KNOCKBACK = Vector2(50, -5)
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack1/Uppercut/Hit" unique_id=255109312]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/Attack1/Uppercut/Hit" unique_id=255109312]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "uppercut_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack1/Uppercut" unique_id=1279045013 node_paths=PackedStringArray("PLAYER")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/Attack1/Uppercut" unique_id=1279045013 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"high_recovery"
 
-[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1/Uppercut/Recovery" unique_id=1874379493]
+[node name="Go Attack2" type="Node" parent="StateChart/Root/Machine/Attack1/Uppercut/Recovery" unique_id=1874379493]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Attack2")
 delay_in_seconds = "uppercut_recovery"
 
-[node name="SwordThrow" type="Node" parent="StateChart/Root/Attack1" unique_id=672940048]
+[node name="SwordThrow" type="Node" parent="StateChart/Root/Machine/Attack1" unique_id=672940048]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack1/SwordThrow" unique_id=1193085876 node_paths=PackedStringArray("PLAYER")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/Attack1/SwordThrow" unique_id=1193085876 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"sword_throw_telegraphy"
 
-[node name="Go Outward" type="Node" parent="StateChart/Root/Attack1/SwordThrow/Telegraphy" unique_id=1282676636]
+[node name="Go Outward" type="Node" parent="StateChart/Root/Machine/Attack1/SwordThrow/Telegraphy" unique_id=1282676636]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Outward")
 delay_in_seconds = "sword_throw_telegraphy"
 
-[node name="Outward" type="Node" parent="StateChart/Root/Attack1/SwordThrow" unique_id=1290176328 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Outward" type="Node" parent="StateChart/Root/Machine/Attack1/SwordThrow" unique_id=1290176328 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"sword_throw_outward"
-HITBOX = NodePath("../../../../../ThrownSword/MeleeHitbox")
+HITBOX = NodePath("../../../../../../ThrownSword/MeleeHitbox")
 HITBOX_ACTIVE = true
 
-[node name="Go Return" type="Node" parent="StateChart/Root/Attack1/SwordThrow/Outward" unique_id=842587859]
+[node name="Go Return" type="Node" parent="StateChart/Root/Machine/Attack1/SwordThrow/Outward" unique_id=842587859]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Return")
 delay_in_seconds = "sword_throw_outward"
 
-[node name="Return" type="Node" parent="StateChart/Root/Attack1/SwordThrow" unique_id=1413936673 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Return" type="Node" parent="StateChart/Root/Machine/Attack1/SwordThrow" unique_id=1413936673 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"sword_throw_return"
-HITBOX = NodePath("../../../../../ThrownSword/MeleeHitbox")
+HITBOX = NodePath("../../../../../../ThrownSword/MeleeHitbox")
 HITBOX_ACTIVE = true
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack1/SwordThrow/Return" unique_id=1232150805]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/Attack1/SwordThrow/Return" unique_id=1232150805]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "sword_throw_return"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack1/SwordThrow" unique_id=297409826 node_paths=PackedStringArray("PLAYER")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/Attack1/SwordThrow" unique_id=297409826 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"sword_throw_catch"
 
-[node name="Go Attack2" type="Node" parent="StateChart/Root/Attack1/SwordThrow/Recovery" unique_id=461182914]
+[node name="Go Attack2" type="Node" parent="StateChart/Root/Machine/Attack1/SwordThrow/Recovery" unique_id=461182914]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Attack2")
 delay_in_seconds = "sword_throw_recovery"
 
-[node name="Go Combo A" type="Node" parent="StateChart/Root/Attack1" unique_id=922783987]
+[node name="Go Combo A" type="Node" parent="StateChart/Root/Machine/Attack1" unique_id=922783987]
 script = ExtResource("6_twjaa")
 to = NodePath("../ComboA")
 event = &"go_combo_a"
 delay_in_seconds = "0.0"
 
-[node name="Go Power Wave A" type="Node" parent="StateChart/Root/Attack1" unique_id=1352581547]
+[node name="Go Power Wave A" type="Node" parent="StateChart/Root/Machine/Attack1" unique_id=1352581547]
 script = ExtResource("6_twjaa")
 to = NodePath("../PowerWaveA")
 event = &"go_power_wave_a"
 delay_in_seconds = "0.0"
 
-[node name="Go Uppercut" type="Node" parent="StateChart/Root/Attack1" unique_id=244863791]
+[node name="Go Uppercut" type="Node" parent="StateChart/Root/Machine/Attack1" unique_id=244863791]
 script = ExtResource("6_twjaa")
 to = NodePath("../Uppercut")
 event = &"go_uppercut"
 delay_in_seconds = "0.0"
 
-[node name="Go Sword Throw" type="Node" parent="StateChart/Root/Attack1" unique_id=1941706643]
+[node name="Go Sword Throw" type="Node" parent="StateChart/Root/Machine/Attack1" unique_id=1941706643]
 script = ExtResource("6_twjaa")
 to = NodePath("../SwordThrow")
 event = &"go_sword_throw"
 delay_in_seconds = "0.0"
 
-[node name="Attack2" type="Node" parent="StateChart/Root" unique_id=297465831]
+[node name="Attack2" type="Node" parent="StateChart/Root/Machine" unique_id=297465831]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("ComboB")
 
-[node name="ComboB" type="Node" parent="StateChart/Root/Attack2" unique_id=214677228]
+[node name="ComboB" type="Node" parent="StateChart/Root/Machine/Attack2" unique_id=214677228]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1877258970 node_paths=PackedStringArray("PLAYER")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB" unique_id=1877258970 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_b_telegraphy"
 
-[node name="Go Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB/Telegraphy" unique_id=1648625623]
+[node name="Go Hit1" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB/Telegraphy" unique_id=1648625623]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit1")
 delay_in_seconds = "combo_b_telegraphy"
 
-[node name="Hit1" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1994299432 node_paths=PackedStringArray("PLAYER")]
+[node name="Hit1" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB" unique_id=1994299432 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_b_hit1"
 HITBOX_ACTIVE = true
 
-[node name="Go Gap" type="Node" parent="StateChart/Root/Attack2/ComboB/Hit1" unique_id=608973990]
+[node name="Go Gap" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB/Hit1" unique_id=608973990]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Gap")
 delay_in_seconds = "combo_b_hit"
 
-[node name="Gap" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=1906219080 node_paths=PackedStringArray("PLAYER")]
+[node name="Gap" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB" unique_id=1906219080 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_b_gap"
 
-[node name="Go Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB/Gap" unique_id=1360827419]
+[node name="Go Hit2" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB/Gap" unique_id=1360827419]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit2")
 delay_in_seconds = "combo_b_gap"
 
-[node name="Hit2" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=258177799 node_paths=PackedStringArray("PLAYER")]
+[node name="Hit2" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB" unique_id=258177799 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_b_hit2"
 HITBOX_ACTIVE = true
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB/Hit2" unique_id=140193930]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB/Hit2" unique_id=140193930]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "combo_b_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack2/ComboB" unique_id=575098438 node_paths=PackedStringArray("PLAYER")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB" unique_id=575098438 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"combo_b_recovery"
 
-[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1644967665]
+[node name="Go Rest" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB/Recovery" unique_id=1644967665]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Rest")
 guard = SubResource("Resource_pfar1")
 delay_in_seconds = "combo_b_recovery"
 
-[node name="Go Area Attack" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1739518204]
+[node name="Go Area Attack" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB/Recovery" unique_id=1739518204]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../AreaAttack")
 guard = SubResource("Resource_arready")
 delay_in_seconds = "combo_b_recovery"
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/ComboB/Recovery" unique_id=1660596667]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Machine/Attack2/ComboB/Recovery" unique_id=1660596667]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Walk")
 delay_in_seconds = "combo_b_recovery"
 
-[node name="PowerWaveB" type="Node" parent="StateChart/Root/Attack2" unique_id=1219406963]
+[node name="PowerWaveB" type="Node" parent="StateChart/Root/Machine/Attack2" unique_id=1219406963]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack2/PowerWaveB" unique_id=709780185 node_paths=PackedStringArray("PLAYER")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB" unique_id=709780185 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_telegraphy"
 
-[node name="Go Hit1" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Telegraphy" unique_id=1811454448]
+[node name="Go Hit1" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" unique_id=1811454448]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit1")
 delay_in_seconds = "power_wave_telegraphy"
 
-[node name="Hit1" type="Node" parent="StateChart/Root/Attack2/PowerWaveB" unique_id=611575609 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit1" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB" unique_id=611575609 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_hit"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 DAMAGE = 20
 
-[node name="Go Gap1" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Hit1" unique_id=1134111795]
+[node name="Go Gap1" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" unique_id=1134111795]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Gap1")
 delay_in_seconds = "power_wave_hit"
 
-[node name="Gap1" type="Node" parent="StateChart/Root/Attack2/PowerWaveB" unique_id=1795441654 node_paths=PackedStringArray("PLAYER")]
+[node name="Gap1" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB" unique_id=1795441654 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_telegraphy"
 
-[node name="Go Hit 2" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Gap1" unique_id=1338413663]
+[node name="Go Hit 2" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" unique_id=1338413663]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit2")
 delay_in_seconds = "power_wave_gap"
 
-[node name="Hit2" type="Node" parent="StateChart/Root/Attack2/PowerWaveB" unique_id=276425083 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit2" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB" unique_id=276425083 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_hit"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Hit2" unique_id=1700353871]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" unique_id=1700353871]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "power_wave_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack2/PowerWaveB" unique_id=911904175 node_paths=PackedStringArray("PLAYER")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB" unique_id=911904175 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"uppercut_recovery"
 
-[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Recovery" unique_id=1924201034]
+[node name="Go Rest" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" unique_id=1924201034]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Rest")
 guard = SubResource("Resource_pfar1")
 delay_in_seconds = "power_wave_recovery"
 
-[node name="Go Area Attack" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Recovery" unique_id=1739518205]
+[node name="Go Area Attack" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" unique_id=1739518205]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../AreaAttack")
 guard = SubResource("Resource_arready")
 delay_in_seconds = "power_wave_recovery"
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/PowerWaveB/Recovery" unique_id=803367303]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" unique_id=803367303]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Walk")
 delay_in_seconds = "power_wave_recovery"
 
-[node name="Stinger" type="Node" parent="StateChart/Root/Attack2" unique_id=1711283376]
+[node name="Stinger" type="Node" parent="StateChart/Root/Machine/Attack2" unique_id=1711283376]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/Attack2/Stinger" unique_id=1283187166 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/Attack2/Stinger" unique_id=1283187166 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"stinger_telegraphy"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 
-[node name="Go Hit" type="Node" parent="StateChart/Root/Attack2/Stinger/Telegraphy" unique_id=1307351314]
+[node name="Go Hit" type="Node" parent="StateChart/Root/Machine/Attack2/Stinger/Telegraphy" unique_id=1307351314]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit")
 delay_in_seconds = "stinger_telegraphy"
 
-[node name="Hit" type="Node" parent="StateChart/Root/Attack2/Stinger" unique_id=1818300085 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit" type="Node" parent="StateChart/Root/Machine/Attack2/Stinger" unique_id=1818300085 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"stinger_hit"
-HITBOX = NodePath("../../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../../MeleeHitbox")
 HITBOX_ACTIVE = true
 DAMAGE = 40
 KNOCKBACK = Vector2(50, -5)
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/Attack2/Stinger/Hit" unique_id=1887114574]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/Attack2/Stinger/Hit" unique_id=1887114574]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 event = &"go_stinger_recovery"
 delay_in_seconds = "stinger_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/Attack2/Stinger" unique_id=283382408 node_paths=PackedStringArray("PLAYER")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/Attack2/Stinger" unique_id=283382408 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../../AnimationPlayer")
 ANIMATION = &"stinger_recovery"
 
-[node name="Go Rest" type="Node" parent="StateChart/Root/Attack2/Stinger/Recovery" unique_id=1428388896]
+[node name="Go Rest" type="Node" parent="StateChart/Root/Machine/Attack2/Stinger/Recovery" unique_id=1428388896]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Rest")
 guard = SubResource("Resource_pfar1")
 delay_in_seconds = "stinger_recovery"
 
-[node name="Go Area Attack" type="Node" parent="StateChart/Root/Attack2/Stinger/Recovery" unique_id=1739518206]
+[node name="Go Area Attack" type="Node" parent="StateChart/Root/Machine/Attack2/Stinger/Recovery" unique_id=1739518206]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../AreaAttack")
 guard = SubResource("Resource_arready")
 delay_in_seconds = "stinger_recovery"
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Attack2/Stinger/Recovery" unique_id=1551921984]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Machine/Attack2/Stinger/Recovery" unique_id=1551921984]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../../Walk")
 delay_in_seconds = "stinger_recovery"
 
-[node name="Go Combo B" type="Node" parent="StateChart/Root/Attack2" unique_id=531765325]
+[node name="Go Combo B" type="Node" parent="StateChart/Root/Machine/Attack2" unique_id=531765325]
 script = ExtResource("6_twjaa")
 to = NodePath("../ComboB")
 event = &"go_combo_b"
 delay_in_seconds = "0.0"
 
-[node name="Go Power Wave B" type="Node" parent="StateChart/Root/Attack2" unique_id=2098062596]
+[node name="Go Power Wave B" type="Node" parent="StateChart/Root/Machine/Attack2" unique_id=2098062596]
 script = ExtResource("6_twjaa")
 to = NodePath("../PowerWaveB")
 event = &"go_power_wave_b"
 delay_in_seconds = "0.0"
 
-[node name="Go Stinger" type="Node" parent="StateChart/Root/Attack2" unique_id=1878820838]
+[node name="Go Stinger" type="Node" parent="StateChart/Root/Machine/Attack2" unique_id=1878820838]
 script = ExtResource("6_twjaa")
 to = NodePath("../Stinger")
 event = &"go_stinger"
 delay_in_seconds = "0.0"
 
-[node name="AreaAttack" type="Node" parent="StateChart/Root" unique_id=1739518210]
+[node name="AreaAttack" type="Node" parent="StateChart/Root/Machine" unique_id=1739518210]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/AreaAttack" unique_id=1739518211 node_paths=PackedStringArray("PLAYER")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/AreaAttack" unique_id=1739518211 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../AnimationPlayer")
 ANIMATION = &"area_attack_telegraphy"
 
-[node name="Go Hit" type="Node" parent="StateChart/Root/AreaAttack/Telegraphy" unique_id=1739518212]
+[node name="Go Hit" type="Node" parent="StateChart/Root/Machine/AreaAttack/Telegraphy" unique_id=1739518212]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit")
 delay_in_seconds = "area_attack_telegraphy"
 
-[node name="Hit" type="Node" parent="StateChart/Root/AreaAttack" unique_id=1739518213 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit" type="Node" parent="StateChart/Root/Machine/AreaAttack" unique_id=1739518213 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../AnimationPlayer")
 ANIMATION = &"area_attack_hit"
-HITBOX = NodePath("../../../../AreaWave/MeleeHitbox")
+HITBOX = NodePath("../../../../../AreaWave/MeleeHitbox")
 HITBOX_ACTIVE = true
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/AreaAttack/Hit" unique_id=1739518214]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/AreaAttack/Hit" unique_id=1739518214]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "area_attack_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/AreaAttack" unique_id=1739518215 node_paths=PackedStringArray("PLAYER")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/AreaAttack" unique_id=1739518215 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../AnimationPlayer")
 ANIMATION = &"area_attack_recovery"
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/AreaAttack/Recovery" unique_id=1739518216]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Machine/AreaAttack/Recovery" unique_id=1739518216]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../Walk")
 delay_in_seconds = "area_attack_recovery"
 
-[node name="SwordSpawn" type="Node" parent="StateChart/Root" unique_id=1556790051]
+[node name="SwordSpawn" type="Node" parent="StateChart/Root/Machine" unique_id=1556790051]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Telegraphy")
 
-[node name="Telegraphy" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=850513776 node_paths=PackedStringArray("PLAYER")]
+[node name="Telegraphy" type="Node" parent="StateChart/Root/Machine/SwordSpawn" unique_id=850513776 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../AnimationPlayer")
 ANIMATION = &"ground_telegraphy"
 
-[node name="Go Hit1" type="Node" parent="StateChart/Root/SwordSpawn/Telegraphy" unique_id=1942846672]
+[node name="Go Hit1" type="Node" parent="StateChart/Root/Machine/SwordSpawn/Telegraphy" unique_id=1942846672]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit1")
 delay_in_seconds = "sword_spawn_telegraphy"
 
-[node name="Hit1" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1931924997 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit1" type="Node" parent="StateChart/Root/Machine/SwordSpawn" unique_id=1931924997 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../AnimationPlayer")
 ANIMATION = &"ground_hit"
-HITBOX = NodePath("../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../MeleeHitbox")
 DAMAGE = 20
 
-[node name="Go Gap" type="Node" parent="StateChart/Root/SwordSpawn/Hit1" unique_id=1239880140]
+[node name="Go Gap" type="Node" parent="StateChart/Root/Machine/SwordSpawn/Hit1" unique_id=1239880140]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Gap")
 delay_in_seconds = "sword_spawn_hit"
 
-[node name="Gap" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1242765082 node_paths=PackedStringArray("PLAYER")]
+[node name="Gap" type="Node" parent="StateChart/Root/Machine/SwordSpawn" unique_id=1242765082 node_paths=PackedStringArray("PLAYER")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../AnimationPlayer")
 ANIMATION = &"ground_telegraphy"
 
-[node name="Go Hit 2" type="Node" parent="StateChart/Root/SwordSpawn/Gap" unique_id=1402877407]
+[node name="Go Hit 2" type="Node" parent="StateChart/Root/Machine/SwordSpawn/Gap" unique_id=1402877407]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Hit2")
 delay_in_seconds = "sword_spawn_gap"
 
-[node name="Hit2" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=1071634030 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Hit2" type="Node" parent="StateChart/Root/Machine/SwordSpawn" unique_id=1071634030 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../AnimationPlayer")
 ANIMATION = &"ground_hit"
-HITBOX = NodePath("../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../MeleeHitbox")
 
-[node name="Go Recovery" type="Node" parent="StateChart/Root/SwordSpawn/Hit2" unique_id=1499461176]
+[node name="Go Recovery" type="Node" parent="StateChart/Root/Machine/SwordSpawn/Hit2" unique_id=1499461176]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Recovery")
 delay_in_seconds = "sword_spawn_hit"
 
-[node name="Recovery" type="Node" parent="StateChart/Root/SwordSpawn" unique_id=2030918825 node_paths=PackedStringArray("PLAYER", "HITBOX")]
+[node name="Recovery" type="Node" parent="StateChart/Root/Machine/SwordSpawn" unique_id=2030918825 node_paths=PackedStringArray("PLAYER", "HITBOX")]
 script = ExtResource("8_atkph")
-PLAYER = NodePath("../../../../AnimationPlayer")
+PLAYER = NodePath("../../../../../AnimationPlayer")
 ANIMATION = &"ground_recovery"
-HITBOX = NodePath("../../../../MeleeHitbox")
+HITBOX = NodePath("../../../../../MeleeHitbox")
 
-[node name="Go Rest" type="Node" parent="StateChart/Root/SwordSpawn/Recovery" unique_id=834730284]
+[node name="Go Rest" type="Node" parent="StateChart/Root/Machine/SwordSpawn/Recovery" unique_id=834730284]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../Rest")
 guard = SubResource("Resource_pfar1")
 delay_in_seconds = "sword_spawn_recovery"
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/SwordSpawn/Recovery" unique_id=890792752]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Machine/SwordSpawn/Recovery" unique_id=890792752]
 script = ExtResource("6_twjaa")
 to = NodePath("../../../Walk")
 delay_in_seconds = "sword_spawn_recovery"
 
-[node name="Rest" type="Node" parent="StateChart/Root" unique_id=1543790628]
+[node name="Rest" type="Node" parent="StateChart/Root/Machine" unique_id=1543790628]
 script = ExtResource("5_bhvv7")
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Rest" unique_id=461837095]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Machine/Rest" unique_id=461837095]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Walk")
 delay_in_seconds = "rest_duration"
 
-[node name="Stunned" type="Node" parent="StateChart/Root" unique_id=2071635489]
+[node name="Stunned" type="Node" parent="StateChart/Root/Machine" unique_id=2071635489]
 script = ExtResource("5_bhvv7")
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Stunned" unique_id=1306928874]
+[node name="Go Walk" type="Node" parent="StateChart/Root/Machine/Stunned" unique_id=1306928874]
 script = ExtResource("6_twjaa")
 to = NodePath("../../Walk")
 delay_in_seconds = "stun_duration"
 
+[node name="Elements" type="Node" parent="StateChart/Root" unique_id=651506311]
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Normal")
+
+[node name="Normal" type="Node" parent="StateChart/Root/Elements" unique_id=1345850672]
+script = ExtResource("5_bhvv7")
+
+[node name="Go to Fire" type="Node" parent="StateChart/Root/Elements/Normal" unique_id=359394910]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Fire")
+event = &"go_to_fire"
+delay_in_seconds = "0.0"
+
+[node name="Go to Freeze" type="Node" parent="StateChart/Root/Elements/Normal" unique_id=1835778426]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Freeze")
+event = &"go_to_freeze"
+delay_in_seconds = "0.0"
+
+[node name="Go to Eletric" type="Node" parent="StateChart/Root/Elements/Normal" unique_id=63766503]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Eletric")
+event = &"go_to_eletric"
+delay_in_seconds = "0.0"
+
+[node name="Fire" type="Node" parent="StateChart/Root/Elements" unique_id=2010795513]
+script = ExtResource("5_bhvv7")
+
+[node name="Go to Normal" type="Node" parent="StateChart/Root/Elements/Fire" unique_id=2103331550]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Normal")
+event = &"go_to_normal"
+delay_in_seconds = "0.0"
+
+[node name="Freeze" type="Node" parent="StateChart/Root/Elements" unique_id=24959175]
+script = ExtResource("5_bhvv7")
+
+[node name="Go to Normal" type="Node" parent="StateChart/Root/Elements/Freeze" unique_id=559655940]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Normal")
+event = &"go_to_normal"
+delay_in_seconds = "0.0"
+
+[node name="Eletric" type="Node" parent="StateChart/Root/Elements" unique_id=1697840952]
+script = ExtResource("5_bhvv7")
+
+[node name="Go to Normal" type="Node" parent="StateChart/Root/Elements/Eletric" unique_id=654598156]
+script = ExtResource("6_twjaa")
+to = NodePath("../../Normal")
+event = &"go_to_normal"
+delay_in_seconds = "0.0"
+
 [connection signal="area_entered" from="MeleeHitbox" to="." method="_on_melee_hitbox_area_entered"]
 [connection signal="area_entered" from="MeleeHitbox" to="MeleeHitbox" method="_on_area_entered"]
-[connection signal="state_entered" from="StateChart/Root/Idle" to="." method="_on_state_entered" binds= [&"Idle"]]
-[connection signal="state_entered" from="StateChart/Root/Walk" to="." method="_on_state_entered" binds= [&"Walk"]]
-[connection signal="state_physics_processing" from="StateChart/Root/Walk" to="." method="_on_walk_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Attack1" to="." method="_on_state_entered" binds= [&"Attack1"]]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Telegraphy" to="StateChart/Root/Attack1/PowerWaveA/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Telegraphy" to="StateChart/Root/Attack1/PowerWaveA/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="." method="on_power_waveA_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="StateChart/Root/Attack1/PowerWaveA/Hit1" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Hit1" to="StateChart/Root/Attack1/PowerWaveA/Hit1" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Gap1" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Gap1" to="StateChart/Root/Attack1/PowerWaveA/Gap1" method="_on_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="." method="on_power_waveA_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="StateChart/Root/Attack1/PowerWaveA/Hit2" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="StateChart/Root/Attack1/PowerWaveA/Hit2" method="_on_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Attack1/PowerWaveA/Hit2" to="." method="on_power_waveA_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Gap2" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Gap2" to="StateChart/Root/Attack1/PowerWaveA/Gap2" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Gap2" to="StateChart/Root/Attack1/PowerWaveA/Gap2" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="." method="on_power_waveA_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="StateChart/Root/Attack1/PowerWaveA/Hit3" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="StateChart/Root/Attack1/PowerWaveA/Hit3" method="_on_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Attack1/PowerWaveA/Hit3" to="." method="on_power_waveA_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/PowerWaveA/Recovery" to="StateChart/Root/Attack1/PowerWaveA/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/PowerWaveA/Recovery" to="StateChart/Root/Attack1/PowerWaveA/Recovery" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Telegraphy" to="StateChart/Root/Attack1/ComboA/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/ComboA/Telegraphy" to="StateChart/Root/Attack1/ComboA/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Hit1" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Hit1" to="StateChart/Root/Attack1/ComboA/Hit1" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/ComboA/Hit1" to="StateChart/Root/Attack1/ComboA/Hit1" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Gap" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Gap" to="StateChart/Root/Attack1/ComboA/Gap" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/ComboA/Gap" to="StateChart/Root/Attack1/ComboA/Gap" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Hit2" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Hit2" to="StateChart/Root/Attack1/ComboA/Hit2" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/ComboA/Hit2" to="StateChart/Root/Attack1/ComboA/Hit2" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/ComboA/Recovery" to="StateChart/Root/Attack1/ComboA/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/ComboA/Recovery" to="StateChart/Root/Attack1/ComboA/Recovery" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Telegraphy" to="StateChart/Root/Attack1/Uppercut/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/Uppercut/Telegraphy" to="StateChart/Root/Attack1/Uppercut/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Hit" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Hit" to="." method="on_uppercut_hit_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Hit" to="StateChart/Root/Attack1/Uppercut/Hit" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/Uppercut/Hit" to="StateChart/Root/Attack1/Uppercut/Hit" method="_on_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Attack1/Uppercut/Hit" to="." method="on_uppercut_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/Uppercut/Recovery" to="StateChart/Root/Attack1/Uppercut/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/Uppercut/Recovery" to="StateChart/Root/Attack1/Uppercut/Recovery" method="_on_state_exited"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow" to="." method="on_sword_throw_exit"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="StateChart/Root/Attack1/SwordThrow/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Telegraphy" to="StateChart/Root/Attack1/SwordThrow/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="." method="on_sword_throw_outward_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Outward" to="StateChart/Root/Attack1/SwordThrow/Outward" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Outward" to="StateChart/Root/Attack1/SwordThrow/Outward" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="on_sword_throw_return_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Return" to="StateChart/Root/Attack1/SwordThrow/Return" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Return" to="." method="on_sword_throw_exit"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Return" to="StateChart/Root/Attack1/SwordThrow/Return" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack1/SwordThrow/Recovery" to="StateChart/Root/Attack1/SwordThrow/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack1/SwordThrow/Recovery" to="StateChart/Root/Attack1/SwordThrow/Recovery" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2" to="." method="_on_state_entered" binds= [&"Attack2"]]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Telegraphy" to="StateChart/Root/Attack2/ComboB/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/ComboB/Telegraphy" to="StateChart/Root/Attack2/ComboB/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Hit1" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Hit1" to="StateChart/Root/Attack2/ComboB/Hit1" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/ComboB/Hit1" to="StateChart/Root/Attack2/ComboB/Hit1" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Gap" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Gap" to="StateChart/Root/Attack2/ComboB/Gap" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/ComboB/Gap" to="StateChart/Root/Attack2/ComboB/Gap" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Hit2" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Hit2" to="StateChart/Root/Attack2/ComboB/Hit2" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/ComboB/Hit2" to="StateChart/Root/Attack2/ComboB/Hit2" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/ComboB/Recovery" to="StateChart/Root/Attack2/ComboB/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/ComboB/Recovery" to="StateChart/Root/Attack2/ComboB/Recovery" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Telegraphy" to="StateChart/Root/Attack2/PowerWaveB/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Telegraphy" to="StateChart/Root/Attack2/PowerWaveB/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="." method="on_power_waveB_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="StateChart/Root/Attack2/PowerWaveB/Hit1" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Hit1" to="StateChart/Root/Attack2/PowerWaveB/Hit1" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Gap1" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Gap1" to="StateChart/Root/Attack2/PowerWaveB/Gap1" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Gap1" to="StateChart/Root/Attack2/PowerWaveB/Gap1" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="." method="on_power_waveB_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="StateChart/Root/Attack2/PowerWaveB/Hit2" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Hit2" to="StateChart/Root/Attack2/PowerWaveB/Hit2" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/PowerWaveB/Recovery" to="StateChart/Root/Attack2/PowerWaveB/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/PowerWaveB/Recovery" to="StateChart/Root/Attack2/PowerWaveB/Recovery" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="StateChart/Root/Attack2/Stinger/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Telegraphy" to="StateChart/Root/Attack2/Stinger/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_enter"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Hit" to="StateChart/Root/Attack2/Stinger/Hit" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_exit"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Hit" to="StateChart/Root/Attack2/Stinger/Hit" method="_on_state_exited"]
-[connection signal="state_physics_processing" from="StateChart/Root/Attack2/Stinger/Hit" to="." method="on_stinger_hit_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/Attack2/Stinger/Recovery" to="StateChart/Root/Attack2/Stinger/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/Attack2/Stinger/Recovery" to="StateChart/Root/Attack2/Stinger/Recovery" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack" to="." method="_on_state_entered" binds= [&"AreaAttack"]]
-[connection signal="state_exited" from="StateChart/Root/AreaAttack" to="AreaWave" method="hide_all"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="AreaWave" method="show_warning"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Telegraphy" to="StateChart/Root/AreaAttack/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/AreaAttack/Telegraphy" to="StateChart/Root/AreaAttack/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="AreaWave" method="show_wave"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Hit" to="StateChart/Root/AreaAttack/Hit" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/AreaAttack/Hit" to="StateChart/Root/AreaAttack/Hit" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/AreaAttack/Recovery" to="StateChart/Root/AreaAttack/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/AreaAttack/Recovery" to="StateChart/Root/AreaAttack/Recovery" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn" to="." method="_on_state_entered" binds= [&"SwordSpawn"]]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Telegraphy" to="StateChart/Root/SwordSpawn/Telegraphy" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Telegraphy" to="StateChart/Root/SwordSpawn/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit1" to="." method="_on_swordspawn_hit1_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit1" to="StateChart/Root/SwordSpawn/Hit1" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Hit1" to="StateChart/Root/SwordSpawn/Hit1" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Gap" to="StateChart/Root/SwordSpawn/Gap" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Gap" to="StateChart/Root/SwordSpawn/Gap" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit2" to="." method="_on_swordspawn_hit2_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Hit2" to="StateChart/Root/SwordSpawn/Hit2" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Hit2" to="StateChart/Root/SwordSpawn/Hit2" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Recovery" to="." method="_on_attack_phase_entered"]
-[connection signal="state_entered" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_entered"]
-[connection signal="state_exited" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Rest" to="." method="_on_state_entered" binds= [&"Rest"]]
-[connection signal="state_entered" from="StateChart/Root/Stunned" to="." method="_on_state_entered" binds= [&"Stunned"]]
+[connection signal="state_entered" from="StateChart/Root/Machine/Idle" to="." method="_on_state_entered" binds= [&"Idle"]]
+[connection signal="state_entered" from="StateChart/Root/Machine/Walk" to="." method="_on_state_entered" binds= [&"Walk"]]
+[connection signal="state_physics_processing" from="StateChart/Root/Machine/Walk" to="." method="_on_walk_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1" to="." method="_on_state_entered" binds= [&"Attack1"]]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Telegraphy" to="StateChart/Root/Machine/Attack1/PowerWaveA/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/PowerWaveA/Telegraphy" to="StateChart/Root/Machine/Attack1/PowerWaveA/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit1" to="." method="on_power_waveA_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit1" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit1" to="StateChart/Root/Machine/Attack1/PowerWaveA/Hit1" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit1" to="StateChart/Root/Machine/Attack1/PowerWaveA/Hit1" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Gap1" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Gap1" to="StateChart/Root/Machine/Attack1/PowerWaveA/Gap1" method="_on_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit2" to="." method="on_power_waveA_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit2" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit2" to="StateChart/Root/Machine/Attack1/PowerWaveA/Hit2" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit2" to="StateChart/Root/Machine/Attack1/PowerWaveA/Hit2" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit2" to="." method="on_power_waveA_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Gap2" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Gap2" to="StateChart/Root/Machine/Attack1/PowerWaveA/Gap2" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/PowerWaveA/Gap2" to="StateChart/Root/Machine/Attack1/PowerWaveA/Gap2" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit3" to="." method="on_power_waveA_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit3" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit3" to="StateChart/Root/Machine/Attack1/PowerWaveA/Hit3" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit3" to="StateChart/Root/Machine/Attack1/PowerWaveA/Hit3" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Machine/Attack1/PowerWaveA/Hit3" to="." method="on_power_waveA_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/PowerWaveA/Recovery" to="StateChart/Root/Machine/Attack1/PowerWaveA/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/PowerWaveA/Recovery" to="StateChart/Root/Machine/Attack1/PowerWaveA/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Telegraphy" to="StateChart/Root/Machine/Attack1/ComboA/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/ComboA/Telegraphy" to="StateChart/Root/Machine/Attack1/ComboA/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Hit1" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Hit1" to="StateChart/Root/Machine/Attack1/ComboA/Hit1" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/ComboA/Hit1" to="StateChart/Root/Machine/Attack1/ComboA/Hit1" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Gap" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Gap" to="StateChart/Root/Machine/Attack1/ComboA/Gap" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/ComboA/Gap" to="StateChart/Root/Machine/Attack1/ComboA/Gap" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Hit2" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Hit2" to="StateChart/Root/Machine/Attack1/ComboA/Hit2" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/ComboA/Hit2" to="StateChart/Root/Machine/Attack1/ComboA/Hit2" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/ComboA/Recovery" to="StateChart/Root/Machine/Attack1/ComboA/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/ComboA/Recovery" to="StateChart/Root/Machine/Attack1/ComboA/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/Uppercut/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/Uppercut/Telegraphy" to="StateChart/Root/Machine/Attack1/Uppercut/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/Uppercut/Telegraphy" to="StateChart/Root/Machine/Attack1/Uppercut/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/Uppercut/Hit" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/Uppercut/Hit" to="." method="on_uppercut_hit_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/Uppercut/Hit" to="StateChart/Root/Machine/Attack1/Uppercut/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/Uppercut/Hit" to="StateChart/Root/Machine/Attack1/Uppercut/Hit" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Machine/Attack1/Uppercut/Hit" to="." method="on_uppercut_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/Uppercut/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/Uppercut/Recovery" to="StateChart/Root/Machine/Attack1/Uppercut/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/Uppercut/Recovery" to="StateChart/Root/Machine/Attack1/Uppercut/Recovery" method="_on_state_exited"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/SwordThrow" to="." method="on_sword_throw_exit"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Telegraphy" to="StateChart/Root/Machine/Attack1/SwordThrow/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/SwordThrow/Telegraphy" to="StateChart/Root/Machine/Attack1/SwordThrow/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Outward" to="." method="on_sword_throw_outward_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Outward" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Outward" to="StateChart/Root/Machine/Attack1/SwordThrow/Outward" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/SwordThrow/Outward" to="StateChart/Root/Machine/Attack1/SwordThrow/Outward" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Return" to="." method="on_sword_throw_return_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Return" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Return" to="StateChart/Root/Machine/Attack1/SwordThrow/Return" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/SwordThrow/Return" to="." method="on_sword_throw_exit"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/SwordThrow/Return" to="StateChart/Root/Machine/Attack1/SwordThrow/Return" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack1/SwordThrow/Recovery" to="StateChart/Root/Machine/Attack1/SwordThrow/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack1/SwordThrow/Recovery" to="StateChart/Root/Machine/Attack1/SwordThrow/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2" to="." method="_on_state_entered" binds= [&"Attack2"]]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Telegraphy" to="StateChart/Root/Machine/Attack2/ComboB/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/ComboB/Telegraphy" to="StateChart/Root/Machine/Attack2/ComboB/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Hit1" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Hit1" to="StateChart/Root/Machine/Attack2/ComboB/Hit1" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/ComboB/Hit1" to="StateChart/Root/Machine/Attack2/ComboB/Hit1" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Gap" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Gap" to="StateChart/Root/Machine/Attack2/ComboB/Gap" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/ComboB/Gap" to="StateChart/Root/Machine/Attack2/ComboB/Gap" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Hit2" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Hit2" to="StateChart/Root/Machine/Attack2/ComboB/Hit2" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/ComboB/Hit2" to="StateChart/Root/Machine/Attack2/ComboB/Hit2" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/ComboB/Recovery" to="StateChart/Root/Machine/Attack2/ComboB/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/ComboB/Recovery" to="StateChart/Root/Machine/Attack2/ComboB/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" to="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" to="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="." method="on_power_waveB_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" to="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" to="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="." method="on_power_waveB_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" to="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" to="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/Stinger/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/Stinger/Telegraphy" to="StateChart/Root/Machine/Attack2/Stinger/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/Stinger/Telegraphy" to="StateChart/Root/Machine/Attack2/Stinger/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/Stinger/Hit" to="." method="on_stinger_hit_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/Stinger/Hit" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/Stinger/Hit" to="StateChart/Root/Machine/Attack2/Stinger/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/Stinger/Hit" to="." method="on_stinger_hit_exit"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/Stinger/Hit" to="StateChart/Root/Machine/Attack2/Stinger/Hit" method="_on_state_exited"]
+[connection signal="state_physics_processing" from="StateChart/Root/Machine/Attack2/Stinger/Hit" to="." method="on_stinger_hit_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/Stinger/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/Stinger/Recovery" to="StateChart/Root/Machine/Attack2/Stinger/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/Attack2/Stinger/Recovery" to="StateChart/Root/Machine/Attack2/Stinger/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack" to="." method="_on_state_entered" binds= [&"AreaAttack"]]
+[connection signal="state_exited" from="StateChart/Root/Machine/AreaAttack" to="AreaWave" method="hide_all"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack/Telegraphy" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack/Telegraphy" to="AreaWave" method="show_warning"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack/Telegraphy" to="StateChart/Root/Machine/AreaAttack/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/AreaAttack/Telegraphy" to="StateChart/Root/Machine/AreaAttack/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack/Hit" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack/Hit" to="AreaWave" method="show_wave"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack/Hit" to="StateChart/Root/Machine/AreaAttack/Hit" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/AreaAttack/Hit" to="StateChart/Root/Machine/AreaAttack/Hit" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/AreaAttack/Recovery" to="StateChart/Root/Machine/AreaAttack/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/AreaAttack/Recovery" to="StateChart/Root/Machine/AreaAttack/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn" to="." method="_on_state_entered" binds= [&"SwordSpawn"]]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn/Telegraphy" to="StateChart/Root/Machine/SwordSpawn/Telegraphy" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/SwordSpawn/Telegraphy" to="StateChart/Root/Machine/SwordSpawn/Telegraphy" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn/Hit1" to="." method="_on_swordspawn_hit1_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn/Hit1" to="StateChart/Root/Machine/SwordSpawn/Hit1" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/SwordSpawn/Hit1" to="StateChart/Root/Machine/SwordSpawn/Hit1" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn/Gap" to="StateChart/Root/Machine/SwordSpawn/Gap" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/SwordSpawn/Gap" to="StateChart/Root/Machine/SwordSpawn/Gap" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn/Hit2" to="." method="_on_swordspawn_hit2_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn/Hit2" to="StateChart/Root/Machine/SwordSpawn/Hit2" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/SwordSpawn/Hit2" to="StateChart/Root/Machine/SwordSpawn/Hit2" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn/Recovery" to="." method="_on_attack_phase_entered"]
+[connection signal="state_entered" from="StateChart/Root/Machine/SwordSpawn/Recovery" to="StateChart/Root/Machine/SwordSpawn/Recovery" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Machine/SwordSpawn/Recovery" to="StateChart/Root/Machine/SwordSpawn/Recovery" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Rest" to="." method="_on_state_entered" binds= [&"Rest"]]
+[connection signal="state_entered" from="StateChart/Root/Machine/Stunned" to="." method="_on_state_entered" binds= [&"Stunned"]]
+[connection signal="state_entered" from="StateChart/Root/Elements/Normal" to="." method="_on_normal_state_entered"]
+[connection signal="state_processing" from="StateChart/Root/Elements/Normal" to="." method="_on_normal_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Elements/Fire" to="." method="_on_fire_state_entered"]
+[connection signal="state_processing" from="StateChart/Root/Elements/Fire" to="." method="_on_fire_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Elements/Freeze" to="." method="_on_freeze_state_entered"]
+[connection signal="state_processing" from="StateChart/Root/Elements/Freeze" to="." method="_on_freeze_state_processing"]
+[connection signal="state_entered" from="StateChart/Root/Elements/Eletric" to="." method="_on_eletric_state_entered"]
+[connection signal="state_processing" from="StateChart/Root/Elements/Eletric" to="." method="_on_eletric_state_processing"]

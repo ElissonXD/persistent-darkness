@@ -22,6 +22,9 @@ extends AtomicState
 @export var DAMAGE : int = 0
 ## Empurrão aplicado no alvo; x é sempre convertido para longe do atacante
 @export var KNOCKBACK : Vector2 = Vector2.ZERO
+var fire_debuff : bool
+var fire_reduction : float
+
 
 func _on_state_entered() -> void:
 	play_animation()
@@ -30,7 +33,8 @@ func _on_state_entered() -> void:
 		return
 
 	if HITBOX_ACTIVE:
-		HITBOX.activate(DAMAGE, KNOCKBACK)
+		var cur_damage = DAMAGE * fire_reduction if fire_debuff else DAMAGE 
+		HITBOX.activate(cur_damage, KNOCKBACK)
 	else:
 		HITBOX.deactivate()
 
@@ -56,3 +60,8 @@ func play_animation() -> void:
 		SPRITE.play(ANIMATION)
 	if PLAYER:
 		PLAYER.play(ANIMATION)
+
+func set_fire(fire : bool, reduction : float):
+	fire_debuff = fire
+	fire_reduction = reduction
+	return
