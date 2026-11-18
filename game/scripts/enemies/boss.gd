@@ -38,7 +38,12 @@ extends CharacterBody2D
 @export var MEDIUM_DISTANCE : float = 300.0
 ## Duração do descanso
 @export var REST_DURATION : float = 2.0
+## Tempo caído (Stunned/Down), entre a queda e o levantar
 @export var STUN_DURATION : float = 3.0
+## Duração da queda ao quebrar a postura (Stunned/Stagger). TODO: valor provisório, conferir no Notion
+@export var STUN_STAGGER_DURATION : float = 0.5
+## Duração do levantar antes de voltar a andar (Stunned/GetUp). TODO: valor provisório, conferir no Notion
+@export var STUN_GETUP_DURATION : float = 0.5
 
 
 @export_category('Walk')
@@ -195,6 +200,8 @@ func _ready() -> void:
 	state_chart.set_expression_property(&"idle_duration", IDLE_DURATION)
 	state_chart.set_expression_property(&"rest_duration", REST_DURATION)
 	state_chart.set_expression_property(&"stun_duration", STUN_DURATION)
+	state_chart.set_expression_property(&"stun_stagger", STUN_STAGGER_DURATION)
+	state_chart.set_expression_property(&"stun_getup", STUN_GETUP_DURATION)
 	state_chart.set_expression_property(&"player_far", false)
 	configure_combo(combo_a, "combo_a", COMBO_A_TELEGRAPHY, COMBO_A_HIT, COMBO_A_GAP, COMBO_A_RECOVERY, COMBO_A_DAMAGE, COMBO_A_KNOCKBACK)
 	configure_combo(combo_b, "combo_b", COMBO_B_TELEGRAPHY, COMBO_B_HIT, COMBO_B_GAP, COMBO_B_RECOVERY, COMBO_B_DAMAGE, COMBO_B_KNOCKBACK)
@@ -246,6 +253,10 @@ func _on_state_entered(state_name: StringName) -> void:
 		velocity.x = 0
 
 	# --- CONDICIONAIS DE CADA ESTADO ---
+	if state_name == &"Idle":
+		animated_sprite_2d.play("idle")
+	if state_name == &"Rest":
+		animated_sprite_2d.play("rest")
 	if state_name == &"Walk":
 		walk_timer = WALK_MAX_DURATION
 		animated_sprite_2d.play("walk")
@@ -374,7 +385,7 @@ func on_uppercut_physics_processing(_delta: float) -> void:
 #   Attack1/<golpe>/Recovery -> Attack2
 #   Attack2/<golpe>/Recovery -> Rest (guard player_far) ou Walk
 
-# TODO: Stunned sempre volta para Walk (transição em boss.tscn). Para onde sair é decisão em aberto.
+# TODO: Stunned (Stagger -> Down -> GetUp) sempre volta para Walk pela transição do GetUp em boss.tscn. Para onde sair é decisão em aberto.
 
 # ---------------ESTADOS DE SAÍDA----------------
 

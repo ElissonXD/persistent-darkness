@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://b11nvp10gju2c" path="res://assets/sprites/enemies/boss_area_attack.png" id="12_arsht"]
 [ext_resource type="Texture2D" uid="uid://bs2o2382bvqu" path="res://assets/sprites/enemies/boss_combos.png" id="13_combos"]
 [ext_resource type="Texture2D" uid="uid://ce8blxf8v5470" path="res://assets/sprites/enemies/boss_walk_sheet.png" id="14_walk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/boss_states_sheet.png" id="15_states"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_83sn4"]
 size = Vector2(180, 330)
@@ -1985,6 +1986,86 @@ region = Rect2(912, 0, 152, 216)
 atlas = ExtResource("14_walk")
 region = Rect2(1064, 0, 152, 216)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_0"]
+atlas = ExtResource("15_states")
+region = Rect2(0, 0, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_1"]
+atlas = ExtResource("15_states")
+region = Rect2(192, 0, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_2"]
+atlas = ExtResource("15_states")
+region = Rect2(384, 0, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_3"]
+atlas = ExtResource("15_states")
+region = Rect2(576, 0, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_4"]
+atlas = ExtResource("15_states")
+region = Rect2(768, 0, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_idle_5"]
+atlas = ExtResource("15_states")
+region = Rect2(960, 0, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rest_0"]
+atlas = ExtResource("15_states")
+region = Rect2(0, 216, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rest_1"]
+atlas = ExtResource("15_states")
+region = Rect2(192, 216, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rest_2"]
+atlas = ExtResource("15_states")
+region = Rect2(384, 216, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rest_3"]
+atlas = ExtResource("15_states")
+region = Rect2(576, 216, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rest_4"]
+atlas = ExtResource("15_states")
+region = Rect2(768, 216, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rest_5"]
+atlas = ExtResource("15_states")
+region = Rect2(960, 216, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_0"]
+atlas = ExtResource("15_states")
+region = Rect2(0, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_1"]
+atlas = ExtResource("15_states")
+region = Rect2(192, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_2"]
+atlas = ExtResource("15_states")
+region = Rect2(384, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_3"]
+atlas = ExtResource("15_states")
+region = Rect2(576, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_4"]
+atlas = ExtResource("15_states")
+region = Rect2(768, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_5"]
+atlas = ExtResource("15_states")
+region = Rect2(960, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_6"]
+atlas = ExtResource("15_states")
+region = Rect2(1152, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_7"]
+atlas = ExtResource("15_states")
+region = Rect2(1344, 432, 192, 216)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_83sn4"]
 animations = [{
 "frames": [{
@@ -2285,6 +2366,52 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_5")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rest_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rest_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rest_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rest_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rest_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rest_5")
+}],
+"loop": 1,
+"name": &"rest",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_run00")
 }, {
 "duration": 1.0,
@@ -2437,6 +2564,57 @@ animations = [{
 "loop": 0,
 "name": &"stinger_telegraphy",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_7")
+}],
+"loop": 1,
+"name": &"stun_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_idle_0")
+}],
+"loop": 0,
+"name": &"stun_getup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stun_3")
+}],
+"loop": 0,
+"name": &"stun_stagger",
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -3231,12 +3409,41 @@ to = NodePath("../../Walk")
 delay_in_seconds = "rest_duration"
 
 [node name="Stunned" type="Node" parent="StateChart/Root" unique_id=2071635489]
-script = ExtResource("5_bhvv7")
+script = ExtResource("4_jtqy8")
+initial_state = NodePath("Stagger")
 
-[node name="Go Walk" type="Node" parent="StateChart/Root/Stunned" unique_id=1306928874]
+[node name="Stagger" type="Node" parent="StateChart/Root/Stunned" unique_id=1873406215 node_paths=PackedStringArray("SPRITE", "HITBOX")]
+script = ExtResource("8_atkph")
+SPRITE = NodePath("../../../../AnimatedSprite2D")
+ANIMATION = &"stun_stagger"
+HITBOX = NodePath("../../../../MeleeHitbox")
+
+[node name="Go Down" type="Node" parent="StateChart/Root/Stunned/Stagger" unique_id=1592846307]
 script = ExtResource("6_twjaa")
-to = NodePath("../../Walk")
+to = NodePath("../../Down")
+delay_in_seconds = "stun_stagger"
+
+[node name="Down" type="Node" parent="StateChart/Root/Stunned" unique_id=1340682759 node_paths=PackedStringArray("SPRITE", "HITBOX")]
+script = ExtResource("8_atkph")
+SPRITE = NodePath("../../../../AnimatedSprite2D")
+ANIMATION = &"stun_down"
+HITBOX = NodePath("../../../../MeleeHitbox")
+
+[node name="Go GetUp" type="Node" parent="StateChart/Root/Stunned/Down" unique_id=1306928874]
+script = ExtResource("6_twjaa")
+to = NodePath("../../GetUp")
 delay_in_seconds = "stun_duration"
+
+[node name="GetUp" type="Node" parent="StateChart/Root/Stunned" unique_id=1728351946 node_paths=PackedStringArray("SPRITE", "HITBOX")]
+script = ExtResource("8_atkph")
+SPRITE = NodePath("../../../../AnimatedSprite2D")
+ANIMATION = &"stun_getup"
+HITBOX = NodePath("../../../../MeleeHitbox")
+
+[node name="Go Walk" type="Node" parent="StateChart/Root/Stunned/GetUp" unique_id=1956203481]
+script = ExtResource("6_twjaa")
+to = NodePath("../../../Walk")
+delay_in_seconds = "stun_getup"
 
 [connection signal="area_entered" from="MeleeHitbox" to="." method="_on_melee_hitbox_area_entered"]
 [connection signal="area_entered" from="MeleeHitbox" to="MeleeHitbox" method="_on_area_entered"]
@@ -3385,3 +3592,9 @@ delay_in_seconds = "stun_duration"
 [connection signal="state_exited" from="StateChart/Root/SwordSpawn/Recovery" to="StateChart/Root/SwordSpawn/Recovery" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Rest" to="." method="_on_state_entered" binds= [&"Rest"]]
 [connection signal="state_entered" from="StateChart/Root/Stunned" to="." method="_on_state_entered" binds= [&"Stunned"]]
+[connection signal="state_entered" from="StateChart/Root/Stunned/Stagger" to="StateChart/Root/Stunned/Stagger" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Stunned/Stagger" to="StateChart/Root/Stunned/Stagger" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Stunned/Down" to="StateChart/Root/Stunned/Down" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Stunned/Down" to="StateChart/Root/Stunned/Down" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Stunned/GetUp" to="StateChart/Root/Stunned/GetUp" method="_on_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Stunned/GetUp" to="StateChart/Root/Stunned/GetUp" method="_on_state_exited"]
