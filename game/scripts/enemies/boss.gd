@@ -450,16 +450,16 @@ func _on_eletric_state_processing(_delta: float) -> void:
 	return
 
 func _on_normal_state_processing(_delta: float) -> void:
-
-	if Input.is_key_pressed(KEY_F):
-		FIRE_BUILDUP = MAX_FIRE_BUILDUP
-		state_chart.send_event("go_to_fire")
-	elif Input.is_key_pressed(KEY_E):
-		state_chart.send_event("go_to_eletric")
-		ELETRIC_BUILDUP = MAX_ELETRIC_BUILDUP
-	elif Input.is_key_pressed(KEY_Z):
-		FREEZE_BUILDUP = MAX_FREEZE_BUILDUP
-		state_chart.send_event("go_to_freeze")
+	if OS.is_debug_build():
+		if Input.is_key_pressed(KEY_F):
+			FIRE_BUILDUP = MAX_FIRE_BUILDUP
+			state_chart.send_event("go_to_fire")
+		elif Input.is_key_pressed(KEY_E):
+			state_chart.send_event("go_to_eletric")
+			ELETRIC_BUILDUP = MAX_ELETRIC_BUILDUP
+		elif Input.is_key_pressed(KEY_Z):
+			FREEZE_BUILDUP = MAX_FREEZE_BUILDUP
+			state_chart.send_event("go_to_freeze")
 
 # ---------------ESTADOS DE SAÍDA----------------
 
@@ -524,8 +524,15 @@ func is_area_attack_ready() -> bool:
 	return phase_2 and area_attack_cooldown_left <= 0.0 and player_abs_distance() < MEDIUM_DISTANCE
 
 # Dano recebido pelo boss. Ao chegar em PHASE_2_HEALTH_RATIO da vida, entra na fase 2
-func take_damage(amount: int, _knockback: Vector2) -> void:
+func take_damage(amount: int, stagger: float, element: String, buildup: float) -> void:
 	if effects['freeze']: amount *= FREEZE_DAMAGE_DEBUFF
+	match element:
+		'freeze':
+			FREEZE_BUILDUP += buildup
+		'fire':
+			FIRE_BUILDUP += buildup
+		'eletric':
+			ELETRIC_BUILDUP += buildup
 	health = maxf(health - amount, 0.0)
 	if health <= HEALTH * PHASE_2_HEALTH_RATIO:
 		enter_phase_2()
