@@ -63,4 +63,11 @@ func _on_area_entered(area: Area2D) -> void:
 	var direction := signf(area.global_position.x - global_position.x)
 	if direction == 0:
 		direction = facing
-	target.take_damage(damage, Vector2(absf(knockback.x) * direction, knockback.y))
+	if target.is_in_group('boss'): #diferenciar do boss pra chamar os parametros corretos
+		# segundo parametro: troque por stagger
+		# terceiro parametro: troque para string do elemento (freeze, fire, eletric)
+		# quarto parametro: troque para buildup do elemetno caso tenha
+		target.take_damage(damage, 0, 'normal', 0)
+	else:
+		target.take_damage(damage, Vector2(absf(knockback.x) * direction, knockback.y))
+	

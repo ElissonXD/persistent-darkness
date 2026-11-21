@@ -7,6 +7,6 @@ func _ready() -> void:
 	super._ready()
 
 # passa pelo take_damage do boss para a fase 2 começar ao chegar em PHASE_2_HEALTH_RATIO da vida
-func take_damage(amount: int, knockback: Vector2) -> void:
-	super.take_damage(amount, knockback)
+func take_damage(amount: int, stagger: float, element: String, buildup: float) -> void:
+	super.take_damage(amount, stagger, element, buildup)
 	test_health = health

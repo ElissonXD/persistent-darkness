@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://0xmi4vocwjo6" path="res://game/scripts/test/player_test_scene.gd" id="1_pts01"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="2_pts02"]
-[ext_resource type="PackedScene" path="res://game/scenes/player/player.tscn" id="3_pts03"]
+[ext_resource type="PackedScene" uid="uid://hqtd1c7k1d2l" path="res://game/scenes/player/player.tscn" id="3_pts03"]
 [ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="4_lxymc"]
 [ext_resource type="PackedScene" path="res://game/scenes/test/target_dummy.tscn" id="4_pts04"]
 

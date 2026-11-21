@@ -9,7 +9,7 @@ func _process(_delta: float) -> void:
 	debug_label.text = "Player HP: %d | Estamina: %d | Boss HP (teste): %d\nA/D: mover | W: pular | Espaço: rolar | Clique esquerdo: atacar | 3: forçar fase 2 do boss" % [
 		roundi(stats.health),
 		roundi(stats.stamina),
-		roundi(boss.get("test_health"))
+		roundi(boss.get("health"))
 	]
 
 # [3] força a fase 2 do boss (só para teste)
