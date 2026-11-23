@@ -24,6 +24,10 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/godot_state_charts/plugin.cfg")
 
+[global_group]
+
+boss=""
+
 [input]
 
 move_left={

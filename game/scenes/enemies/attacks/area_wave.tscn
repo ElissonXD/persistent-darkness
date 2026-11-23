@@ -1,0 +1,63 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/scripts/enemies/attacks/area_wave.gd" id="1_arwav"]
+[ext_resource type="Script" uid="uid://brv01bwrynsnk" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="2_mhbox"]
+[ext_resource type="Texture2D" path="res://assets/sprites/projectiles/area_attack_wave.png" id="3_wvtex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_arwav"]
+resource_local_to_scene = true
+size = Vector2(800, 120)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wave0"]
+atlas = ExtResource("3_wvtex")
+region = Rect2(0, 0, 1536, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wave1"]
+atlas = ExtResource("3_wvtex")
+region = Rect2(0, 200, 1536, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wave2"]
+atlas = ExtResource("3_wvtex")
+region = Rect2(0, 400, 1536, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wave"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wave0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wave1")
+}, {
+"duration": 2.0,
+"texture": SubResource("AtlasTexture_wave2")
+}],
+"loop": false,
+"name": &"wave",
+"speed": 10.0
+}]
+
+[node name="AreaWave" type="Node2D"]
+script = ExtResource("1_arwav")
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+visible = false
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_wave")
+animation = &"wave"
+centered = false
+offset = Vector2(-768, -196)
+
+[node name="MeleeHitbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 2
+monitoring = false
+script = ExtResource("2_mhbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MeleeHitbox"]
+position = Vector2(0, -60)
+shape = SubResource("RectangleShape2D_arwav")
+debug_color = Color(0.9, 0.1, 0.1, 0.42)
+
+[connection signal="area_entered" from="MeleeHitbox" to="MeleeHitbox" method="_on_area_entered"]
+[connection signal="animation_finished" from="Sprite" to="." method="hide_wave"]

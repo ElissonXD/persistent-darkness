@@ -45,6 +45,11 @@ func set_facing(direction: float) -> void:
 	facing = signf(direction)
 	collision_shape_2d.position.x = absf(collision_shape_2d.position.x) * facing
 
+# Animações do AnimationPlayer (RESET, high_*, stinger_*) gravam a posição da forma sempre para a
+# direita e desfazem o set_facing. Reaplica o lado a cada frame de física, antes da checagem de colisão
+func _physics_process(_delta: float) -> void:
+	collision_shape_2d.position.x = absf(collision_shape_2d.position.x) * facing
+
 func _on_area_entered(area: Area2D) -> void:
 	if not active:
 		return
@@ -58,4 +63,11 @@ func _on_area_entered(area: Area2D) -> void:
 	var direction := signf(area.global_position.x - global_position.x)
 	if direction == 0:
 		direction = facing
-	target.take_damage(damage, Vector2(absf(knockback.x) * direction, knockback.y))
+	if target.is_in_group('boss'): #diferenciar do boss pra chamar os parametros corretos
+		# segundo parametro: troque por stagger
+		# terceiro parametro: troque para string do elemento (freeze, fire, eletric)
+		# quarto parametro: troque para buildup do elemetno caso tenha
+		target.take_damage(damage, 0, 'normal', 0)
+	else:
+		target.take_damage(damage, Vector2(absf(knockback.x) * direction, knockback.y))
+	

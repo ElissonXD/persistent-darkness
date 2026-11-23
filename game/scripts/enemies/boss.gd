@@ -6,7 +6,7 @@ extends CharacterBody2D
 @export var BUILDUP_VALUE : float = 100.0
 @export var WALK_SPEED : float = 300.0
 @export var JUMP_VELOCITY : float = -400.0
-## Marque se o desenho do spritesheet olha para a direita (o spritesheet_6x6_running olha para a esquerda)
+## Marque se o desenho do spritesheet olha para a direita (os sheets do boss olham para a esquerda)
 @export var SPRITE_FACES_RIGHT : bool = false
 
 @export_category('Ataques')
@@ -25,7 +25,8 @@ extends CharacterBody2D
 @export var MEDIUM_ATTACKS_2 : Array[String]
 ## Golpes do Attack2 com o player perto (< MEDIUM_DISTANCE)
 @export var CLOSE_ATTACKS_2 : Array[String]
-## Golpes exclusivos da fase 2 (ainda não usados)
+## Golpes exclusivos da fase 2 (ex.: go_to_sword_spawn). Sorteados junto com o Attack1 quando o
+## Walk acaba o tempo sem alcançar o player; na fase 1 não entram no sorteio
 @export var EXCLUSIVE_ATTACKS : Array[String]
 
 @export_category('IA')
@@ -37,7 +38,12 @@ extends CharacterBody2D
 @export var MEDIUM_DISTANCE : float = 300.0
 ## Duração do descanso
 @export var REST_DURATION : float = 2.0
+## Tempo caído (Stunned/Down), entre a queda e o levantar
 @export var STUN_DURATION : float = 3.0
+## Duração da queda ao quebrar a postura (Stunned/Stagger). TODO: valor provisório, conferir no Notion
+@export var STUN_STAGGER_DURATION : float = 0.5
+## Duração do levantar antes de voltar a andar (Stunned/GetUp). TODO: valor provisório, conferir no Notion
+@export var STUN_GETUP_DURATION : float = 0.5
 
 
 @export_category('Walk')
@@ -121,26 +127,88 @@ var stinger_hit_timer : float
 # ponto de onde a espada sai e para onde ela volta (fixado na ida)
 var sword_throw_origin : Vector2
 
+@export_category('Fase 2')
+## Fração da vida máxima (HEALTH) em que o boss entra na fase 2 (0.5 = 50%)
+@export_range(0.0, 1.0, 0.05) var PHASE_2_HEALTH_RATIO : float = 0.5
+# vida atual (começa em HEALTH)
+var health : float
+# vira true uma vez e não volta (enter_phase_2)
+var phase_2 : bool = false
+
+# TODO: valores provisórios do ataque em área (Notion: "a definir"); escolhidos para o player
+# (MOVE_SPEED 300, rolagem de 240 px com 0.25 s de i-frames, 100 de vida) conseguir reagir
+@export_category('Ataque em área')
+## Aviso com a marca do raio no chão (sem dano). Mais longo que os outros golpes: dá tempo de sair
+## andando do raio mesmo colado no boss (~1 s andando + tempo de reação)
+@export var AREA_ATTACK_TELEGRAPHY : float = 1.4
+## Tempo com a onda ativa. Menor que os i-frames da rolagem, então rolar na hora certa também esquiva
+@export var AREA_ATTACK_HIT : float = 0.25
+## Boss parado depois da onda: janela para o player contra-atacar
+@export var AREA_ATTACK_RECOVERY : float = 1.2
+## Alcance horizontal da onda para cada lado do boss (maior que MEDIUM_DISTANCE: pega quem está perto)
+@export var AREA_ATTACK_RADIUS : float = 400.0
+## Altura da onda a partir do pé do boss: acima disso (plataforma, pulo no ápice) não acerta
+@export var AREA_ATTACK_HEIGHT : float = 120.0
+## Tempo mínimo entre dois ataques em área (conta a partir do início do golpe)
+@export var AREA_ATTACK_COOLDOWN : float = 12.0
+## Dano: 3 acertos matam o player (menos que o Uppercut/Stinger, porque é bem avisado e cobre área)
+@export var AREA_ATTACK_DAMAGE : int = 35
+## Empurrão para longe do boss
+@export var AREA_ATTACK_KNOCKBACK : Vector2 = Vector2(600, -250)
+# tempo que falta para o ataque em área ficar pronto de novo
+var area_attack_cooldown_left : float = 0.0
+
+@export_category("Sword Spawn")
+@export var SWORD_SPAWN_TELEGRAPHY : float = 0.3
+@export var SWORD_SPAWN_HIT : float = 0.15
+@export var SWORD_SPAWN_GAP : float = 0.35
+@export var SWORD_SPAWN_RECOVERY : float = 0.5
+
+
 @export_category('Effects buildups')
+@export var MAX_FIRE_BUILDUP : float = 100
+@export var MAX_FREEZE_BUILDUP : float = 80
+@export var MAX_ELETRIC_BUILDUP : float = 70
 var FIRE_BUILDUP = 0
 var FREEZE_BUILDUP = 0
 var ELETRIC_BUILDUP = 0
+var effects = {'fire': false, 'freeze': false, 'eletric': false}
+const effect_colors := {
+	"fire": Color("#ff7b1c"),   
+	"freeze": Color("#6ee2ff"),
+	"eletric": Color("#fff370")
+}
+
+@export_category('Effects debuffs')
+@export var FIRE_DAMAGE : float = 2
+@export var FIRE_REDUCTION : float = 0.8
+@export var FREEZE_DAMAGE_DEBUFF : float = 1.2
+@export var ELETRIC_SPEED_DEBUFF : float = 0.8
+var fire_timer = 0.5
+
 
 # Nodes
 @onready var animated_sprite_2d: AnimatedSprite2D = $AnimatedSprite2D
 @onready var state_chart: StateChart = $StateChart
-@onready var combo_a: CompoundState = $StateChart/Root/Attack1/ComboA
-@onready var uppercut: CompoundState = $StateChart/Root/Attack1/Uppercut
-@onready var combo_b: CompoundState = $StateChart/Root/Attack2/ComboB
-@onready var power_wave_a: CompoundState = $StateChart/Root/Attack1/PowerWaveA
-@onready var power_wave_b: CompoundState = $StateChart/Root/Attack2/PowerWaveB
-@onready var stinger: CompoundState = $StateChart/Root/Attack2/Stinger
-@onready var sword_throw: CompoundState = $StateChart/Root/Attack1/SwordThrow
+@onready var combo_a: CompoundState = $StateChart/Root/Machine/Attack1/ComboA
+@onready var uppercut: CompoundState = $StateChart/Root/Machine/Attack1/Uppercut
+@onready var combo_b: CompoundState = $StateChart/Root/Machine/Attack2/ComboB
+@onready var power_wave_a: CompoundState = $StateChart/Root/Machine/Attack1/PowerWaveA
+@onready var power_wave_b: CompoundState = $StateChart/Root/Machine/Attack2/PowerWaveB
+@onready var stinger: CompoundState = $StateChart/Root/Machine/Attack2/Stinger
+@onready var sword_throw: CompoundState = $StateChart/Root/Machine/Attack1/SwordThrow
 @onready var thrown_sword: ThrownSword = $ThrownSword
+@onready var area_attack: CompoundState = $StateChart/Root/Machine/AreaAttack
+@onready var area_wave: AreaWave = $AreaWave
+@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+@onready var sword_spawn: CompoundState = $StateChart/Root/Machine/SwordSpawn
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
+# sinais
+
+signal set_fire(fire: bool, reduction : float)
 
 var player : Node2D = null
 
@@ -152,6 +220,8 @@ func _ready() -> void:
 	state_chart.set_expression_property(&"idle_duration", IDLE_DURATION)
 	state_chart.set_expression_property(&"rest_duration", REST_DURATION)
 	state_chart.set_expression_property(&"stun_duration", STUN_DURATION)
+	state_chart.set_expression_property(&"stun_stagger", STUN_STAGGER_DURATION)
+	state_chart.set_expression_property(&"stun_getup", STUN_GETUP_DURATION)
 	state_chart.set_expression_property(&"player_far", false)
 	configure_combo(combo_a, "combo_a", COMBO_A_TELEGRAPHY, COMBO_A_HIT, COMBO_A_GAP, COMBO_A_RECOVERY, COMBO_A_DAMAGE, COMBO_A_KNOCKBACK)
 	configure_combo(combo_b, "combo_b", COMBO_B_TELEGRAPHY, COMBO_B_HIT, COMBO_B_GAP, COMBO_B_RECOVERY, COMBO_B_DAMAGE, COMBO_B_KNOCKBACK)
@@ -160,10 +230,23 @@ func _ready() -> void:
 	configure_combo(stinger, "stinger", STINGER_TELEGRAPHY, 0, 0, STINGER_RECOVERY, STINGER_DAMAGE, STINGER_KNOCKBACK)
 	configure_combo(uppercut, "uppercut", UPPERCUT_TELEGRAPHY, UPPERCUT_HIT, 0, UPPERCUT_RECOVERY, UPPERCUT_DAMAGE, UPPERCUT_KNOCKBACK)
 	configure_combo(sword_throw, "sword_throw", SWORD_THROW_TELEGRAPHY, 0, 0, SWORD_THROW_RECOVERY, SWORD_THROW_DAMAGE, SWORD_THROW_KNOCKBACK)
+	configure_combo(sword_spawn, "sword_spawn", SWORD_SPAWN_TELEGRAPHY, SWORD_SPAWN_HIT, SWORD_SPAWN_GAP, SWORD_SPAWN_RECOVERY, 0, Vector2.ZERO)
 	state_chart.set_expression_property(&"sword_throw_outward", SWORD_THROW_OUTWARD)
 	state_chart.set_expression_property(&"sword_throw_return", SWORD_THROW_RETURN)
 
+	# fase 2 e ataque em área
+	health = HEALTH
+	state_chart.set_expression_property(&"phase_2", false)
+	state_chart.set_expression_property(&"area_attack_ready", false)
+	configure_combo(area_attack, "area_attack", AREA_ATTACK_TELEGRAPHY, AREA_ATTACK_HIT, 0, AREA_ATTACK_RECOVERY, AREA_ATTACK_DAMAGE, AREA_ATTACK_KNOCKBACK)
+	# a onda nasce no pé do boss (base da colisão)
+	var body_shape := collision_shape_2d.shape as RectangleShape2D
+	area_wave.position = Vector2(0, collision_shape_2d.position.y + body_shape.size.y / 2.0)
+	area_wave.setup(AREA_ATTACK_RADIUS, AREA_ATTACK_HEIGHT)
+
 func _physics_process(delta: float) -> void:
+	area_attack_cooldown_left = maxf(area_attack_cooldown_left - delta, 0.0)
+
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
@@ -190,13 +273,19 @@ func _on_state_entered(state_name: StringName) -> void:
 		velocity.x = 0
 
 	# --- CONDICIONAIS DE CADA ESTADO ---
+	if state_name == &"Idle":
+		animated_sprite_2d.play("idle")
+	if state_name == &"Rest":
+		animated_sprite_2d.play("rest")
 	if state_name == &"Walk":
 		walk_timer = WALK_MAX_DURATION
-		animated_sprite_2d.play("running")
+		animated_sprite_2d.play("walk")
 	if state_name == &"Attack1" or state_name == &"Attack2":
 		var attack := pick_attack(get_attack_state(state_name))
 		if attack != "":
 			state_chart.send_event(attack)
+	if state_name == &"AreaAttack":
+		area_attack_cooldown_left = AREA_ATTACK_COOLDOWN
 
 func on_power_waveA_enter() -> void:
 	instatiate_power_wave(false)
@@ -209,9 +298,10 @@ func on_power_waveB_enter() -> void:
 func on_stinger_hit_enter() -> void:
 	stinger_distance = player_distance()
 	stinger_direction = signf(stinger_distance)
-	velocity.x = stinger_direction * STINGER_SPEED
+	var mult := get_speed_mult()
+	velocity.x = stinger_direction * STINGER_SPEED * mult
+	stinger_hit_timer = STINGER_HIT / mult
 	stinger_stop = false
-	stinger_hit_timer = STINGER_HIT
 	return
 
 #------UPPERCUT-------
@@ -224,11 +314,11 @@ func on_uppercut_hit_enter() -> void:
 func on_sword_throw_outward_enter() -> void:
 	sword_throw_origin = global_position + Vector2(melee_hitbox.facing * SWORD_THROW_HAND_X, SWORD_THROW_HEIGHT)
 	var end := sword_throw_origin + Vector2(melee_hitbox.facing * SWORD_THROW_RANGE, 0)
-	thrown_sword.fly(sword_throw_origin, end, SWORD_THROW_OUTWARD)
+	thrown_sword.fly(sword_throw_origin, end, SWORD_THROW_OUTWARD / get_speed_mult())
 
 # Volta: pelo mesmo caminho, do ponto onde a espada está até a mão do boss
 func on_sword_throw_return_enter() -> void:
-	thrown_sword.fly(thrown_sword.global_position, sword_throw_origin, SWORD_THROW_RETURN)
+	thrown_sword.fly(thrown_sword.global_position, sword_throw_origin, SWORD_THROW_OUTWARD / get_speed_mult())
 
 
 # state_entered de cada AttackPhase. Chamado depois do _on_state_entered do estado pai
@@ -239,6 +329,54 @@ func _on_attack_phase_entered() -> void:
 	# decisão Rest/Walk do fim do Combo B usa a distância do início do Recovery
 	# (este sinal é emitido antes do addon avaliar as transições da fase).
 	state_chart.set_expression_property(&"player_far", is_player_far())
+	# guard da saída Attack2 -> AreaAttack (vem depois do Go Rest, então só vale com o player perto)
+	state_chart.set_expression_property(&"area_attack_ready", is_area_attack_ready())
+
+#====== SWORDSPAWN
+func _on_swordspawn_telegraphy_state_entered() -> void:
+	velocity = Vector2.ZERO
+	return
+
+func _on_swordspawn_hit1_state_entered() -> void:
+	var area_spawn = get_tree().get_first_node_in_group('sword_area')
+	if area_spawn:
+		area_spawn.invoke_swords(false)
+	return
+
+func _on_swordspawn_hit2_state_entered() -> void:
+	var area_spawn = get_tree().get_first_node_in_group('sword_area')
+	if area_spawn:
+		area_spawn.invoke_swords(true)
+	return
+
+func _on_fire_state_entered() -> void:
+	effects['fire'] = true
+	set_fire.emit(true, FIRE_REDUCTION)
+	fire_timer = 0.0
+	change_shader_color(effect_colors['fire'])
+	
+	# fazer um for para cada ataque que nerfa o dano e ativa o efeito de
+	return
+
+func _on_freeze_state_entered() -> void:
+	effects['freeze'] = true
+	change_shader_color(effect_colors['freeze'])
+	return
+
+func _on_eletric_state_entered() -> void:
+	effects['eletric'] = true
+	change_shader_color(effect_colors['eletric'])
+	apply_eletric_slow()
+	return
+
+func _on_normal_state_entered() -> void:
+	for stat in effects:
+		effects[stat] = false
+	fire_timer = 0.0
+	set_fire.emit(false, FIRE_REDUCTION)
+	change_shader_color(Color.WHITE, 0.0)
+	apply_eletric_slow()
+	return
 
 # ---------------ESTADOS DE PROCESSAMENTO ----------------
 
@@ -259,17 +397,19 @@ func _on_walk_state_physics_processing(_delta: float) -> void:
 		return
 	
 	if walk_timer <= 0:
-		# aqui vou ir para qualquer estado de ataque 1 ou ataque exclusivo
-		# if fase 2....choice ataque 1 ou exclsuivo
-		# por enquanto vai pra ataque 1 ja que nao tem fase 2
-		state_chart.send_event(&'go_attack_1')
+		# fase 1: sempre Attack1. Fase 2: sorteia entre o Attack1 e um golpe exclusivo
+		var attacks = [&'go_attack_1']
+		if phase_2 and not EXCLUSIVE_ATTACKS.is_empty():
+			attacks.append(EXCLUSIVE_ATTACKS.pick_random())
+		state_chart.send_event(attacks.pick_random())
 		velocity.x = 0
 		return
-
-	velocity.x = signf(distance_x) * WALK_SPEED
+	
+	velocity.x = signf(distance_x) * WALK_SPEED * get_speed_mult()
 
 func on_stinger_hit_physics_processing(_delta:float) -> void:
-	velocity.x = move_toward(velocity.x, stinger_direction*stinger_distance, stinger_direction*STINGER_SPEED * _delta)
+	var speed := STINGER_SPEED * get_speed_mult()
+	velocity.x = move_toward(velocity.x, stinger_direction * stinger_distance, stinger_direction * speed * _delta)
 	
 	melee_hitbox.set_facing(stinger_direction)
 	
@@ -284,11 +424,11 @@ func on_stinger_hit_physics_processing(_delta:float) -> void:
 	
 	return
 
-
 # -------UPPERCUT---------
 
 func on_uppercut_physics_processing(_delta: float) -> void:
-	velocity.x = move_toward(velocity.x, uppercut_direction*UPPERCUT_STEP_VELOCITY,UPPERCUT_STEP_VELOCITY* _delta)
+	var step_vel := UPPERCUT_STEP_VELOCITY * get_speed_mult()
+	velocity.x = move_toward(velocity.x, uppercut_direction * step_vel, step_vel * _delta)
 	melee_hitbox.set_facing(uppercut_direction)
 	return
 # Recovery é uma AttackPhase igual às outras: o que muda de um golpe para outro é só a animação
@@ -296,7 +436,41 @@ func on_uppercut_physics_processing(_delta: float) -> void:
 #   Attack1/<golpe>/Recovery -> Attack2
 #   Attack2/<golpe>/Recovery -> Rest (guard player_far) ou Walk
 
-# TODO: Stunned sempre volta para Walk (transição em boss.tscn). Para onde sair é decisão em aberto.
+# TODO: Stunned (Stagger -> Down -> GetUp) sempre volta para Walk pela transição do GetUp em boss.tscn. Para onde sair é decisão em aberto.
+
+func _on_fire_state_processing(delta: float) -> void:
+	fire_timer += delta
+	if fire_timer >= 0.5:
+		fire_timer = 0.0
+		health -= FIRE_DAMAGE
+	FIRE_BUILDUP -= delta
+	if FIRE_BUILDUP <= 0:
+		state_chart.send_event('go_to_normal')
+	return
+
+func _on_freeze_state_processing(_delta: float) -> void:
+	FREEZE_BUILDUP -= _delta
+	if FREEZE_BUILDUP <= 0:
+		state_chart.send_event('go_to_normal')
+	return
+
+func _on_eletric_state_processing(_delta: float) -> void:
+	ELETRIC_BUILDUP -= _delta
+	if ELETRIC_BUILDUP <= 0:
+		state_chart.send_event('go_to_normal')
+	return
+
+func _on_normal_state_processing(_delta: float) -> void:
+	if OS.is_debug_build():
+		if Input.is_key_pressed(KEY_F):
+			FIRE_BUILDUP = MAX_FIRE_BUILDUP
+			state_chart.send_event("go_to_fire")
+		elif Input.is_key_pressed(KEY_E):
+			state_chart.send_event("go_to_eletric")
+			ELETRIC_BUILDUP = MAX_ELETRIC_BUILDUP
+		elif Input.is_key_pressed(KEY_Z):
+			FREEZE_BUILDUP = MAX_FREEZE_BUILDUP
+			state_chart.send_event("go_to_freeze")
 
 # ---------------ESTADOS DE SAÍDA----------------
 
@@ -328,6 +502,7 @@ func configure_combo(combo: Node, prefix: String, telegraphy: float, hit: float,
 		if phase.HITBOX_ACTIVE:
 			phase.DAMAGE = damage
 			phase.KNOCKBACK = knockback
+		self.connect('set_fire', phase.set_fire)
 
 func find_attack_phases(node: Node) -> Array[AttackPhase]:
 	var phases : Array[AttackPhase] = []
@@ -354,6 +529,31 @@ func player_abs_distance() -> float:
 
 func is_player_far() -> bool:
 	return player_abs_distance() >= LONG_DISTANCE
+
+# Ataque em área: só na fase 2, com o cooldown zerado e o player perto (< MEDIUM_DISTANCE)
+func is_area_attack_ready() -> bool:
+	return phase_2 and area_attack_cooldown_left <= 0.0 and player_abs_distance() < MEDIUM_DISTANCE
+
+# Dano recebido pelo boss. Ao chegar em PHASE_2_HEALTH_RATIO da vida, entra na fase 2
+func take_damage(amount: int, stagger: float, element: String, buildup: float) -> void:
+	if effects['freeze']: amount *= FREEZE_DAMAGE_DEBUFF
+	match element:
+		'freeze':
+			FREEZE_BUILDUP += buildup
+		'fire':
+			FIRE_BUILDUP += buildup
+		'eletric':
+			ELETRIC_BUILDUP += buildup
+	health = maxf(health - amount, 0.0)
+	if health <= HEALTH * PHASE_2_HEALTH_RATIO:
+		enter_phase_2()
+
+# Libera os golpes da fase 2. Também chamado pelas cenas de teste para forçar a fase 2
+func enter_phase_2() -> void:
+	if phase_2:
+		return
+	phase_2 = true
+	state_chart.set_expression_property(&"phase_2", true)
 
 # Listas de golpes do estado de ataque: [longos, médios, curtos], nessa ordem
 func get_attack_state(state_number : String) -> Array:
@@ -404,6 +604,47 @@ func instatiate_power_wave(isStronger:bool):
 	get_tree().current_scene.add_child(instance)
 	return
 
+func get_speed_mult() -> float:
+	return ELETRIC_SPEED_DEBUFF if effects['eletric'] else 1.0
+
+func update_combo_timings(mult: float) -> void:
+	var combos = [
+		["combo_a", COMBO_A_TELEGRAPHY, COMBO_A_HIT, COMBO_A_GAP, COMBO_A_RECOVERY],
+		["combo_b", COMBO_B_TELEGRAPHY, COMBO_B_HIT, COMBO_B_GAP, COMBO_B_RECOVERY],
+		["power_wave", POWER_WAVE_TELEGRAPHY, POWER_WAVE_HIT, POWER_WAVE_GAP, POWER_WAVE_RECOVERY],
+		["stinger", STINGER_TELEGRAPHY, 0.0, 0.0, STINGER_RECOVERY],
+		["uppercut", UPPERCUT_TELEGRAPHY, UPPERCUT_HIT, 0.0, UPPERCUT_RECOVERY],
+		["sword_throw", SWORD_THROW_TELEGRAPHY, 0.0, 0.0, SWORD_THROW_RECOVERY],
+		["sword_spawn", SWORD_SPAWN_TELEGRAPHY, SWORD_SPAWN_HIT, SWORD_SPAWN_GAP, SWORD_SPAWN_RECOVERY],
+		["area_attack", AREA_ATTACK_TELEGRAPHY, AREA_ATTACK_HIT, 0.0, AREA_ATTACK_RECOVERY]
+	]
+	
+	for c in combos:
+		state_chart.set_expression_property(c[0] + "_telegraphy", c[1] / mult)
+		state_chart.set_expression_property(c[0] + "_hit", c[2] / mult)
+		state_chart.set_expression_property(c[0] + "_gap", c[3] / mult)
+		state_chart.set_expression_property(c[0] + "_recovery", c[4] / mult)
+
+func apply_eletric_slow() -> void:
+	var mult := get_speed_mult()
+
+	animated_sprite_2d.speed_scale = mult
+	animation_player.speed_scale = mult
+	
+	state_chart.set_expression_property(&"idle_duration", IDLE_DURATION / mult)
+	state_chart.set_expression_property(&"rest_duration", REST_DURATION / mult)
+	state_chart.set_expression_property(&"stun_duration", STUN_DURATION / mult)
+	state_chart.set_expression_property(&"sword_throw_outward", SWORD_THROW_OUTWARD / mult)
+	state_chart.set_expression_property(&"sword_throw_return", SWORD_THROW_RETURN / mult)
+	
+	update_combo_timings(mult)
+
+
+func change_shader_color(color: Color, mix_weight : float = 0.3) -> void:
+	var mat := animated_sprite_2d.material as ShaderMaterial
+	if mat:
+		mat.set_shader_parameter("tint_color", color)
+		mat.set_shader_parameter("mix_weight", mix_weight)
 
 func _on_melee_hitbox_area_entered(area: Area2D) -> void:
 	stinger_stop = true

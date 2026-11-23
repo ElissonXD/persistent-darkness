@@ -3,7 +3,7 @@ extends Node2D
 # Cena de teste do boss: mostra a vida do dummy (estado do boss: usar o debugger do addon).
 # [<-/->] anda, [Espaço] alterna invulnerável,
 # [1] envia posture_broken ao boss, [2] aplica dano de teste no dummy pelo contrato,
-# [R] restaura a vida do dummy.
+# [3] força a fase 2 do boss (libera o ataque em área), [R] restaura a vida do dummy.
 
 @export_category('Teste')
 @export var TEST_DAMAGE : int = 10
@@ -28,5 +28,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			# empurra o dummy para longe do boss
 			var side := signf(player_dummy.global_position.x - boss.global_position.x)
 			boss.deal_damage(player_dummy.hurtbox, TEST_DAMAGE, Vector2(TEST_KNOCKBACK.x * side, TEST_KNOCKBACK.y))
+		KEY_3:
+			# só para teste: entra na fase 2 sem precisar tirar vida do boss
+			boss.enter_phase_2()
 		KEY_R:
 			player_dummy.health = player_dummy.MAX_HEALTH
