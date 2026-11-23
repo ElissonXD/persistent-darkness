@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="2_rhup1"]
 [ext_resource type="Texture2D" uid="uid://h108q2lp0s1q" path="res://assets/sprites/backgrounds/background.jpg" id="3_rhup1"]
 [ext_resource type="PackedScene" uid="uid://hqtd1c7k1d2l" path="res://game/scenes/player/player.tscn" id="4_y6h0r"]
+[ext_resource type="Script" uid="uid://dtqhxa6pjjkeo" path="res://game/scripts/player/camera_2d.gd" id="5_56eqj"]
 [ext_resource type="PackedScene" uid="uid://dtsjd12o23aht" path="res://game/scenes/ui/hud.tscn" id="5_fv2ru"]
 [ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="5_obyst"]
 
@@ -15,7 +16,7 @@ size = Vector2(159.5, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_56eqj"]
 size = Vector2(154.5, 20)
 
-[sub_resource type="Resource" id="Resource_fv2ru"]
+[sub_resource type="Resource" id="Resource_56eqj"]
 resource_local_to_scene = true
 script = ExtResource("5_obyst")
 
@@ -54,9 +55,13 @@ scale = Vector2(0.7, 0.7)
 
 [node name="Player" parent="World2D" unique_id=116187027 instance=ExtResource("4_y6h0r")]
 position = Vector2(-300, 255)
-STATS = SubResource("Resource_fv2ru")
+STATS = SubResource("Resource_56eqj")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2040716281]
+script = ExtResource("5_56eqj")
+player_path = NodePath("../World2D/Player")
+boss_path = NodePath("../World2D/SoulCinder")
+boundary_node_path = NodePath("../World2D/Boundary")
+background_node_path = NodePath("../World2D/background")
 
 [node name="UI" parent="." unique_id=2020152070 instance=ExtResource("5_fv2ru")]
-visible = false
