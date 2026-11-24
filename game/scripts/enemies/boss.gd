@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 @export_category('Boss Data')
 @export var HEALTH : float = 1000
+## Postura máxima: o stagger de cada golpe recebido desconta daqui; ao zerar o boss vai para o Stunned
+## e a postura volta ao máximo. TODO: valor provisório, conferir no Notion
 @export var POSTURE : float = 100.0
 @export var BUILDUP_VALUE : float = 100.0
 @export var WALK_SPEED : float = 300.0
@@ -42,8 +44,8 @@ extends CharacterBody2D
 @export var STUN_DURATION : float = 3.0
 ## Duração da queda ao quebrar a postura (Stunned/Stagger). TODO: valor provisório, conferir no Notion
 @export var STUN_STAGGER_DURATION : float = 0.5
-## Duração do levantar antes de voltar a andar (Stunned/GetUp). TODO: valor provisório, conferir no Notion
-@export var STUN_GETUP_DURATION : float = 0.5
+## Duração do levantar antes de voltar a andar (Stunned/GetUp). Igual à animação stun_getup (5 quadros a 8 fps)
+@export var STUN_GETUP_DURATION : float = 0.625
 
 
 @export_category('Walk')
@@ -205,12 +207,15 @@ var fire_timer = 0.5
 @onready var melee_hitbox: MeleeHitbox = $MeleeHitbox
 @onready var marker_2d: Marker2D = $Marker2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var stunned: CompoundState = $StateChart/Root/Machine/Stunned
 
 # sinais
 
 signal set_fire(fire: bool, reduction : float)
 
 var player : Node2D = null
+# postura atual (começa e recarrega em POSTURE)
+var posture : float
 
 func _ready() -> void:
 	# pegar o player
@@ -236,6 +241,7 @@ func _ready() -> void:
 
 	# fase 2 e ataque em área
 	health = HEALTH
+	posture = POSTURE
 	state_chart.set_expression_property(&"phase_2", false)
 	state_chart.set_expression_property(&"area_attack_ready", false)
 	configure_combo(area_attack, "area_attack", AREA_ATTACK_TELEGRAPHY, AREA_ATTACK_HIT, 0, AREA_ATTACK_RECOVERY, AREA_ATTACK_DAMAGE, AREA_ATTACK_KNOCKBACK)
@@ -286,6 +292,9 @@ func _on_state_entered(state_name: StringName) -> void:
 			state_chart.send_event(attack)
 	if state_name == &"AreaAttack":
 		area_attack_cooldown_left = AREA_ATTACK_COOLDOWN
+	if state_name == &"Stunned":
+		# postura quebrada: recarrega para a próxima vez
+		posture = POSTURE
 
 func on_power_waveA_enter() -> void:
 	instatiate_power_wave(false)
@@ -547,6 +556,16 @@ func take_damage(amount: int, stagger: float, element: String, buildup: float) -
 	health = maxf(health - amount, 0.0)
 	if health <= HEALTH * PHASE_2_HEALTH_RATIO:
 		enter_phase_2()
+	take_stagger(stagger)
+
+# Desconta o stagger da postura. Ao zerar, quebra a postura (Machine -> Stunned).
+# Caído (Stunned ativo) a postura não cai, senão o golpe seguinte reiniciaria o Stunned.
+func take_stagger(stagger: float) -> void:
+	if stagger <= 0 or stunned.active:
+		return
+	posture = maxf(posture - stagger, 0.0)
+	if posture <= 0:
+		state_chart.send_event(&"posture_broken")
 
 # Libera os golpes da fase 2. Também chamado pelas cenas de teste para forçar a fase 2
 func enter_phase_2() -> void:
@@ -634,6 +653,8 @@ func apply_eletric_slow() -> void:
 	state_chart.set_expression_property(&"idle_duration", IDLE_DURATION / mult)
 	state_chart.set_expression_property(&"rest_duration", REST_DURATION / mult)
 	state_chart.set_expression_property(&"stun_duration", STUN_DURATION / mult)
+	state_chart.set_expression_property(&"stun_stagger", STUN_STAGGER_DURATION / mult)
+	state_chart.set_expression_property(&"stun_getup", STUN_GETUP_DURATION / mult)
 	state_chart.set_expression_property(&"sword_throw_outward", SWORD_THROW_OUTWARD / mult)
 	state_chart.set_expression_property(&"sword_throw_return", SWORD_THROW_RETURN / mult)
 	

@@ -7,6 +7,10 @@ extends Area2D
 # Dano segue o contrato: take_damage(amount, knockback) no dono do hurtbox, se existir.
 # area_entered -> _on_area_entered é ligado na aba Sinais da cena que usa a hitbox.
 
+@export_category('Hitbox')
+## Postura tirada do boss por golpe (só vale quando o alvo é o boss). TODO: valor provisório, conferir no Notion
+@export var STAGGER : float = 10.0
+
 # Nodes
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
@@ -64,10 +68,9 @@ func _on_area_entered(area: Area2D) -> void:
 	if direction == 0:
 		direction = facing
 	if target.is_in_group('boss'): #diferenciar do boss pra chamar os parametros corretos
-		# segundo parametro: troque por stagger
 		# terceiro parametro: troque para string do elemento (freeze, fire, eletric)
 		# quarto parametro: troque para buildup do elemetno caso tenha
-		target.take_damage(damage, 0, 'normal', 0)
+		target.take_damage(damage, STAGGER, 'normal', 0)
 	else:
 		target.take_damage(damage, Vector2(absf(knockback.x) * direction, knockback.y))
 	
