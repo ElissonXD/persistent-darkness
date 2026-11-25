@@ -480,6 +480,8 @@ func _on_normal_state_processing(_delta: float) -> void:
 		elif Input.is_key_pressed(KEY_Z):
 			FREEZE_BUILDUP = MAX_FREEZE_BUILDUP
 			state_chart.send_event("go_to_freeze")
+		elif Input.is_key_pressed(KEY_P):
+			state_chart.send_event(&"posture_broken")
 
 # ---------------ESTADOS DE SAÍDA----------------
 
