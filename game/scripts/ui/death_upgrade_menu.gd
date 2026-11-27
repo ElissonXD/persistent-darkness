@@ -24,6 +24,10 @@ func _ready() -> void:
 			menu_button.pressed.connect(_on_menu_button_pressed)
 
 func show_death_screen() -> void:
+	if visible:
+		return
+
+	visible = true
 	get_tree().paused = true
 	
 	if player_stats:
@@ -31,7 +35,6 @@ func show_death_screen() -> void:
 		if death_count_label:
 			death_count_label.text = "Total de Mortes: %d" % player_stats.death_count
 			
-	show()
 	generate_random_choices()
 
 func generate_random_choices() -> void:
