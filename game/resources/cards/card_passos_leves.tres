@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://bdxsbnu3b8wh7"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_4x4jb"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_kx3xx"]
+
+[sub_resource type="Resource" id="Resource_h4r3s"]
+script = ExtResource("1_4x4jb")
+STAT = &"MOVE_SPEED"
+MULT = 0.15
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_j5fpp"]
+script = ExtResource("1_4x4jb")
+STAT = &"MAX_HEALTH"
+MULT = -0.1
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_kx3xx")
+CARD_NAME = "Passos Leves"
+DESCRIPTION = "Aumenta sua mobilidade, mas reduz sua capacidade de resistir a golpes."
+MODIFIERS = Array[ExtResource("1_4x4jb")]([SubResource("Resource_h4r3s"), SubResource("Resource_j5fpp")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

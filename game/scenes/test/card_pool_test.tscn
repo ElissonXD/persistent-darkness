@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bagnf2bv1yj0c"]
+
+[ext_resource type="Script" uid="uid://b20lshs4fmso" path="res://game/scripts/test/card_pool_test.gd" id="1_h5i8g"]
+
+[node name="CardPoolTest" type="Node" unique_id=967119003]
+script = ExtResource("1_h5i8g")

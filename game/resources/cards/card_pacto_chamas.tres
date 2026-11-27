@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://di7jbsi3hrmd3"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_hhdvs"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_s32kj"]
+
+[sub_resource type="Resource" id="Resource_eskep"]
+script = ExtResource("1_hhdvs")
+STAT = &"BURN_BUILDUP"
+FLAT = 25.0
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_cgt28"]
+script = ExtResource("1_hhdvs")
+STAT = &"MAX_HEALTH"
+MULT = -0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_s32kj")
+CARD_NAME = "Pacto das Chamas"
+DESCRIPTION = "Seus ataques acumulam queimadura nos inimigos, mas o poder das chamas consome sua própria vitalidade."
+RARITY = 1
+MODIFIERS = Array[ExtResource("1_hhdvs")]([SubResource("Resource_eskep"), SubResource("Resource_cgt28")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

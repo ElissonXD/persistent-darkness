@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://deyaiaueakinp"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_jhgt2"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_3o1fa"]
+
+[sub_resource type="Resource" id="Resource_gf7wx"]
+script = ExtResource("1_jhgt2")
+STAT = &"SWING_3_DAMAGE"
+MULT = 0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_3ohl8"]
+script = ExtResource("1_jhgt2")
+STAT = &"SWING_STAMINA_COST"
+MULT = 0.1
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_3o1fa")
+CARD_NAME = "Manoplas Brutais"
+DESCRIPTION = "Aumenta o dano dos golpes finais de uma sequência de ataques, mas faz ataques custarem mais energia."
+MODIFIERS = Array[ExtResource("1_jhgt2")]([SubResource("Resource_gf7wx"), SubResource("Resource_3ohl8")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

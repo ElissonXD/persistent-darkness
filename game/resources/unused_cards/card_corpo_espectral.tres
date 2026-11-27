@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://t3emoow324we"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_l68da"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_x40yp"]
+
+[sub_resource type="Resource" id="Resource_fsecm"]
+script = ExtResource("1_l68da")
+STAT = &"ROLL_STAMINA_COST"
+MULT = 0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_x40yp")
+CARD_NAME = "Corpo Espectral"
+DESCRIPTION = "Permite atravessar inimigos durante a rolagem em troca de um custo maior de energia"
+RARITY = 1
+MODIFIERS = Array[ExtResource("1_l68da")]([SubResource("Resource_fsecm")])
+ABILITIES = Array[StringName]([&"ROLL_PASSES_THROUGH_ENEMIES"])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

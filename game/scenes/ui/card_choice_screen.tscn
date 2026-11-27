@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://b03n7odyhdbji"]
+
+[ext_resource type="Script" uid="uid://c2vg7v3r5v00o" path="res://game/scripts/ui/card_choice_screen.gd" id="1_4ydyb"]
+
+[node name="CardChoiceScreen" type="Control" unique_id=885551587]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4ydyb")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=131504927]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7490196)
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1694498107]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Columns" type="HBoxContainer" parent="Margin" unique_id=1717589469]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Sidebar" type="VBoxContainer" parent="Margin/Columns" unique_id=1548140858]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="OwnedTitle" type="Label" parent="Margin/Columns/Sidebar" unique_id=1433604351]
+layout_mode = 2
+text = "Suas cartas (clique para sacrificar)"
+autowrap_mode = 3
+
+[node name="OwnedScroll" type="ScrollContainer" parent="Margin/Columns/Sidebar" unique_id=189887551]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="OwnedRow" type="VBoxContainer" parent="Margin/Columns/Sidebar/OwnedScroll" unique_id=1297044146]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Main" type="VBoxContainer" parent="Margin/Columns" unique_id=1738541304]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Margin/Columns/Main" unique_id=1836015238]
+layout_mode = 2
+text = "Você caiu. Escolha uma carta"
+
+[node name="OffersRow" type="HBoxContainer" parent="Margin/Columns/Main" unique_id=792042662]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="DetailLabel" type="RichTextLabel" parent="Margin/Columns/Main" unique_id=117895342]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+bbcode_enabled = true
+scroll_active = false
+
+[node name="LuckLabel" type="Label" parent="Margin/Columns/Main" unique_id=1453450441]
+layout_mode = 2
+
+[node name="SkipButton" type="Button" parent="Margin/Columns/Main" unique_id=568724696]
+layout_mode = 2
+text = "Pular"

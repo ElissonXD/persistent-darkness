@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cw2eq05ly5w8f"]
+
+[ext_resource type="Script" uid="uid://djpvonrnwmfud" path="res://game/scripts/test/card_choice_test.gd" id="1_w6kcu"]
+
+[node name="CardChoiceTest" type="Node" unique_id=1497059476]
+script = ExtResource("1_w6kcu")

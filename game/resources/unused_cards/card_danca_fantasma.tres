@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://dpdbvxs3hc02t"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_bjnfw"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_ac78c"]
+
+[sub_resource type="Resource" id="Resource_44v4w"]
+script = ExtResource("1_bjnfw")
+STAT = &"ROLL_SPEED"
+MULT = 0.4
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_c4hal"]
+script = ExtResource("1_bjnfw")
+STAT = &"ROLL_DURATION"
+MULT = -0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_hhdvs"]
+script = ExtResource("1_bjnfw")
+STAT = &"STRENGTH"
+MULT = -0.25
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_ac78c")
+CARD_NAME = "Dança Fantasma"
+DESCRIPTION = "Atravessa inimigos ao rolar e aumenta muito sua mobilidade, mas reduz sua força."
+RARITY = 2
+MODIFIERS = Array[ExtResource("1_bjnfw")]([SubResource("Resource_44v4w"), SubResource("Resource_c4hal"), SubResource("Resource_hhdvs")])
+ABILITIES = Array[StringName]([&"ROLL_PASSES_THROUGH_ENEMIES"])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"
