@@ -21,9 +21,11 @@ z_index = -2
 scale = Vector2(1.0121528, 1.0092592)
 
 [node name="Sky1" type="Parallax2D" parent="Background" unique_id=180000002]
+follow_viewport = false
+ignore_camera_scroll = true
 
 [node name="sky1" type="Sprite2D" parent="Background/Sky1" unique_id=180000003]
-position = Vector2(569.084, 471.63306)
+position = Vector2(571.06006, 505.32114)
 scale = Vector2(1.988, 2)
 texture = ExtResource("1_sky1")
 
@@ -38,7 +40,7 @@ texture = ExtResource("2_sky2")
 scroll_offset = Vector2(60.267582, 0)
 
 [node name="sky3" type="Sprite2D" parent="Background/Sky3" unique_id=180000007]
-position = Vector2(569.084, 471.63306)
+position = Vector2(508.81647, 504.33032)
 scale = Vector2(1.988, 2)
 texture = ExtResource("3_sky3")
 

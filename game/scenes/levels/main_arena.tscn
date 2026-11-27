@@ -32,28 +32,32 @@ scale = Vector2(1.0121528, 1.0092592)
 
 [node name="Sky1" type="Parallax2D" parent="Sky" unique_id=1317565597]
 scroll_scale = Vector2(0, 0)
+ignore_camera_scroll = true
 
 [node name="sky1" type="Sprite2D" parent="Sky/Sky1" unique_id=610757814]
-position = Vector2(569.08405, 309.1377)
+position = Vector2(555.25214, 428.03677)
 scale = Vector2(1.988, 2)
 texture = ExtResource("1_28yl2")
 
 [node name="Sky2" type="Parallax2D" parent="Sky" unique_id=2053328528]
-scroll_scale = Vector2(0.25, 0.25)
+scroll_scale = Vector2(0.7, 0)
+scroll_offset = Vector2(100, 0)
 repeat_size = Vector2(1145.088, 0)
+repeat_times = 3
 
 [node name="sky2" type="Sprite2D" parent="Sky/Sky2" unique_id=389235977]
-position = Vector2(569.08405, 309.1377)
+position = Vector2(569.084, 388.40366)
 scale = Vector2(1.988, 2)
 texture = ExtResource("2_jel1r")
 
 [node name="Sky3" type="Parallax2D" parent="Sky" unique_id=768206982]
-scroll_scale = Vector2(0.4, -2.38)
-scroll_offset = Vector2(60.267582, 0)
+scroll_scale = Vector2(0.9, 0)
+scroll_offset = Vector2(100, 0)
 repeat_size = Vector2(1145.088, 0)
+repeat_times = 3
 
 [node name="sky3" type="Sprite2D" parent="Sky/Sky3" unique_id=178285717]
-position = Vector2(1653.9044, 309.1376)
+position = Vector2(1653.9045, 286.6789)
 scale = Vector2(1.988, 2)
 texture = ExtResource("3_1w24a")
 

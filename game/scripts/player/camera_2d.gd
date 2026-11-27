@@ -33,6 +33,9 @@ var boundary_rect: Rect2
 var has_boundary: bool = false
 var background_rect: Rect2
 var has_background: bool = false
+var background_sprite: Sprite2D
+var background_screen_transform: Transform2D
+var background_screen_transform_captured: bool = false
 
 func _ready() -> void:
 	if not player_path.is_empty():
@@ -90,10 +93,23 @@ func _setup_background() -> void:
 	var bg := get_node_or_null(background_node_path)
 	if bg is Sprite2D:
 		var sprite := bg as Sprite2D
+		background_sprite = sprite
 		background_rect = sprite.global_transform * sprite.get_rect()
 		if has_boundary and sprite.get_parent() is Parallax2D:
 			background_rect = boundary_rect
 		has_background = true
+
+func _lock_background_to_viewport() -> void:
+	if not is_instance_valid(background_sprite):
+		return
+
+	var canvas_transform := get_viewport().get_canvas_transform()
+	if not background_screen_transform_captured:
+		background_screen_transform = canvas_transform * background_sprite.global_transform
+		background_screen_transform_captured = true
+		return
+
+	background_sprite.global_transform = canvas_transform.affine_inverse() * background_screen_transform
 
 func _find_collision_shape(node: Node) -> CollisionShape2D:
 	if node is CollisionShape2D:
@@ -165,3 +181,5 @@ func _process(delta: float) -> void:
 
 	global_position = global_position.lerp(next_target, follow_speed * delta)
 	global_position = _clamp_to_background(global_position)
+	force_update_scroll()
+	_lock_background_to_viewport()
