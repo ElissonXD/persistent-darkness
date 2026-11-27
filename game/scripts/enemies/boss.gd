@@ -212,6 +212,7 @@ var fire_timer = 0.5
 # sinais
 
 signal set_fire(fire: bool, reduction : float)
+signal boss_death
 
 var player : Node2D = null
 # postura atual (começa e recarrega em POSTURE)
@@ -387,6 +388,16 @@ func _on_normal_state_entered() -> void:
 	apply_eletric_slow()
 	return
 
+func _on_death_state_entered() -> void:
+	state_chart.send_event('go_to_normal')
+	velocity = Vector2.ZERO
+	animation_player.play('RESET')
+	animation_player.play("death")
+	melee_hitbox.monitorable = false
+	melee_hitbox.monitoring = false
+	return
+
+
 # ---------------ESTADOS DE PROCESSAMENTO ----------------
 
 func _on_walk_state_physics_processing(_delta: float) -> void:
@@ -482,6 +493,14 @@ func _on_normal_state_processing(_delta: float) -> void:
 			state_chart.send_event("go_to_freeze")
 		elif Input.is_key_pressed(KEY_P):
 			state_chart.send_event(&"posture_broken")
+		elif Input.is_key_pressed(KEY_H):
+			state_chart.send_event(&"go_death")
+
+func _on_death_state_processing(_delta : float) -> void:
+	if not animated_sprite_2d.is_playing():
+		boss_death.emit()
+		queue_free()
+		return
 
 # ---------------ESTADOS DE SAÍDA----------------
 

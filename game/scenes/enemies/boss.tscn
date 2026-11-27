@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cs8eosjcigrr4" path="res://assets/sprites/enemies/boss_stinger_2.png" id="4_wruid"]
 [ext_resource type="Texture2D" uid="uid://b52ii70fan470" path="res://assets/sprites/enemies/boss_stinger.png" id="5_bfkjr"]
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_bhvv7"]
+[ext_resource type="Texture2D" uid="uid://bku6e5hw8xq8u" path="res://assets/sprites/enemies/boss_defeat.png" id="5_cu0c5"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_twjaa"]
 [ext_resource type="Script" uid="uid://le5w1cm0ul8p" path="res://addons/godot_state_charts/expression_guard.gd" id="7_xgrd1"]
 [ext_resource type="Script" uid="uid://b411mffelg75g" path="res://game/scripts/enemies/attacks/attack_phase.gd" id="8_atkph"]
@@ -636,6 +637,46 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [Vector2(-6, -25.4)]
+}
+
+[sub_resource type="Animation" id="Animation_iwqdr"]
+resource_name = "death"
+length = 3.4666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"death"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6, 0.8, 1, 1.2333333, 1.4333333, 1.6666666, 1.9, 2.1, 2.4, 2.6, 2.7666667, 2.9666667, 3.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-6, 60)]
 }
 
 [sub_resource type="Animation" id="Animation_esicy"]
@@ -1501,6 +1542,7 @@ _data = {
 &"combo_b_hit2": SubResource("Animation_combo_b_hit2"),
 &"combo_b_recovery": SubResource("Animation_combo_b_recovery"),
 &"combo_b_telegraphy": SubResource("Animation_combo_b_telegraphy"),
+&"death": SubResource("Animation_iwqdr"),
 &"ground_hit": SubResource("Animation_esicy"),
 &"ground_recovery": SubResource("Animation_fwxea"),
 &"ground_telegraphy": SubResource("Animation_4r3x5"),
@@ -1656,6 +1698,70 @@ region = Rect2(0, 1200, 384, 240)
 [sub_resource type="AtlasTexture" id="AtlasTexture_combo_b_telegraphy_1"]
 atlas = ExtResource("13_combos")
 region = Rect2(384, 1200, 384, 240)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pxd7p"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(0, 0, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kiqd5"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(192, 0, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o1p6j"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(384, 0, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_olvk1"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(576, 0, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cyrot"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(0, 128, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yb1na"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(192, 128, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_00bjd"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(384, 128, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08iy2"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(576, 128, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy84x"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(0, 256, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ravka"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(192, 256, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6w0kp"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(384, 256, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b3igc"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(576, 256, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rveq5"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(0, 384, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71kux"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(192, 384, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44dyn"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(384, 384, 192, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dx1f5"]
+atlas = ExtResource("5_cu0c5")
+region = Rect2(576, 384, 192, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8cn5p"]
 atlas = ExtResource("2_cknmc")
@@ -2037,22 +2143,6 @@ region = Rect2(1152, 432, 192, 216)
 atlas = ExtResource("15_states")
 region = Rect2(1344, 432, 192, 216)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_stun_3"]
-atlas = ExtResource("15_states")
-region = Rect2(576, 432, 192, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_stun_2"]
-atlas = ExtResource("15_states")
-region = Rect2(384, 432, 192, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_stun_1"]
-atlas = ExtResource("15_states")
-region = Rect2(192, 432, 192, 216)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_stun_0"]
-atlas = ExtResource("15_states")
-region = Rect2(0, 432, 192, 216)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_getup_0"]
 atlas = ExtResource("15_states")
 region = Rect2(0, 648, 192, 216)
@@ -2072,6 +2162,22 @@ region = Rect2(576, 648, 192, 216)
 [sub_resource type="AtlasTexture" id="AtlasTexture_getup_4"]
 atlas = ExtResource("15_states")
 region = Rect2(768, 648, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_0"]
+atlas = ExtResource("15_states")
+region = Rect2(0, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_1"]
+atlas = ExtResource("15_states")
+region = Rect2(192, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_2"]
+atlas = ExtResource("15_states")
+region = Rect2(384, 432, 192, 216)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stun_3"]
+atlas = ExtResource("15_states")
+region = Rect2(576, 432, 192, 216)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ok7qu"]
 atlas = ExtResource("9_esicy")
@@ -2342,6 +2448,59 @@ animations = [{
 "loop": 0,
 "name": &"combo_b_telegraphy",
 "speed": 6.67
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pxd7p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kiqd5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o1p6j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_olvk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cyrot")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yb1na")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_00bjd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_08iy2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy84x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ravka")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6w0kp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b3igc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rveq5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71kux")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44dyn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dx1f5")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -2930,6 +3089,12 @@ metadata/_custom_type_script = "uid://c1vp0ojjvaby1"
 script = ExtResource("6_twjaa")
 to = NodePath("../Stunned")
 event = &"posture_broken"
+delay_in_seconds = "0.0"
+
+[node name="Go Death" type="Node" parent="StateChart/Root/Machine" unique_id=1599777896]
+script = ExtResource("6_twjaa")
+to = NodePath("../Death")
+event = &"go_death"
 delay_in_seconds = "0.0"
 
 [node name="Idle" type="Node" parent="StateChart/Root/Machine" unique_id=373310700]
@@ -3567,6 +3732,9 @@ script = ExtResource("6_twjaa")
 to = NodePath("../../../Walk")
 delay_in_seconds = "stun_getup"
 
+[node name="Death" type="Node" parent="StateChart/Root/Machine" unique_id=1223726829]
+script = ExtResource("5_bhvv7")
+
 [node name="Elements" type="Node" parent="StateChart/Root" unique_id=651506311]
 script = ExtResource("4_jtqy8")
 initial_state = NodePath("Normal")
@@ -3711,15 +3879,15 @@ delay_in_seconds = "0.0"
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" to="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" to="StateChart/Root/Machine/Attack2/PowerWaveB/Telegraphy" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="." method="on_power_waveB_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" to="StateChart/Root/Machine/Attack2/PowerWaveB/Hit1" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" to="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" to="StateChart/Root/Machine/Attack2/PowerWaveB/Gap1" method="_on_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="." method="on_power_waveB_enter"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="." method="_on_attack_phase_entered"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" to="StateChart/Root/Machine/Attack2/PowerWaveB/Hit2" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Attack2/PowerWaveB/Recovery" to="." method="_on_attack_phase_entered"]
@@ -3772,6 +3940,8 @@ delay_in_seconds = "0.0"
 [connection signal="state_exited" from="StateChart/Root/Machine/Stunned/Down" to="StateChart/Root/Machine/Stunned/Down" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Machine/Stunned/GetUp" to="StateChart/Root/Machine/Stunned/GetUp" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Machine/Stunned/GetUp" to="StateChart/Root/Machine/Stunned/GetUp" method="_on_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Machine/Death" to="." method="_on_death_state_entered"]
+[connection signal="state_processing" from="StateChart/Root/Machine/Death" to="." method="_on_death_state_processing"]
 [connection signal="state_entered" from="StateChart/Root/Elements/Normal" to="." method="_on_normal_state_entered"]
 [connection signal="state_processing" from="StateChart/Root/Elements/Normal" to="." method="_on_normal_state_processing"]
 [connection signal="state_entered" from="StateChart/Root/Elements/Fire" to="." method="_on_fire_state_entered"]
