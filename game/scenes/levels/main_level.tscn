@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dkxp33s2kksmi"]
+
+[ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="2_rhup1"]
+[ext_resource type="PackedScene" uid="uid://hqtd1c7k1d2l" path="res://game/scenes/player/player.tscn" id="4_y6h0r"]
+[ext_resource type="Script" uid="uid://dtqhxa6pjjkeo" path="res://game/scripts/player/camera_2d.gd" id="5_56eqj"]
+[ext_resource type="PackedScene" uid="uid://dtsjd12o23aht" path="res://game/scenes/ui/hud.tscn" id="5_fv2ru"]
+[ext_resource type="PackedScene" uid="uid://dxqgme1q33dhc" path="res://game/scenes/levels/main_arena.tscn" id="7_arena"]
+[ext_resource type="Resource" uid="uid://b36llc78qja8j" path="res://game/scripts/autoloads/player_stats.tres" id="8_stats"]
+
+[node name="MainLevel" type="Node2D" unique_id=1301530298]
+
+[node name="MainArena" parent="." unique_id=1249724771 instance=ExtResource("7_arena")]
+
+[node name="World2D" type="Node2D" parent="." unique_id=1598667471]
+
+[node name="SoulCinder" parent="World2D" unique_id=1100173584 instance=ExtResource("2_rhup1")]
+position = Vector2(864, 524.7)
+scale = Vector2(0.7, 0.7)
+
+[node name="Player" parent="World2D" unique_id=116187027 node_paths=PackedStringArray("death_screen") instance=ExtResource("4_y6h0r")]
+position = Vector2(288, 596)
+STATS = ExtResource("8_stats")
+death_screen = NodePath("../../UI/UI/DeathUpgradeMenu")
+
+[node name="Camera2D" type="Camera2D" parent="World2D/Player" unique_id=2040716281]
+position = Vector2(-288, -596)
+process_callback = 0
+position_smoothing_enabled = true
+script = ExtResource("5_56eqj")
+player_path = NodePath("..")
+boss_path = NodePath("../../SoulCinder")
+boundary_node_path = NodePath("../../../MainArena/CameraBoundary")
+background_node_path = NodePath("../../../MainArena/Sky/Sky1/sky1")
+
+[node name="UI" parent="." unique_id=2020152070 instance=ExtResource("5_fv2ru")]

@@ -123,10 +123,18 @@ func _on_swing_state_entered() -> void:
 	set_swing_damage(swing_1, &"SWING_1_DAMAGE")
 	set_swing_damage(swing_2, &"SWING_2_DAMAGE")
 	set_swing_damage(swing_3, &"SWING_3_DAMAGE")
-
+	
+'''
 func _on_dead_state_entered() -> void:
 	velocity.x = 0
+'''
 
+
+@export var death_screen : Node
+func _on_dead_state_entered() -> void:
+	velocity.x = 0
+	if death_screen and death_screen.has_method("show_death_screen"):
+		death_screen.show_death_screen()
 
 func _on_idle_state_physics_processing(_delta: float) -> void:
 	velocity.x = 0

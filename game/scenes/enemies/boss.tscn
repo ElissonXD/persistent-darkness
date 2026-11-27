@@ -3018,6 +3018,7 @@ expression = "area_attack_ready"
 
 [node name="SoulCinder" type="CharacterBody2D" unique_id=1100173584 groups=["boss"]]
 collision_layer = 4
+floor_snap_length = 4.0
 script = ExtResource("1_48gq0")
 LONG_ATTACKS_1 = Array[String](["go_power_wave_a", "go_sword_throw"])
 CLOSE_ATTACKS_1 = Array[String](["go_combo_a", "go_uppercut"])

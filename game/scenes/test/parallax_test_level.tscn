@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://kx67yggeg4gu"]
+
+[ext_resource type="Texture2D" uid="uid://ciymd2pq14yu7" path="res://assets/sprites/backgrounds/sky/1.png" id="1_sky1"]
+[ext_resource type="Texture2D" uid="uid://t0u0pdc7c3u4" path="res://assets/sprites/backgrounds/sky/2.png" id="2_sky2"]
+[ext_resource type="Texture2D" uid="uid://bjepl3iibct4p" path="res://assets/sprites/backgrounds/sky/3.png" id="3_sky3"]
+[ext_resource type="Texture2D" uid="uid://cg55drqcbqmd0" path="res://assets/sprites/backgrounds/floor.png" id="4_floor"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1136, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(40, 600)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_camera_boundary"]
+size = Vector2(1136, 475)
+
+[node name="ParallaxTestLevel" type="Node2D" unique_id=1599263728]
+
+[node name="Background" type="Node2D" parent="." unique_id=180000001]
+z_index = -2
+scale = Vector2(1.0121528, 1.0092592)
+
+[node name="Sky1" type="Parallax2D" parent="Background" unique_id=180000002]
+follow_viewport = false
+ignore_camera_scroll = true
+
+[node name="sky1" type="Sprite2D" parent="Background/Sky1" unique_id=180000003]
+position = Vector2(571.06006, 505.32114)
+scale = Vector2(1.988, 2)
+texture = ExtResource("1_sky1")
+
+[node name="Sky2" type="Parallax2D" parent="Background" unique_id=180000004]
+
+[node name="sky2" type="Sprite2D" parent="Background/Sky2" unique_id=180000005]
+position = Vector2(569.084, 471.63306)
+scale = Vector2(1.988, 2)
+texture = ExtResource("2_sky2")
+
+[node name="Sky3" type="Parallax2D" parent="Background" unique_id=180000006]
+scroll_offset = Vector2(60.267582, 0)
+
+[node name="sky3" type="Sprite2D" parent="Background/Sky3" unique_id=180000007]
+position = Vector2(508.81647, 504.33032)
+scale = Vector2(1.988, 2)
+texture = ExtResource("3_sky3")
+
+[node name="World2D" type="Node2D" parent="." unique_id=180000008]
+
+[node name="Boundary" type="StaticBody2D" parent="World2D" unique_id=180000009]
+
+[node name="FloorSprite" type="Sprite2D" parent="World2D/Boundary" unique_id=180000010]
+position = Vector2(288, 286.5)
+texture = ExtResource("4_floor")
+
+[node name="FloorSprite2" type="Sprite2D" parent="World2D/Boundary" unique_id=177069347]
+position = Vector2(864, 286.5)
+texture = ExtResource("4_floor")
+flip_h = true
+
+[node name="CollisionShapeFloor" type="CollisionShape2D" parent="World2D/Boundary" unique_id=180000011]
+position = Vector2(578, 454)
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="LeftWall" type="CollisionShape2D" parent="World2D/Boundary" unique_id=180000012]
+position = Vector2(28, 310.5)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="CollisionShape2D" parent="World2D/Boundary" unique_id=180000013]
+position = Vector2(1128, 310.5)
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="CameraBoundary" type="Area2D" parent="World2D" unique_id=746277795]
+position = Vector2(578, 310.5)
+collision_layer = 0
+collision_mask = 0
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World2D/CameraBoundary" unique_id=1263268679]
+shape = SubResource("RectangleShape2D_camera_boundary")

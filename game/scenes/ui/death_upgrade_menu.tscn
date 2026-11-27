@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://duxqdinv8ki6l"]
+
+[ext_resource type="Script" uid="uid://be6h3hvbfbu60" path="res://game/scripts/ui/death_upgrade_menu.gd" id="1_by0ox"]
+[ext_resource type="Resource" uid="uid://b36llc78qja8j" path="res://game/scripts/autoloads/player_stats.tres" id="2_stats"]
+
+[node name="DeathUpgradeMenu" type="CanvasLayer" unique_id=172480228]
+process_mode = 3
+follow_viewport_enabled = false
+layer = 2
+script = ExtResource("1_by0ox")
+player_stats = ExtResource("2_stats")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2144301042]
+layout_mode = 3
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.15686275, 0.09019608, 0.019607844, 0.34901962)
+
+[node name="Control" type="Control" parent="." unique_id=1580612916]
+layout_mode = 3
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control" unique_id=1502064638]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -150.0
+offset_right = 230.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer" unique_id=1686011255]
+layout_mode = 2
+
+[node name="Button1" type="Button" parent="Control/MarginContainer/VBoxContainer" unique_id=1732493921]
+layout_mode = 2
+
+[node name="Button2" type="Button" parent="Control/MarginContainer/VBoxContainer" unique_id=1794114323]
+layout_mode = 2
+
+[node name="Button3" type="Button" parent="Control/MarginContainer/VBoxContainer" unique_id=66820325]
+layout_mode = 2
+
+[node name="DeathCountLabel" type="Label" parent="Control/MarginContainer/VBoxContainer" unique_id=571079869]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuButton" type="Button" parent="Control/MarginContainer/VBoxContainer" unique_id=1519562498]
+layout_mode = 2
+text = "Desistir"

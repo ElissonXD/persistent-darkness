@@ -1,0 +1,204 @@
+[gd_scene format=3 uid="uid://dxqgme1q33dhc"]
+
+[ext_resource type="Texture2D" uid="uid://ciymd2pq14yu7" path="res://assets/sprites/backgrounds/sky/1.png" id="1_28yl2"]
+[ext_resource type="Texture2D" uid="uid://t0u0pdc7c3u4" path="res://assets/sprites/backgrounds/sky/2.png" id="2_jel1r"]
+[ext_resource type="Texture2D" uid="uid://bjepl3iibct4p" path="res://assets/sprites/backgrounds/sky/3.png" id="3_1w24a"]
+[ext_resource type="Texture2D" uid="uid://cg55drqcbqmd0" path="res://assets/sprites/backgrounds/floor.png" id="4_7ab2r"]
+[ext_resource type="Texture2D" uid="uid://2xs2ntfdgagv" path="res://assets/sprites/backgrounds/filling.png" id="5_kuvsk"]
+[ext_resource type="Texture2D" uid="uid://dd8gd78tkqdlc" path="res://assets/sprites/backgrounds/wall.png" id="6_yc6sj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qmg03"]
+size = Vector2(36.445053, 2.4037018)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ykh0f"]
+size = Vector2(2246.6667, 600)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_ykh0f"]
+distance = -424.0
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_psmbb"]
+
+[node name="MainArena" type="Node2D" unique_id=1878989111]
+scale = Vector2(1.5, 1.5)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=532855748]
+offset_left = -2.0
+offset_right = 2304.0
+offset_bottom = 189.0
+color = Color(0.13333334, 0.1254902, 0.20392157, 1)
+
+[node name="Sky" type="Node2D" parent="." unique_id=733182963]
+scale = Vector2(1.0121528, 1.0092592)
+
+[node name="Sky1" type="Parallax2D" parent="Sky" unique_id=1317565597]
+scroll_scale = Vector2(0, 0)
+ignore_camera_scroll = true
+
+[node name="sky1" type="Sprite2D" parent="Sky/Sky1" unique_id=610757814]
+position = Vector2(555.25214, 428.03677)
+scale = Vector2(1.988, 2)
+texture = ExtResource("1_28yl2")
+
+[node name="Sky2" type="Parallax2D" parent="Sky" unique_id=2053328528]
+scroll_scale = Vector2(0.7, 0)
+scroll_offset = Vector2(100, 0)
+repeat_size = Vector2(1145.088, 0)
+repeat_times = 3
+
+[node name="sky2" type="Sprite2D" parent="Sky/Sky2" unique_id=389235977]
+position = Vector2(569.084, 388.40366)
+scale = Vector2(1.988, 2)
+texture = ExtResource("2_jel1r")
+
+[node name="Sky3" type="Parallax2D" parent="Sky" unique_id=768206982]
+scroll_scale = Vector2(0.9, 0)
+scroll_offset = Vector2(100, 0)
+repeat_size = Vector2(1145.088, 0)
+repeat_times = 3
+
+[node name="sky3" type="Sprite2D" parent="Sky/Sky3" unique_id=178285717]
+position = Vector2(1653.9045, 286.6789)
+scale = Vector2(1.988, 2)
+texture = ExtResource("3_1w24a")
+
+[node name="Floor" type="Sprite2D" parent="." unique_id=748447065]
+position = Vector2(288, 286.5)
+texture = ExtResource("4_7ab2r")
+
+[node name="Floor2" type="Sprite2D" parent="." unique_id=2110208582]
+position = Vector2(864, 286.5)
+texture = ExtResource("4_7ab2r")
+flip_h = true
+
+[node name="Floor3" type="Sprite2D" parent="." unique_id=412757107]
+position = Vector2(1440, 286.5)
+texture = ExtResource("4_7ab2r")
+
+[node name="Floor4" type="Sprite2D" parent="." unique_id=103596503]
+position = Vector2(2016, 286.5)
+texture = ExtResource("4_7ab2r")
+flip_h = true
+
+[node name="Wall" type="Parallax2D" parent="." unique_id=1869315265]
+scale = Vector2(1.0121528, 1.0092592)
+
+[node name="filling_sprite" type="Sprite2D" parent="Wall" unique_id=1244706814]
+position = Vector2(574.02405, 146.64221)
+texture = ExtResource("5_kuvsk")
+
+[node name="filling_sprite2" type="Sprite2D" parent="Wall" unique_id=1892160346]
+position = Vector2(575.01196, 531.08264)
+texture = ExtResource("5_kuvsk")
+
+[node name="wall_sprite" type="Sprite2D" parent="Wall" unique_id=1669140550]
+position = Vector2(565.132, 280.73395)
+scale = Vector2(0.9879931, 0.9908257)
+texture = ExtResource("6_yc6sj")
+
+[node name="Wall2" type="Parallax2D" parent="." unique_id=566033592]
+scale = Vector2(1.0121528, 1.0092592)
+
+[node name="filling_sprite" type="Sprite2D" parent="Wall2" unique_id=313573800]
+position = Vector2(1664.1097, 146.80734)
+texture = ExtResource("5_kuvsk")
+
+[node name="filling_sprite2" type="Sprite2D" parent="Wall2" unique_id=2007474827]
+position = Vector2(1665.0977, 531.24774)
+texture = ExtResource("5_kuvsk")
+
+[node name="wall_sprite" type="Sprite2D" parent="Wall2" unique_id=407374903]
+position = Vector2(1657.8524, 281.39447)
+scale = Vector2(0.9879931, 0.9908257)
+texture = ExtResource("6_yc6sj")
+
+[node name="WindowPlataforms" type="StaticBody2D" parent="." unique_id=304751122]
+position = Vector2(576.0001, 312.00006)
+scale = Vector2(2.0121598, 2.0185184)
+
+[node name="Window0" type="CollisionShape2D" parent="WindowPlataforms" unique_id=621747374]
+position = Vector2(-225.95953, 10.568771)
+scale = Vector2(0.9999996, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window1" type="CollisionShape2D" parent="WindowPlataforms" unique_id=455663522]
+position = Vector2(-121.26278, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window2" type="CollisionShape2D" parent="WindowPlataforms" unique_id=81388962]
+position = Vector2(-5.9637833, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window3" type="CollisionShape2D" parent="WindowPlataforms" unique_id=813309601]
+position = Vector2(98.732994, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window4" type="CollisionShape2D" parent="WindowPlataforms" unique_id=1868586828]
+position = Vector2(214.69464, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window5" type="CollisionShape2D" parent="WindowPlataforms" unique_id=308134232]
+position = Vector2(323.36725, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window6" type="CollisionShape2D" parent="WindowPlataforms" unique_id=1447932198]
+position = Vector2(428.06403, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window7" type="CollisionShape2D" parent="WindowPlataforms" unique_id=170758517]
+position = Vector2(543.69434, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window8" type="CollisionShape2D" parent="WindowPlataforms" unique_id=324416001]
+position = Vector2(648.3911, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="Window9" type="CollisionShape2D" parent="WindowPlataforms" unique_id=1883359908]
+position = Vector2(764.3528, 10.568775)
+scale = Vector2(0.9999997, 1)
+shape = SubResource("RectangleShape2D_qmg03")
+one_way_collision = true
+
+[node name="CameraBoundary" type="StaticBody2D" parent="." unique_id=1955170863]
+visible = false
+position = Vector2(1152, 310.5)
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBoundary" unique_id=1964238506]
+position = Vector2(-28.666626, 0)
+shape = SubResource("RectangleShape2D_ykh0f")
+
+[node name="PlayerBoundary" type="StaticBody2D" parent="." unique_id=1039680666]
+visible = false
+position = Vector2(1152, 310.5)
+
+[node name="CollisionShapeFloor" type="CollisionShape2D" parent="PlayerBoundary" unique_id=1441151368]
+position = Vector2(-1152, -310.5)
+shape = SubResource("WorldBoundaryShape2D_ykh0f")
+
+[node name="CollisionShapeLeftWall" type="CollisionShape2D" parent="PlayerBoundary" unique_id=1728296099]
+position = Vector2(-1124, 300)
+rotation = 1.5707964
+shape = SubResource("WorldBoundaryShape2D_psmbb")
+
+[node name="CollisionShapeRightWall" type="CollisionShape2D" parent="PlayerBoundary" unique_id=359952098]
+position = Vector2(2230, 300)
+rotation = -1.5707964
+shape = SubResource("WorldBoundaryShape2D_psmbb")
