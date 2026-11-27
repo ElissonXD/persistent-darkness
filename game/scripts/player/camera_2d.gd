@@ -91,6 +91,8 @@ func _setup_background() -> void:
 	if bg is Sprite2D:
 		var sprite := bg as Sprite2D
 		background_rect = sprite.global_transform * sprite.get_rect()
+		if has_boundary and sprite.get_parent() is Parallax2D:
+			background_rect = boundary_rect
 		has_background = true
 
 func _find_collision_shape(node: Node) -> CollisionShape2D:

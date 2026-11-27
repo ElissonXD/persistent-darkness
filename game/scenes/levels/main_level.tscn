@@ -1,20 +1,11 @@
 [gd_scene format=3 uid="uid://dkxp33s2kksmi"]
 
 [ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="2_rhup1"]
-[ext_resource type="Texture2D" uid="uid://h108q2lp0s1q" path="res://assets/sprites/backgrounds/background.jpg" id="3_rhup1"]
 [ext_resource type="PackedScene" uid="uid://hqtd1c7k1d2l" path="res://game/scenes/player/player.tscn" id="4_y6h0r"]
 [ext_resource type="Script" uid="uid://dtqhxa6pjjkeo" path="res://game/scripts/player/camera_2d.gd" id="5_56eqj"]
 [ext_resource type="PackedScene" uid="uid://dtsjd12o23aht" path="res://game/scenes/ui/hud.tscn" id="5_fv2ru"]
 [ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="5_obyst"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rhup1"]
-size = Vector2(1252, 23.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_fv2ru"]
-size = Vector2(159.5, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_56eqj"]
-size = Vector2(154.5, 20)
+[ext_resource type="PackedScene" uid="uid://dxqgme1q33dhc" path="res://game/scenes/levels/main_arena.tscn" id="7_arena"]
 
 [sub_resource type="Resource" id="Resource_56eqj"]
 resource_local_to_scene = true
@@ -22,46 +13,26 @@ script = ExtResource("5_obyst")
 
 [node name="MainLevel" type="Node2D" unique_id=1301530298]
 
+[node name="MainArena" parent="." unique_id=1249724771 instance=ExtResource("7_arena")]
+
 [node name="World2D" type="Node2D" parent="." unique_id=1598667471]
 
-[node name="background" type="Sprite2D" parent="World2D" unique_id=2084886972]
-texture = ExtResource("3_rhup1")
-
-[node name="Boundary" type="StaticBody2D" parent="World2D" unique_id=1057519052]
-position = Vector2(0, 277)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World2D/Boundary" unique_id=2067601493]
-position = Vector2(4, 32)
-shape = SubResource("RectangleShape2D_rhup1")
-one_way_collision = true
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="World2D/Boundary" unique_id=1221850160]
-position = Vector2(625, -119.5)
-rotation = -1.5707964
-scale = Vector2(2, 2)
-shape = SubResource("RectangleShape2D_fv2ru")
-one_way_collision = true
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="World2D/Boundary" unique_id=1992532547]
-position = Vector2(-625, -120.5)
-rotation = 1.5707964
-scale = Vector2(2, 2)
-shape = SubResource("RectangleShape2D_56eqj")
-one_way_collision = true
-
 [node name="SoulCinder" parent="World2D" unique_id=1100173584 instance=ExtResource("2_rhup1")]
-position = Vector2(143, 81.000015)
+position = Vector2(864, 524.7)
 scale = Vector2(0.7, 0.7)
 
 [node name="Player" parent="World2D" unique_id=116187027 instance=ExtResource("4_y6h0r")]
-position = Vector2(-300, 255)
+position = Vector2(288, 596)
 STATS = SubResource("Resource_56eqj")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=2040716281]
+[node name="Camera2D" type="Camera2D" parent="World2D/Player" unique_id=2040716281]
+position = Vector2(-288, -596)
+process_callback = 0
+position_smoothing_enabled = true
 script = ExtResource("5_56eqj")
-player_path = NodePath("../World2D/Player")
-boss_path = NodePath("../World2D/SoulCinder")
-boundary_node_path = NodePath("../World2D/Boundary")
-background_node_path = NodePath("../World2D/background")
+player_path = NodePath("..")
+boss_path = NodePath("../../SoulCinder")
+boundary_node_path = NodePath("../../../MainArena/CameraBoundary")
+background_node_path = NodePath("../../../MainArena/Sky/Sky1/sky1")
 
 [node name="UI" parent="." unique_id=2020152070 instance=ExtResource("5_fv2ru")]

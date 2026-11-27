@@ -54,7 +54,7 @@ const ON_HIT_EFFECTS : Array[StringName] = [&"BURN_BUILDUP", &"PARALYSIS_BUILDUP
 
 @export_category('Movimento')
 @export var MOVE_SPEED : float = 300.0
-@export var JUMP_SPEED : float = 500.0
+@export var JUMP_SPEED : float = 600.0
 
 @export_category('Rolagem')
 @export var ROLL_SPEED : float = 600.0
