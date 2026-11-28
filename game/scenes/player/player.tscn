@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://cytafq8i1y8qm" path="res://addons/godot_state_charts/atomic_state.gd" id="5_atm01"]
 [ext_resource type="Script" uid="uid://cf1nsco3w0mf6" path="res://addons/godot_state_charts/transition.gd" id="6_trn01"]
 [ext_resource type="Script" uid="uid://b411mffelg75g" path="res://game/scripts/enemies/attacks/attack_phase.gd" id="7_atk01"]
-[ext_resource type="Script" uid="uid://brv01bwrynsnk" path="res://game/scripts/enemies/attacks/melee_hitbox.gd" id="8_mhb01"]
+[ext_resource type="Script" path="res://game/scripts/player/player_hitbox.gd" id="8_mhb01"]
 
 [sub_resource type="Resource" id="Resource_stats1"]
 resource_local_to_scene = true
@@ -67,6 +67,11 @@ initial_state = NodePath("Grounded")
 script = ExtResource("6_trn01")
 to = NodePath("../Dead")
 event = &"died"
+
+[node name="Go Hurt" type="Node" parent="StateChart/Root"]
+script = ExtResource("6_trn01")
+to = NodePath("../Hurt")
+event = &"hurt"
 
 [node name="Grounded" type="Node" parent="StateChart/Root"]
 script = ExtResource("4_cmp01")
@@ -257,6 +262,26 @@ script = ExtResource("6_trn01")
 to = NodePath("../../Grounded")
 event = &"landed"
 
+[node name="Hurt" type="Node" parent="StateChart/Root"]
+script = ExtResource("4_cmp01")
+initial_state = NodePath("Stagger")
+
+[node name="Stagger" type="Node" parent="StateChart/Root/Hurt"]
+script = ExtResource("5_atm01")
+
+[node name="Go Invulnerable" type="Node" parent="StateChart/Root/Hurt/Stagger"]
+script = ExtResource("6_trn01")
+to = NodePath("../../Invulnerable")
+delay_in_seconds = "hurt_duration"
+
+[node name="Invulnerable" type="Node" parent="StateChart/Root/Hurt"]
+script = ExtResource("5_atm01")
+
+[node name="Go Grounded" type="Node" parent="StateChart/Root/Hurt/Invulnerable"]
+script = ExtResource("6_trn01")
+to = NodePath("../../../Grounded")
+delay_in_seconds = "hurt_iframe_duration"
+
 [node name="Dead" type="Node" parent="StateChart/Root"]
 script = ExtResource("5_atm01")
 
@@ -266,7 +291,7 @@ script = ExtResource("5_atm01")
 [connection signal="state_entered" from="StateChart/Root/Grounded/Roll" to="." method="_on_roll_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Roll/Invulnerable" to="." method="_on_invulnerable_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Roll/Invulnerable" to="." method="_on_invulnerable_state_exited"]
-[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1" to="." method="_on_swing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1" to="." method="_on_swing_1_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1/Windup" to="StateChart/Root/Grounded/Attack/Swing1/Windup" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing1/Windup" to="StateChart/Root/Grounded/Attack/Swing1/Windup" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1/Hit" to="StateChart/Root/Grounded/Attack/Swing1/Hit" method="_on_state_entered"]
@@ -274,7 +299,7 @@ script = ExtResource("5_atm01")
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing1/Recovery" to="StateChart/Root/Grounded/Attack/Swing1/Recovery" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing1/Recovery" to="StateChart/Root/Grounded/Attack/Swing1/Recovery" method="_on_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Grounded/Attack/Swing1/Recovery" to="." method="_on_swing_1_recovery_state_physics_processing"]
-[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing2" to="." method="_on_swing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing2" to="." method="_on_swing_2_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing2/Windup" to="StateChart/Root/Grounded/Attack/Swing2/Windup" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing2/Windup" to="StateChart/Root/Grounded/Attack/Swing2/Windup" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing2/Hit" to="StateChart/Root/Grounded/Attack/Swing2/Hit" method="_on_state_entered"]
@@ -283,7 +308,7 @@ script = ExtResource("5_atm01")
 [connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing2/Recovery" to="StateChart/Root/Grounded/Attack/Swing2/Recovery" method="_on_state_exited"]
 [connection signal="state_physics_processing" from="StateChart/Root/Airborne" to="." method="_on_airborne_state_physics_processing"]
 [connection signal="state_entered" from="StateChart/Root/Dead" to="." method="_on_dead_state_entered"]
-[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3" to="." method="_on_swing_state_entered"]
+[connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3" to="." method="_on_swing_3_state_entered"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3/Windup" to="StateChart/Root/Grounded/Attack/Swing3/Windup" method="_on_state_entered"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Attack/Swing3/Windup" to="StateChart/Root/Grounded/Attack/Swing3/Windup" method="_on_state_exited"]
 [connection signal="state_entered" from="StateChart/Root/Grounded/Attack/Swing3/Hit" to="StateChart/Root/Grounded/Attack/Swing3/Hit" method="_on_state_entered"]
@@ -296,3 +321,7 @@ script = ExtResource("5_atm01")
 [connection signal="state_entered" from="StateChart/Root/Grounded/Heal/Recovery" to="." method="_on_heal_recovery_state_entered"]
 [connection signal="state_physics_processing" from="StateChart/Root/Grounded/Heal/Recovery" to="." method="_on_heal_state_physics_processing"]
 [connection signal="state_exited" from="StateChart/Root/Grounded/Roll" to="." method="_on_roll_state_exited"]
+[connection signal="state_entered" from="StateChart/Root/Hurt" to="." method="_on_hurt_state_entered"]
+[connection signal="state_physics_processing" from="StateChart/Root/Hurt/Stagger" to="." method="_on_hurt_state_physics_processing"]
+[connection signal="state_entered" from="StateChart/Root/Hurt/Invulnerable" to="." method="_on_invulnerable_state_entered"]
+[connection signal="state_exited" from="StateChart/Root/Hurt/Invulnerable" to="." method="_on_invulnerable_state_exited"]

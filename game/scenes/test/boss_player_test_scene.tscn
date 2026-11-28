@@ -3,14 +3,14 @@
 [ext_resource type="Script" uid="uid://cmtuy2i6bn5qe" path="res://game/scripts/test/boss_player_test_scene.gd" id="1_test"]
 [ext_resource type="PackedScene" uid="uid://bcwkugn6v3oy7" path="res://addons/godot_state_charts/utilities/state_chart_debugger.tscn" id="2_debugger"]
 [ext_resource type="PackedScene" uid="uid://8mvh8343eyu3" path="res://game/scenes/enemies/boss.tscn" id="3_boss"]
-[ext_resource type="Script" uid="uid://sic1xil6xvjx" path="res://game/scripts/test/boss_player_test_target.gd" id="4_boss_test"]
+[ext_resource type="Script" uid="uid://dakprhddggrlu" path="res://game/scripts/test/boss_player_test_target.gd" id="4_boss_test"]
 [ext_resource type="Script" uid="uid://dddt7ecqhvuec" path="res://game/scripts/player/player_stats.gd" id="5_a7eoh"]
 [ext_resource type="PackedScene" path="res://game/scenes/player/player.tscn" id="5_player"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(3000, 100)
 
-[sub_resource type="Resource" id="Resource_1i5uw"]
+[sub_resource type="Resource" id="Resource_a7eoh"]
 resource_local_to_scene = true
 script = ExtResource("5_a7eoh")
 
@@ -41,7 +41,8 @@ script = ExtResource("4_boss_test")
 
 [node name="Player" parent="." unique_id=1843619374 instance=ExtResource("5_player")]
 position = Vector2(-500, 255)
-STATS = SubResource("Resource_1i5uw")
+collision_layer = 4
+STATS = SubResource("Resource_a7eoh")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=141449474]
 

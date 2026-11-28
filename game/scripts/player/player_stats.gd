@@ -62,7 +62,7 @@ const ON_HIT_EFFECTS : Array[StringName] = [&"BURN_BUILDUP", &"PARALYSIS_BUILDUP
 @export var ROLL_IFRAME_DURATION : float = 0.25
 @export var ROLL_STAMINA_COST : float = 25.0
 ## Se verdadeiro, durante a rolagem o player atravessa inimigos (upgrade de carta). Falso = a rolagem colide com eles
-@export var ROLL_PASSES_THROUGH_ENEMIES : bool = false
+@export var ROLL_PASSES_THROUGH_ENEMIES : bool = true
 
 # TODO: valores provisórios, o grupo ainda não definiu
 @export_category('Cura')
@@ -77,6 +77,19 @@ const ON_HIT_EFFECTS : Array[StringName] = [&"BURN_BUILDUP", &"PARALYSIS_BUILDUP
 @export var SWING_1_DAMAGE : float = 20.0
 @export var SWING_2_DAMAGE : float = 30.0
 @export var SWING_3_DAMAGE : float = 45.0
+## Stagger de cada golpe: desconta da postura do boss (POSTURE no boss.gd)
+@export var SWING_1_STAGGER : float = 15.0
+@export var SWING_2_STAGGER : float = 20.0
+@export var SWING_3_STAGGER : float = 40.0
+
+# TODO: valores provisórios, o grupo ainda não definiu
+@export_category('Dano recebido')
+## Tempo cambaleando depois de levar um golpe (sem controle)
+@export var HURT_DURATION : float = 0.35
+## Tempo invulnerável logo depois do stagger, para não encadear golpes sem chance de reagir
+@export var HURT_IFRAME_DURATION : float = 0.3
+## Fração do empurrão que o player ignora (0 = nenhuma, 1 = imune; limitada entre 0 e 1)
+@export var KNOCKBACK_RESISTANCE : float = 0.0
 
 @export_category('Efeitos na arma')
 @export var BURN_BUILDUP : float = 0.0
