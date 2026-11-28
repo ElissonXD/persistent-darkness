@@ -49,7 +49,10 @@ const ENEMY_LAYER : int = 3
 @onready var swing_2: CompoundState = $StateChart/Root/Grounded/Attack/Swing2
 @onready var swing_3: CompoundState = $StateChart/Root/Grounded/Attack/Swing3
 @onready var hurtbox: Area2D = $Hurtbox
+<<<<<<< HEAD
 @onready var hurt: CompoundState = $StateChart/Root/Hurt
+=======
+>>>>>>> 5f2dd2abb39c482e15f8a02522cdaacfde482eb9
 
 var facing : float = 1.0
 var invulnerable : bool = false
