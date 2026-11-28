@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://cvxyjsaedclkn"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_7neoy"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_wtqop"]
+
+[sub_resource type="Resource" id="Resource_jhgt2"]
+script = ExtResource("1_7neoy")
+STAT = &"HEAL_AMOUNT"
+MULT = 0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_3o1fa"]
+script = ExtResource("1_7neoy")
+STAT = &"HEAL_DELAY"
+MULT = 0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_wtqop")
+CARD_NAME = "Cálice Sagrado"
+DESCRIPTION = "Melhora a eficiência da cura, mas aumenta o tempo necessário para realizá-la."
+MODIFIERS = Array[ExtResource("1_7neoy")]([SubResource("Resource_jhgt2"), SubResource("Resource_3o1fa")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://c5u68jc33aynw"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_fsecm"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_dwbid"]
+
+[sub_resource type="Resource" id="Resource_2nryg"]
+script = ExtResource("1_fsecm")
+STAT = &"MAX_HEALTH"
+FLAT = 15.0
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_kcami"]
+script = ExtResource("1_fsecm")
+STAT = &"MOVE_SPEED"
+MULT = -0.1
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_dwbid")
+CARD_NAME = "Última Resistência"
+DESCRIPTION = "Aumenta sua vida, mas torna sua movimentação mais lenta."
+MODIFIERS = Array[ExtResource("1_fsecm")]([SubResource("Resource_2nryg"), SubResource("Resource_kcami")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

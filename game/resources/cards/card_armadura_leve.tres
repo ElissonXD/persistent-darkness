@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://dtvtc0ttyy1pm"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_jr8gs"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_hrdrr"]
+
+[sub_resource type="Resource" id="Resource_ku40g"]
+script = ExtResource("1_jr8gs")
+STAT = &"STAMINA_REGEN"
+MULT = 0.3
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_u5gax"]
+script = ExtResource("1_jr8gs")
+STAT = &"ROLL_IFRAME_DURATION"
+MULT = 0.15
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_p0uwi"]
+script = ExtResource("1_jr8gs")
+STAT = &"MOVE_SPEED"
+MULT = 0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_wlki5"]
+script = ExtResource("1_jr8gs")
+STAT = &"MAX_HEALTH"
+FLAT = -10.0
+MULT = -0.1
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_hrdrr")
+CARD_NAME = "Armadura leve"
+DESCRIPTION = "Aumenta sua velocidade de movimento e invencibilidade em rolagem, assim como sua recuperação de energia, porém, reduz sua vitalidade."
+RARITY = 2
+MODIFIERS = Array[ExtResource("1_jr8gs")]([SubResource("Resource_ku40g"), SubResource("Resource_u5gax"), SubResource("Resource_p0uwi"), SubResource("Resource_wlki5")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

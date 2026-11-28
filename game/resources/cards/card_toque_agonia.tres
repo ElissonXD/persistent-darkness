@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://bjfb33i84yba3"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_ivxfv"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_b8vto"]
+
+[sub_resource type="Resource" id="Resource_llkhu"]
+script = ExtResource("1_ivxfv")
+STAT = &"PARALYSIS_BUILDUP"
+FLAT = 20.0
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_l8rmm"]
+script = ExtResource("1_ivxfv")
+STAT = &"MAX_STAMINA"
+MULT = -0.25
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_rrx0x"]
+script = ExtResource("1_ivxfv")
+STAT = &"STAMINA_REGEN"
+MULT = -0.3
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_e2pk7"]
+script = ExtResource("1_ivxfv")
+STAT = &"STAMINA_REGEN_DELAY"
+MULT = 0.5
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_b8vto")
+CARD_NAME = "Toque da Agonia"
+DESCRIPTION = "Seus ataques acumulam paralisia nos inimigos, mas o efeito também prejudica sua capacidade de recuperação."
+RARITY = 1
+MODIFIERS = Array[ExtResource("1_ivxfv")]([SubResource("Resource_llkhu"), SubResource("Resource_l8rmm"), SubResource("Resource_rrx0x"), SubResource("Resource_e2pk7")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

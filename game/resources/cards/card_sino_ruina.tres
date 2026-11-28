@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://dktnfw53v5av1"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_pbwc0"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_fsf0u"]
+
+[sub_resource type="Resource" id="Resource_mnjm8"]
+script = ExtResource("1_pbwc0")
+STAT = &"PARALYSIS_BUILDUP"
+FLAT = 35.0
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_j8e1g"]
+script = ExtResource("1_pbwc0")
+STAT = &"STRENGTH"
+FLAT = -4.0
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_16flq"]
+script = ExtResource("1_pbwc0")
+STAT = &"MAX_STAMINA"
+MULT = -0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_0foa0"]
+script = ExtResource("1_pbwc0")
+STAT = &"STAMINA_REGEN"
+MULT = -0.25
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_fsf0u")
+CARD_NAME = "Sino da Ruína"
+DESCRIPTION = "Seus ataques acumulam paralisia em uma quantidade elevada, mas sua força física e energia são comprometidas."
+RARITY = 1
+MODIFIERS = Array[ExtResource("1_pbwc0")]([SubResource("Resource_mnjm8"), SubResource("Resource_j8e1g"), SubResource("Resource_16flq"), SubResource("Resource_0foa0")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

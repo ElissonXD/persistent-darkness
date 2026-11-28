@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://bb25n4fbf0idj"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_gf7wx"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_3ohl8"]
+
+[sub_resource type="Resource" id="Resource_4yc5f"]
+script = ExtResource("1_gf7wx")
+STAT = &"STAMINA_REGEN_DELAY"
+MULT = -0.3
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_3ohl8")
+CARD_NAME = "Areia do Tempo"
+DESCRIPTION = "Permite recuperar estamina mais rapidamente após gastar energia."
+MODIFIERS = Array[ExtResource("1_gf7wx")]([SubResource("Resource_4yc5f")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

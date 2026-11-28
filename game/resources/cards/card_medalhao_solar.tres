@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://i3gbjhew6jt1"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_ruaa3"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_bycnr"]
+
+[sub_resource type="Resource" id="Resource_mb7t7"]
+script = ExtResource("1_ruaa3")
+STAT = &"HEAL_AMOUNT"
+FLAT = 10.0
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_wbwgb"]
+script = ExtResource("1_ruaa3")
+STAT = &"MAX_HEALTH"
+MULT = -0.05
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_bycnr")
+CARD_NAME = "Medalhão Solar"
+DESCRIPTION = "Aumenta sua capacidade de recuperação de vida, mas reduz a vida máxima."
+MODIFIERS = Array[ExtResource("1_ruaa3")]([SubResource("Resource_mb7t7"), SubResource("Resource_wbwgb")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

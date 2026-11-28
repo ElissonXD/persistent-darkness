@@ -89,7 +89,7 @@ func _physics_process(delta: float) -> void:
 func _on_roll_state_entered() -> void:
 	STATS.spend_stamina(stat(&"ROLL_STAMINA_COST"))
 	velocity.x = facing * stat(&"ROLL_SPEED")
-	set_collision_mask_value(ENEMY_LAYER, not STATS.ROLL_PASSES_THROUGH_ENEMIES)
+	set_collision_mask_value(ENEMY_LAYER, not STATS.has_ability(&"ROLL_PASSES_THROUGH_ENEMIES"))
 	var duration := stat(&"ROLL_DURATION")
 	var iframes := minf(stat(&"ROLL_IFRAME_DURATION"), duration)
 	state_chart.set_expression_property(&"roll_iframe_duration", iframes)

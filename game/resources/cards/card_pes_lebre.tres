@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://b5f72wcnaq1nj"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_0xfhx"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_ibvjn"]
+
+[sub_resource type="Resource" id="Resource_8ianh"]
+script = ExtResource("1_0xfhx")
+STAT = &"MOVE_SPEED"
+MULT = 0.12
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_hu51h"]
+script = ExtResource("1_0xfhx")
+STAT = &"ROLL_SPEED"
+MULT = -0.1
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_ibvjn")
+CARD_NAME = "Pés de Lebre"
+DESCRIPTION = "Aumenta a velocidade de movimento, mas diminui a velocidade das rolagens."
+MODIFIERS = Array[ExtResource("1_0xfhx")]([SubResource("Resource_8ianh"), SubResource("Resource_hu51h")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

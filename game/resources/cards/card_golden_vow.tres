@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://c20u42uq0lqrc"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_3ked8"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_u6sd6"]
+
+[sub_resource type="Resource" id="Resource_3snb8"]
+script = ExtResource("1_3ked8")
+STAT = &"MAX_HEALTH"
+FLAT = 10.0
+MULT = 0.1
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_fsm1e"]
+script = ExtResource("1_3ked8")
+STAT = &"STRENGTH"
+FLAT = 6.0
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_xrivr"]
+script = ExtResource("1_3ked8")
+STAT = &"ROLL_STAMINA_COST"
+MULT = 0.2
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_u6sd6")
+CARD_NAME = "Voto Dourado"
+DESCRIPTION = "Aumenta sua força e vitalidade, mas aumenta o custo de rolagem."
+RARITY = 2
+MODIFIERS = Array[ExtResource("1_3ked8")]([SubResource("Resource_3snb8"), SubResource("Resource_fsm1e"), SubResource("Resource_xrivr")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

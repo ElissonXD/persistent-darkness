@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://cvq186atkcvrj"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_4yc5f"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_iyenj"]
+
+[sub_resource type="Resource" id="Resource_0xfhx"]
+script = ExtResource("1_4yc5f")
+STAT = &"MAX_HEALTH"
+FLAT = 15.0
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_ibvjn"]
+script = ExtResource("1_4yc5f")
+STAT = &"ROLL_DURATION"
+MULT = 0.1
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_iyenj")
+CARD_NAME = "Elmo do Guerreiro"
+DESCRIPTION = "Aumenta sua resistência, mas deixa rolagens mais longas."
+MODIFIERS = Array[ExtResource("1_4yc5f")]([SubResource("Resource_0xfhx"), SubResource("Resource_ibvjn")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://djxo0xgahwc2g"]
+
+[ext_resource type="Script" uid="uid://dq1yuyutgqaks" path="res://game/scripts/logic/stat_modifier.gd" id="1_8ianh"]
+[ext_resource type="Script" uid="uid://kn1r05dbhuaw" path="res://game/scripts/logic/card_data.gd" id="2_hu51h"]
+
+[sub_resource type="Resource" id="Resource_tbeu0"]
+script = ExtResource("1_8ianh")
+STAT = &"SWING_1_DAMAGE"
+MULT = 0.3
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[sub_resource type="Resource" id="Resource_lav1b"]
+script = ExtResource("1_8ianh")
+STAT = &"SWING_3_DAMAGE"
+MULT = -0.1
+metadata/_custom_type_script = "uid://dq1yuyutgqaks"
+
+[resource]
+script = ExtResource("2_hu51h")
+CARD_NAME = "Lâmina Afiada"
+DESCRIPTION = "Aumenta o dano dos ataques básicos, mas reduz o potencial dos golpes mais fortes."
+MODIFIERS = Array[ExtResource("1_8ianh")]([SubResource("Resource_tbeu0"), SubResource("Resource_lav1b")])
+metadata/_custom_type_script = "uid://kn1r05dbhuaw"

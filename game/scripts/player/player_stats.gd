@@ -37,7 +37,13 @@ signal stat_changed(stat: StringName)
 signal ability_changed(ability: StringName)
 signal died
 
-const MIN_STAT : Dictionary = {&"MAX_HEALTH": 1.0, &"MAX_STAMINA": 1.0}
+const MIN_STAT : Dictionary = {
+	&"MAX_HEALTH": 20.0,
+	&"MAX_STAMINA": 20.0,
+	&"STAMINA_REGEN": 5.0,
+	&"HEAL_AMOUNT": 10.0,
+	&"MOVE_SPEED": 100.0,
+}
 const ON_HIT_EFFECTS : Array[StringName] = [&"BURN_BUILDUP", &"PARALYSIS_BUILDUP", &"FROSTBITE_BUILDUP"]
 
 @export_category('Vida')
@@ -149,12 +155,16 @@ func clear_modifiers() -> void:
 
 func get_stat(stat: StringName) -> float:
 	var flat := 0.0
-	var mult := 0.0
+	var bonus := 0.0      # MULT positivos: somam entre si
+	var penalty := 1.0    # MULT negativos: cada um multiplica o que sobrou
 	for m in modifiers:
 		if m.stat == stat:
 			flat += m.flat
-			mult += m.mult
-	return maxf((get(stat) + flat) * (1.0 + mult), MIN_STAT.get(stat, 0.0))
+			if m.mult >= 0.0:
+				bonus += m.mult
+			else:
+				penalty *= maxf(1.0 + m.mult, 0.0)
+	return maxf((get(stat) + flat) * (1.0 + bonus) * penalty, MIN_STAT.get(stat, 0.0))
 
 func update_stat(stat: StringName) -> void:
 	stat_changed.emit(stat)
