@@ -83,3 +83,21 @@ layout_mode = 2
 [node name="SkipButton" type="Button" parent="Margin/Columns/Main" unique_id=568724696]
 layout_mode = 2
 text = "Pular"
+
+[node name="MarginContainer" type="MarginContainer" parent="Margin/Columns/Main" unique_id=2026160634]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin/Columns/Main/MarginContainer" unique_id=845004413]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+
+[node name="DeathCountLabel" type="Label" parent="Margin/Columns/Main/MarginContainer/VBoxContainer" unique_id=567204450]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuButton" type="Button" parent="Margin/Columns/Main/MarginContainer/VBoxContainer" unique_id=1076214499]
+layout_mode = 2
+text = "Desistir"

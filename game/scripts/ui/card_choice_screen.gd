@@ -3,12 +3,16 @@ extends Control
 
 ## Avisa que o jogador terminou (escolheu ou pulou). Quem abriu a tela decide o que vem depois.
 signal finished
+## Avisa que o jogador clicou no botão de voltar ao menu.
+signal menu_requested
 
 const CARD_VIEW := preload("res://game/scenes/ui/card_view.tscn")
 const SKIP_TEXT := "Pular: segue sem escolher nenhuma carta."
 
 @onready var offers_row: HBoxContainer = $Margin/Columns/Main/OffersRow
 @onready var detail_label: RichTextLabel = $Margin/Columns/Main/DetailLabel
+@onready var death_count_label: Label = $Margin/Columns/Main/MarginContainer/VBoxContainer/DeathCountLabel
+@onready var menu_button: Button = $Margin/Columns/Main/MarginContainer/VBoxContainer/MenuButton
 @onready var luck_label: Label = $Margin/Columns/Main/LuckLabel
 @onready var skip_button: Button = $Margin/Columns/Main/SkipButton
 @onready var owned_row: Container = $Margin/Columns/Sidebar/OwnedScroll/OwnedRow
@@ -22,16 +26,24 @@ var pending_sacrifice: CardData = null   # sacrifício pede um segundo clique pa
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	skip_button.pressed.connect(_on_skip_pressed)
+	
+	if menu_button:
+		menu_button.pressed.connect(func(): menu_requested.emit())
 
 	detail_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	detail_label.focus_mode = Control.FOCUS_NONE
 	skip_button.focus_entered.connect(func(): detail_label.text = "[center]%s[/center]" % SKIP_TEXT)
+
 
 ## Chame depois de adicionar a tela à árvore.
 func open(card_pool: CardPool, player_stats: PlayerStats) -> void:
 	pool = card_pool
 	stats = player_stats
 	pending_sacrifice = null
+	
+	if death_count_label and stats:
+		death_count_label.text = "Total de Mortes: %d" % stats.death_count
+		
 	offers = pool.draw_offers()
 	refresh()
 
